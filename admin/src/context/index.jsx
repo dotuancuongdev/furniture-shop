@@ -1,10 +1,15 @@
 import React, { createContext, useState } from "react";
 import { USER } from "../constants";
 
-export const appContext = createContext(null);
+export const AppContext = createContext(null);
 
 const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    message: ``,
+    severity: "",
+  });
 
   try {
     const localUser = localStorage.getItem(USER);
@@ -14,9 +19,9 @@ const AppProvider = ({ children }) => {
     }
   } catch {}
   return (
-    <appContext.Provider value={{ user, setUser }}>
+    <AppContext.Provider value={{ user, setUser, snackbar, setSnackbar }}>
       {children}
-    </appContext.Provider>
+    </AppContext.Provider>
   );
 };
 
