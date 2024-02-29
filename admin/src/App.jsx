@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import { AppContext } from "./context";
 import { Alert, Button, Snackbar } from "@mui/material";
+import Categories from "./pages/Categories";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -44,7 +45,7 @@ function App() {
   return (
     <>
       <AppSnackbar />
-      {user ? <Admin /> : <Login />}
+      {user ? <Categories /> : <Login />}
     </>
   );
 }
