@@ -14,6 +14,21 @@ import {
   Stack,
 } from "@mui/material";
 import Categories from "./pages/Categories";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+const admin = createBrowserRouter([
+  { path: "/", element: <Admin /> },
+  { path: "/category", element: <Categories /> },
+  { path: "/*", element: <Navigate to="/" replace /> },
+]);
+const auth = createBrowserRouter([
+  { path: "/", element: <Login /> },
+  { path: "/*", element: <Navigate to="/" replace /> },
+]);
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -68,7 +83,7 @@ function App() {
     <>
       <AppLoading />
       <AppSnackbar />
-      {user ? <Categories /> : <Login />}
+      <RouterProvider router={user ? admin : auth} />
     </>
   );
 }
