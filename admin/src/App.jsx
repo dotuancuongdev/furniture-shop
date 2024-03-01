@@ -5,7 +5,14 @@ import Login from "./pages/Login";
 
 import Admin from "./pages/Admin";
 import { AppContext } from "./context";
-import { Alert, Button, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Snackbar,
+  Stack,
+} from "@mui/material";
 import Categories from "./pages/Categories";
 
 const AppSnackbar = () => {
@@ -38,12 +45,28 @@ const AppSnackbar = () => {
   );
 };
 
+const AppLoading = () => {
+  const { loading } = useContext(AppContext);
+  return (
+    <Box
+      className={`flex justify-center items-center fixed top-0 left-0 w-full h-screen bg-zinc-900 opacity-80 z-[9999] ${
+        !loading ? "hidden" : ""
+      }`}
+    >
+      <Stack sx={{ color: "grey.500" }} spacing={2} direction="row">
+        <CircularProgress color="secondary" className="text-green-400" />
+      </Stack>
+    </Box>
+  );
+};
+
 function App() {
   const appContext = useContext(AppContext);
-  const { user, snackbar, setSnackbar } = appContext;
+  const { user } = appContext;
 
   return (
     <>
+      <AppLoading />
       <AppSnackbar />
       {user ? <Categories /> : <Login />}
     </>

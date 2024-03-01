@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import api from "../api";
 import {
   Box,
@@ -29,6 +29,7 @@ import {
   DEFAULT_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
 } from "../constants";
+import { AppContext } from "../context";
 
 let totalPages;
 let totalItems;
@@ -37,24 +38,40 @@ const Categories = () => {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageNumberInput, setPageNumberInput] = useState(`${pageNumber}`);
+  const appContext = useContext(AppContext);
+  const { setSnackbar, setLoading } = appContext;
+
+  const emptyRowsCount = pageSize - categories.length;
+  const emptyRows = Array(emptyRowsCount).fill(0);
+
   useEffect(() => {
     let ignore = false;
     const getCategories = async () => {
       try {
-        const respone = await api.get(
-          `/categories?pageSize=${pageSize}&pageNumber=${pageNumber}`
-        );
+        setLoading(true);
+        const respone = await api.get("/categories", {
+          params: {
+            pageSize,
+            pageNumber,
+          },
+        });
         if (!ignore) {
-          console.log(respone);
           setCategories(respone.data.items);
 
           totalPages = respone.data.totalPages;
           totalItems = respone.data.totalItems;
         }
       } catch (error) {
-        console.log(error);
+        setSnackbar({
+          isOpen: true,
+          message: error.message,
+          severity: "error",
+        });
+      } finally {
+        setLoading(false);
       }
     };
+
     getCategories();
     return () => {
       ignore = true;
@@ -93,8 +110,6 @@ const Categories = () => {
   const handleEnterPageNumber = (e) => {
     if (e.keyCode === 13) {
       if (!pageNumberInput || parseInt(pageNumberInput) > totalPages) {
-        setPageNumberInput("1");
-        setPageNumber(1);
         return;
       }
 
@@ -114,7 +129,9 @@ const Categories = () => {
     setPageNumber(prevPage);
     setPageNumberInput(`${prevPage}`);
   };
-  return (
+  return categories.length === 0 ? (
+    <Box>no data</Box>
+  ) : (
     <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -122,13 +139,13 @@ const Categories = () => {
             <TableRow>
               <StyledTableCell>#</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Edit</StyledTableCell>
-              <StyledTableCell>Delete</StyledTableCell>
+              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell>Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {categories.map((c, idx) => (
-              <StyledTableRow key={c.name}>
+              <StyledTableRow key={c.id}>
                 <StyledTableCell>
                   {(pageNumber - 1) * pageSize + idx + 1}
                 </StyledTableCell>
@@ -136,18 +153,32 @@ const Categories = () => {
                   {c.name}
                 </StyledTableCell>
                 <StyledTableCell>
-                  <EditIcon className="cursor-pointer text-zinc-500 hover:text-black" />
+                  {c.description?.length > 30
+                    ? `${c.description.slice(0, 30).trim()}...`
+                    : c.description}
                 </StyledTableCell>
                 <StyledTableCell>
-                  <DeleteForeverIcon className="cursor-pointer text-red-400 hover:text-red-500" />
+                  <Box className="flex gap-1">
+                    <EditIcon className="cursor-pointer text-zinc-500 hover:text-black" />
+                    <DeleteForeverIcon className="cursor-pointer text-red-400 hover:text-red-500" />
+                  </Box>
                 </StyledTableCell>
+              </StyledTableRow>
+            ))}
+            {emptyRows.map((c, idx) => (
+              <StyledTableRow key={idx} className="h-[57px]">
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box className="flex justify-end">
+      <Box className="flex justify-end items-center gap-2">
+        <Typography>Total {totalItems} items</Typography>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">PageSize</InputLabel>
           <Select
@@ -174,15 +205,15 @@ const Categories = () => {
           </Button>
           <TextField
             size="small"
-            label="PageNumber"
+            // label="PageNumber"
             type="number"
-            className=" "
+            className=" w-24 mr-2"
             value={pageNumberInput}
             onChange={handleChangePageNumber}
             onKeyDown={handleEnterPageNumber}
           />
 
-          <Typography>/ {totalPages} Pages</Typography>
+          <Typography>of {totalPages} Pages</Typography>
           <Button
             className="text-black"
             disabled={pageNumber === totalPages}
