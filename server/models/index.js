@@ -93,14 +93,48 @@ export const City = sequelize.define("City", {
   },
 })
 
-ProductVersion.belongsTo(Product)
+ProductVersion.belongsTo(Product, {
+  foreignKey: {
+    name: "productId",
+    allowNull: false,
+  },
+})
 Product.hasMany(ProductVersion)
 
-Product.belongsToMany(Category, { through: "ProductCategory" })
-Category.belongsToMany(Product, { through: "ProductCategory" })
+Product.belongsToMany(Category, {
+  through: "ProductCategories",
+  foreignKey: {
+    name: "productId",
+    allowNull: false,
+  },
+})
+Category.belongsToMany(Product, {
+  through: "ProductCategories",
+  foreignKey: {
+    name: "categoryId",
+    allowNull: false,
+  },
+})
 
-Order.hasOne(City)
+Order.belongsTo(City, {
+  foreignKey: {
+    name: "cityId",
+    allowNull: false,
+  },
+})
 City.hasMany(Order)
 
-Order.belongsToMany(ProductVersion, { through: "OrderDetail" })
-ProductVersion.belongsToMany(Order, { through: "OrderDetail" })
+Order.belongsToMany(ProductVersion, {
+  through: "OrderDetails",
+  foreignKey: {
+    name: "orderId",
+    allowNull: false,
+  },
+})
+ProductVersion.belongsToMany(Order, {
+  through: "OrderDetails",
+  foreignKey: {
+    name: "productVersionId",
+    allowNull: false,
+  },
+})
