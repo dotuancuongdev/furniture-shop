@@ -30,6 +30,7 @@ import {
   PAGE_SIZE_OPTIONS,
 } from "../constants";
 import { AppContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 let totalPages;
 let totalItems;
@@ -40,7 +41,7 @@ const Categories = () => {
   const [pageNumberInput, setPageNumberInput] = useState(`${pageNumber}`);
   const appContext = useContext(AppContext);
   const { setSnackbar, setLoading } = appContext;
-
+  const navigate = useNavigate();
   const emptyRowsCount = pageSize - categories.length;
   const emptyRows = Array(emptyRowsCount).fill(0);
 
@@ -133,6 +134,13 @@ const Categories = () => {
     <Box>no data</Box>
   ) : (
     <>
+      <Button
+        variant="contained"
+        className="bg-green-400"
+        onClick={() => navigate(`/category/create`)}
+      >
+        create a new category
+      </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>

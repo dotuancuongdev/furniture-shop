@@ -19,10 +19,12 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import CreateCategory from "./pages/CreateCategory";
 
 const admin = createBrowserRouter([
   { path: "/", element: <Admin /> },
   { path: "/category", element: <Categories /> },
+  { path: "/category/create", element: <CreateCategory /> },
   { path: "/*", element: <Navigate to="/" replace /> },
 ]);
 const auth = createBrowserRouter([
