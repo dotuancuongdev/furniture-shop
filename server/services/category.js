@@ -1,6 +1,6 @@
 import { Op } from "sequelize"
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../constants.js"
-import { Category } from "../models/index.js"
+import { Category, ProductVersion } from "../models/index.js"
 
 const get = async (query) => {
   const { pageSize, pageNumber } = query
@@ -15,9 +15,10 @@ const get = async (query) => {
     order: ["id"],
     offset: skipItemsCount,
     limit: size,
+    include: ProductVersion,
   })
   return {
-    items,
+    items: JSON.stringify(items),
     pageSize: size,
     pageNumber: number,
     totalItems,
