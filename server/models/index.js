@@ -1,12 +1,17 @@
-import { DataTypes } from "sequelize"
-import sequelize from "../db.js"
+import mongoose from "mongoose"
+const { Schema } = mongoose
 
-export const Category = sequelize.define("Category", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+const categorySchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
   },
-  description: {
-    type: DataTypes.STRING(1024),
-  },
-})
+  { collection: "Categories" }
+)
+
+export const Category = mongoose.model("Category", categorySchema)
