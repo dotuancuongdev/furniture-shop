@@ -4,13 +4,15 @@ import cors from "cors"
 import express from "express"
 
 import router from "./routers/index.js"
-import sequelize from "./db.js"
+import mongoose from "mongoose"
 
 const PORT = 8888
 
+const { MONGODB_URI } = process.env
+
 const connectToDatabase = async () => {
   try {
-    await sequelize.sync()
+    await mongoose.connect(MONGODB_URI)
     console.log("Connect to database successfully!")
   } catch (error) {
     console.log("Connect to database failed!")
