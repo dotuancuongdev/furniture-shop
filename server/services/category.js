@@ -8,14 +8,14 @@ const get = async (query) => {
   const number =
     pageNumber && pageNumber > 0 ? parseInt(pageNumber) : DEFAULT_PAGE_NUMBER
 
-  const totalItems = await Category.count()
+  const totalItems = await Category.countDocuments()
   const totalPages = Math.ceil(totalItems / size)
   const skipItemsCount = (number - 1) * size
-  const items = await Category.findAll({
-    order: ["id"],
-    offset: skipItemsCount,
-    limit: size,
-  })
+  const items = await Category.find()
+    .skip(skipItemsCount)
+    .limit(pageSize)
+    .select("_id name description")
+    .exec()
   return {
     items,
     pageSize: size,
@@ -26,7 +26,7 @@ const get = async (query) => {
 }
 
 const getDetail = async (id) => {
-  const item = await Category.findOne({ where: { id } })
+  const item = await Category.findById(id).select("_id name description").exec()
   return item
 }
 
@@ -42,9 +42,9 @@ const create = async (payload) => {
 const update = async (id, payload) => {
   const { name } = payload
   if (!name || !name.trim()) throw new Error("Name is required")
-  const exist = await Category.findOne({ where: { name, id: { [Op.ne]: id } } })
+  const exist = await Category.findOne({ name, _id: { $ne: id } })
   if (exist) throw new Error("Duplicate name")
-  const result = await Category.update(payload, { where: { id } })
+  const result = await Category.findByIdAndUpdate(id, payload)
   return result
 }
 
