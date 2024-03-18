@@ -31,19 +31,11 @@ const getDetail = async (id) => {
 }
 
 const create = async (payload) => {
-  const { name } = payload
-  if (!name || !name.trim()) throw new Error("Name is required")
-  const exist = await Category.findOne({ name })
-  if (exist) throw new Error("Duplicate name")
   const result = await Category.create(payload)
   return result
 }
 
 const update = async (id, payload) => {
-  const { name } = payload
-  if (!name || !name.trim()) throw new Error("Name is required")
-  const exist = await Category.findOne({ name, _id: { $ne: id } })
-  if (exist) throw new Error("Duplicate name")
   const result = await Category.findByIdAndUpdate(id, payload)
   return result
 }

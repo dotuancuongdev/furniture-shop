@@ -1,3 +1,4 @@
+import { Category } from "../models/index.js"
 import { STATUS_CODE_MESSAGE } from "../constants.js"
 import categoryService from "../services/category.js"
 
@@ -24,6 +25,12 @@ const getDetail = async (req, res) => {
 
 const create = async (req, res) => {
   try {
+    const { name } = req.body
+    if (!name || !name.trim()) throw new Error("Name is required")
+
+    const exist = await Category.findOne({ name })
+    if (exist) throw new Error("Duplicate name")
+
     const result = await categoryService.create(req.body)
     res.status(201).json({ _id: result.id })
   } catch (error) {
@@ -33,7 +40,6 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { body } = req
   try {
     const exist = await categoryService.getDetail(id)
     if (!exist) throw new Error()
@@ -41,8 +47,15 @@ const update = async (req, res) => {
     res.status(404).json({ code: 404, message: STATUS_CODE_MESSAGE[404] })
     return
   }
+
   try {
-    const result = await categoryService.update(id, body)
+    const { name } = req.body
+    if (!name || !name.trim()) throw new Error("Name is required")
+
+    const exist = await Category.findOne({ name, _id: { $ne: id } })
+    if (exist) throw new Error("Duplicate name")
+
+    const result = await categoryService.update(id, req.body)
     res.status(200).json({ _id: result.id })
   } catch (error) {
     res.status(400).json({ code: 400, message: error.message })
