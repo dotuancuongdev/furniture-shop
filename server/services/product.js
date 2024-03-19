@@ -14,14 +14,34 @@ const get = async (query) => {
   const number =
     pageNumber && pageNumber > 0 ? parseInt(pageNumber) : DEFAULT_PAGE_NUMBER
 
-  const totalItems = await Category.countDocuments()
+  const totalItems = await Product.countDocuments()
   const totalPages = Math.ceil(totalItems / size)
   const skipItemsCount = (number - 1) * size
-  const items = await Category.find()
+  const products = await Product.find()
     .skip(skipItemsCount)
     .limit(pageSize)
-    .select("_id name description")
+    .populate({
+      path: "productVersions",
+      match: { isActive: { $eq: true } },
+    })
+    .populate({ path: "productCategories", populate: "category" })
+    .select("_id summary description images stock")
+    .lean()
     .exec()
+
+  const items = products.map((p) => {
+    const prd = { ...p }
+    if (p.productVersions.length > 0) {
+      const version = p.productVersions[0]
+      prd.name = version.name
+      prd.price = version.price
+      prd.thumbnail = version.thumbnail
+    }
+    const categoryIds = p.productCategories.map((pc) => pc.category._id)
+    prd.categoryIds = categoryIds
+    return prd
+  })
+
   return {
     items,
     pageSize: size,
@@ -32,7 +52,26 @@ const get = async (query) => {
 }
 
 const getDetail = async (id) => {
-  const item = await Category.findById(id).select("_id name description").exec()
+  const product = await Product.findById(id)
+    .populate({
+      path: "productVersions",
+      match: { isActive: { $eq: true } },
+    })
+    .populate({ path: "productCategories", populate: "category" })
+    .select("_id summary description images stock")
+    .lean()
+    .exec()
+
+  const item = { ...product }
+  if (product.productVersions.length > 0) {
+    const version = product.productVersions[0]
+    item.name = version.name
+    item.price = version.price
+    item.thumbnail = version.thumbnail
+  }
+  const categoryIds = product.productCategories.map((pc) => pc.category._id)
+  item.categoryIds = categoryIds
+
   return item
 }
 
