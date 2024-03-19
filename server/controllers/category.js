@@ -12,6 +12,16 @@ const get = async (req, res) => {
   }
 }
 
+const getAll = async (req, res) => {
+  const { query } = req
+  try {
+    const result = await categoryService.getAll(query)
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
 const getDetail = async (req, res) => {
   const { id } = req.params
   try {
@@ -81,6 +91,7 @@ const remove = async (req, res) => {
 
 const categoryController = {
   get,
+  getAll,
   getDetail,
   create,
   update,

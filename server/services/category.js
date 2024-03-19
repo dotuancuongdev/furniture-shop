@@ -25,6 +25,12 @@ const get = async (query) => {
   }
 }
 
+const getAll = async (query) => {
+  const { search } = query
+  const items = await Category.find().select("_id name description").exec()
+  return items
+}
+
 const getDetail = async (id) => {
   const item = await Category.findById(id).select("_id name description").exec()
   return item
@@ -47,6 +53,7 @@ const remove = async (id) => {
 
 const categoryService = {
   get,
+  getAll,
   getDetail,
   create,
   update,
