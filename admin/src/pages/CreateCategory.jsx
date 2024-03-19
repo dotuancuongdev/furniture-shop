@@ -34,15 +34,14 @@ const CreateCategory = () => {
           message: "Success",
           severity: "success",
         });
+        setLoading(false);
         navigate("/category");
       } catch (error) {
         setSnackbar({
           isOpen: true,
-          message: error.message,
+          message: error.response?.data?.message || error.message,
           severity: "error",
         });
-        console.log(error);
-      } finally {
         setLoading(false);
       }
     };
