@@ -50,7 +50,7 @@ const CreateCategory = () => {
   };
   return (
     <Box className="h-screen w-full flex justify-center items-center">
-      <Box className="flex flex-col gap-2 w-1/3 rounded-md shadow-xl p-5">
+      <Box className="flex flex-col gap-3 w-1/3 rounded-md shadow-xl p-5">
         <Typography className="uppercase text-center font-medium">
           create a new category
         </Typography>

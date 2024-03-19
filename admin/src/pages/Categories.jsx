@@ -42,9 +42,15 @@ const Categories = () => {
   const appContext = useContext(AppContext);
   const { setSnackbar, setLoading } = appContext;
   const navigate = useNavigate();
-  const emptyRowsCount = pageSize - categories.length;
-  const emptyRows = Array(emptyRowsCount).fill(0);
 
+  let emptyRowsCount =
+    pageSize - categories.length < 0 ? 1 : pageSize - categories.length;
+  // if (emptyRowsCount < 0) {
+  //   emptyRowsCount = 0;
+  // }
+
+  const emptyRows = Array(emptyRowsCount).fill(0);
+  console.log("render");
   useEffect(() => {
     let ignore = false;
     const getCategories = async () => {
@@ -61,6 +67,8 @@ const Categories = () => {
 
           totalPages = respone.data.totalPages;
           totalItems = respone.data.totalItems;
+
+          setLoading(false);
         }
       } catch (error) {
         setSnackbar({
@@ -68,7 +76,7 @@ const Categories = () => {
           message: error.message,
           severity: "error",
         });
-      } finally {
+
         setLoading(false);
       }
     };
@@ -130,6 +138,7 @@ const Categories = () => {
     setPageNumber(prevPage);
     setPageNumberInput(`${prevPage}`);
   };
+
   return categories.length === 0 ? (
     <Box>no data</Box>
   ) : (
@@ -153,7 +162,7 @@ const Categories = () => {
           </TableHead>
           <TableBody>
             {categories.map((c, idx) => (
-              <StyledTableRow key={c.id}>
+              <StyledTableRow key={c._id}>
                 <StyledTableCell>
                   {(pageNumber - 1) * pageSize + idx + 1}
                 </StyledTableCell>
@@ -167,8 +176,15 @@ const Categories = () => {
                 </StyledTableCell>
                 <StyledTableCell>
                   <Box className="flex gap-1">
-                    <EditIcon className="cursor-pointer text-zinc-500 hover:text-black" />
-                    <DeleteForeverIcon className="cursor-pointer text-red-400 hover:text-red-500" />
+                    <Button
+                      className="text-zinc-400 hover:text-black"
+                      onClick={() => navigate(`/category/edit/${c._id}`)}
+                    >
+                      <EditIcon className=" " />
+                    </Button>
+                    <Button className="text-red-400 hover:text-red-600">
+                      <DeleteForeverIcon className=" " />
+                    </Button>
                   </Box>
                 </StyledTableCell>
               </StyledTableRow>

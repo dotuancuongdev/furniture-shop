@@ -20,11 +20,13 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import CreateCategory from "./pages/CreateCategory";
+import EditCategory from "./pages/EditCategory";
 
 const admin = createBrowserRouter([
   { path: "/", element: <Admin /> },
   { path: "/category", element: <Categories /> },
   { path: "/category/create", element: <CreateCategory /> },
+  { path: "/category/edit/:id", element: <EditCategory /> },
   { path: "/*", element: <Navigate to="/" replace /> },
 ]);
 const auth = createBrowserRouter([
