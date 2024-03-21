@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useContext } from "react";
 import { AppContext } from "../context";
 
@@ -9,13 +9,7 @@ const Admin = () => {
     setUser(null);
     localStorage.clear();
   };
-  return (
-    <>
-      <Button variant="contained" onClick={handleLogout}>
-        logout
-      </Button>
-    </>
-  );
+  return <Box>admin home page</Box>;
 };
 
 export default Admin;

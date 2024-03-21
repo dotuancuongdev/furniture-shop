@@ -20,10 +20,13 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import AddIcon from "@mui/icons-material/Add";
+
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
@@ -50,7 +53,7 @@ const Categories = () => {
   // }
 
   const emptyRows = Array(emptyRowsCount).fill(0);
-  console.log("render");
+
   useEffect(() => {
     let ignore = false;
     const getCategories = async () => {
@@ -143,13 +146,17 @@ const Categories = () => {
     <Box>no data</Box>
   ) : (
     <>
-      <Button
-        variant="contained"
-        className="bg-green-400"
-        onClick={() => navigate(`/category/create`)}
-      >
-        create a new category
-      </Button>
+      <Box className="flex justify-end mb-5">
+        <Button
+          variant="contained"
+          className="bg-green-500 flex justify-center items-center"
+          onClick={() => navigate(`/category/create`)}
+        >
+          <AddIcon className="text-xl mr-1" />
+          <Box>create</Box>
+        </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -189,19 +196,21 @@ const Categories = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ))}
-            {emptyRows.map((c, idx) => (
-              <StyledTableRow key={idx} className="h-[57px]">
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {pageNumber !== 1
+              ? emptyRows.map((c, idx) => (
+                  <StyledTableRow key={idx} className="h-[68.8px]">
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                  </StyledTableRow>
+                ))
+              : null}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box className="flex justify-end items-center gap-2">
+      <Box className="mt-3 flex justify-end items-center gap-2">
         <Typography>Total {totalItems} items</Typography>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">PageSize</InputLabel>
@@ -231,7 +240,7 @@ const Categories = () => {
             size="small"
             // label="PageNumber"
             type="number"
-            className=" w-24 mr-2"
+            className=" w-16 mr-2"
             value={pageNumberInput}
             onChange={handleChangePageNumber}
             onKeyDown={handleEnterPageNumber}

@@ -126,131 +126,145 @@ const CreateProduct = () => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Name"
-          variant="outlined"
-          size="small"
-          className={`${errors.name ? "" : "mb-6"}`}
-          {...register("name")}
-        />
-        {errors.name && (
-          <Typography className="text-red-500">
-            {errors.name.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Price"
-          variant="outlined"
-          type="number"
-          size="small"
-          className={`${errors.price ? "" : "mb-6"}`}
-          {...register("price")}
-        />
-        {errors.price && (
-          <Typography className="text-red-500">
-            {errors.price.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Stock"
-          variant="outlined"
-          type="number"
-          size="small"
-          className={`${errors.stock ? "" : "mb-6"}`}
-          {...register("stock")}
-        />
-        {errors.stock && (
-          <Typography className="text-red-500">
-            {errors.stock.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Summary"
-          variant="outlined"
-          size="small"
-          className={`${errors.summary ? "" : "mb-6"}`}
-          {...register("summary")}
-        />
-        {errors.summary && (
-          <Typography className="text-red-500">
-            {errors.summary.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Description"
-          variant="outlined"
-          size="small"
-          className={`${errors.description ? "" : "mb-6"}`}
-          multiline
-          rows={2}
-          {...register("description")}
-        />
-        {errors.description && (
-          <Typography className="text-red-500">
-            {errors.description.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Thumbnail"
-          variant="outlined"
-          size="small"
-          className={`${errors.thumbnail ? "" : "mb-6"}`}
-          {...register("thumbnail")}
-        />
-        {errors.thumbnail && (
-          <Typography className="text-red-500">
-            {errors.thumbnail.message}
-          </Typography>
-        )}
-      </Box>
-      <Box>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-name-label">Category</InputLabel>
-          <Select
-            labelId="demo-multiple-name-label"
-            id="demo-multiple-name"
-            multiple
-            size="small"
-            input={<OutlinedInput label="Categories" />}
-            MenuProps={MenuProps}
-            {...register("categoryIds")}
-            value={selectedCategoryValues}
-            onChange={handleChangeCategory}
-          >
-            {categories.map((category) => (
-              <MenuItem
-                key={category._id}
-                value={category._id}
-                style={getStyles(category, categories, theme)}
-              >
-                {category.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <Button type="submit" variant="contained" className="bg-green-500">
-        create product
-      </Button>
-    </form>
+    <Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box className="flex flex-wrap">
+          <Box className="w-full flex gap-5">
+            <Box className="flex-1  ">
+              <TextField
+                id="outlined-basic"
+                label="Name"
+                variant="outlined"
+                size="small"
+                className={`${errors.name ? "" : "mb-6"} w-full`}
+                {...register("name")}
+              />
+              {errors.name && (
+                <Typography className="text-red-500">
+                  {errors.name.message}
+                </Typography>
+              )}
+            </Box>
+            <Box className="flex-1  ">
+              <TextField
+                id="outlined-basic"
+                label="Price"
+                variant="outlined"
+                type="number"
+                size="small"
+                className={`${errors.price ? "" : "mb-6"} w-full`}
+                {...register("price")}
+              />
+              {errors.price && (
+                <Typography className="text-red-500">
+                  {errors.price.message}
+                </Typography>
+              )}
+            </Box>
+            <Box className="flex-1 ">
+              <TextField
+                id="outlined-basic"
+                label="Stock"
+                variant="outlined"
+                type="number"
+                size="small"
+                className={`${errors.stock ? "" : "mb-6"} w-full`}
+                {...register("stock")}
+              />
+              {errors.stock && (
+                <Typography className="text-red-500">
+                  {errors.stock.message}
+                </Typography>
+              )}
+            </Box>
+            <Box className="flex-1">
+              <TextField
+                id="outlined-basic"
+                label="Description"
+                variant="outlined"
+                size="small"
+                className={`${errors.description ? "" : "mb-6"} w-full`}
+                multiline
+                rows={1}
+                {...register("description")}
+              />
+              {errors.description && (
+                <Typography className="text-red-500">
+                  {errors.description.message}
+                </Typography>
+              )}
+            </Box>
+          </Box>
+
+          <Box className="w-full flex gap-5">
+            <Box className="flex-1">
+              <TextField
+                id="outlined-basic"
+                label="Summary"
+                variant="outlined"
+                size="small"
+                multiline
+                rows={1}
+                className={`${errors.summary ? "" : "mb-6"} w-full`}
+                {...register("summary")}
+              />
+              {errors.summary && (
+                <Typography className="text-red-500">
+                  {errors.summary.message}
+                </Typography>
+              )}
+            </Box>
+
+            <Box className="flex-1">
+              <TextField
+                id="outlined-basic"
+                label="Thumbnail"
+                variant="outlined"
+                size="small"
+                className={`${errors.thumbnail ? "" : "mb-6"} w-full`}
+                {...register("thumbnail")}
+              />
+              {errors.thumbnail && (
+                <Typography className="text-red-500">
+                  {errors.thumbnail.message}
+                </Typography>
+              )}
+            </Box>
+            <Box className="flex-1">
+              <FormControl className="w-full ">
+                <InputLabel id="demo-multiple-name-label">Category</InputLabel>
+                <Select
+                  labelId="demo-multiple-name-label"
+                  id="demo-multiple-name"
+                  multiple
+                  size="small"
+                  input={<OutlinedInput label="Categories" />}
+                  MenuProps={MenuProps}
+                  {...register("categoryIds")}
+                  value={selectedCategoryValues}
+                  onChange={handleChangeCategory}
+                >
+                  {categories.map((category) => (
+                    <MenuItem
+                      key={category._id}
+                      value={category._id}
+                      style={getStyles(category, categories, theme)}
+                    >
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+        </Box>
+        <Box className="flex justify-center">
+          <Button type="submit" variant="contained" className="bg-green-500">
+            create product
+          </Button>
+        </Box>
+      </form>
+    </Box>
   );
 };
 
