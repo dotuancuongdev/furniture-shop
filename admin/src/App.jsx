@@ -10,17 +10,22 @@ import {
   Box,
   Button,
   CircularProgress,
+  Menu,
+  MenuItem,
   Snackbar,
   Stack,
   styled,
   useTheme,
 } from "@mui/material";
-import Categories from "./pages/Categories";
+import Link from "@mui/material/Link";
+
 import {
   Navigate,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+
+import Categories from "./pages/Categories";
 import CreateCategory from "./pages/CreateCategory";
 import EditCategory from "./pages/EditCategory";
 import CreateProduct from "./pages/CreateProduct";
@@ -46,6 +51,7 @@ import ListItemText from "@mui/material/ListItemText";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
 import CategoryIcon from "@mui/icons-material/Category";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const admin = createBrowserRouter([
   { path: "/", element: <Admin /> },
@@ -62,9 +68,9 @@ const auth = createBrowserRouter([
 ]);
 
 const drawer = [
-  { id: 1, name: "Products", icon: <AllInboxIcon /> },
-  { id: 2, name: "Categories", icon: <CategoryIcon /> },
-  { id: 3, name: "Oders", icon: <ReceiptIcon /> },
+  { id: 1, name: "Products", icon: <AllInboxIcon />, url: "/product" },
+  { id: 2, name: "Categories", icon: <CategoryIcon />, url: "/category" },
+  { id: 3, name: "Orders", icon: <ReceiptIcon />, url: "/order" },
 ];
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -162,14 +168,22 @@ function App() {
   const appContext = useContext(AppContext);
   const { user } = appContext;
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openProfileMenu = !!anchorEl;
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const handleAccountLogoClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleAccountLogoClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -196,13 +210,27 @@ function App() {
                 </Typography>
               </Box>
               <Box>
-                <Button
-                  variant="contained"
-                  className="bg-zinc-300"
-                  onClick={handleLogOut}
-                >
-                  logout
+                <Button onClick={handleAccountLogoClick}>
+                  <AccountCircleIcon className="text-white" />
                 </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={openProfileMenu}
+                  onClose={handleAccountLogoClose}
+                >
+                  <MenuItem onClick={handleAccountLogoClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleAccountLogoClose}>
+                    My account
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleAccountLogoClose();
+                      handleLogOut();
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                </Menu>
               </Box>
             </Toolbar>
           </AppBar>
@@ -234,7 +262,7 @@ function App() {
                 <ListItem key={item.id} disablePadding>
                   <ListItemButton>
                     <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.name} />
+                    <ListItemText>{item.name}</ListItemText>
                   </ListItemButton>
                 </ListItem>
               ))}
