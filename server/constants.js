@@ -13,4 +13,8 @@ export const STATUS_CODE_MESSAGE = {
   500: "Internal Server Error",
 }
 
-export const DEFAULT_VERSION = 1
+export const ORDER_STATUS = {
+  PENDING: "PENDING",
+  PROCESSING: "PROCESSING",
+  COMPLETED: "COMPLETED",
+}

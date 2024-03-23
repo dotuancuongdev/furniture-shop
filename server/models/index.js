@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from "../constants.js"
 import mongoose from "mongoose"
 const { Schema } = mongoose
 
@@ -48,7 +49,7 @@ const productSchema = new Schema({
   ],
 })
 
-export const productVersionSchema = new Schema({
+const productVersionSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -71,7 +72,7 @@ export const productVersionSchema = new Schema({
   },
 })
 
-export const productCategorySchema = new Schema({
+const productCategorySchema = new Schema({
   product: {
     type: Schema.Types.ObjectId,
     ref: "Product",
@@ -79,6 +80,63 @@ export const productCategorySchema = new Schema({
   category: {
     type: Schema.Types.ObjectId,
     ref: "Category",
+  },
+})
+
+const citySchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
+})
+
+const orderSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ORDER_STATUS,
+    default: ORDER_STATUS.PENDING,
+  },
+  city: {
+    type: Schema.Types.ObjectId,
+    ref: "City",
+  },
+})
+
+const orderProductVersion = new Schema({
+  order: {
+    type: Schema.Types.ObjectId,
+    ref: "Order",
+  },
+  productVersion: {
+    type: Schema.Types.ObjectId,
+    ref: "ProductVersion",
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
   },
 })
 
@@ -91,4 +149,10 @@ export const ProductVersion = mongoose.model(
 export const ProductCategory = mongoose.model(
   "ProductCategory",
   productCategorySchema
+)
+export const City = mongoose.model("City", citySchema)
+export const Order = mongoose.model("Order", orderSchema)
+export const OrderProductVersion = mongoose.model(
+  "OrderProductVersion",
+  orderProductVersion
 )
