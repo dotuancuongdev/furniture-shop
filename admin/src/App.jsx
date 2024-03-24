@@ -17,7 +17,6 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import Link from "@mui/material/Link";
 
 import {
   Navigate,
@@ -28,6 +27,7 @@ import {
 import Categories from "./pages/Categories";
 import CreateCategory from "./pages/CreateCategory";
 import EditCategory from "./pages/EditCategory";
+import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 
 import * as React from "react";
@@ -52,13 +52,17 @@ import AllInboxIcon from "@mui/icons-material/AllInbox";
 import CategoryIcon from "@mui/icons-material/Category";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import EditPrd from "./pages/EditPrd";
 
 const admin = createBrowserRouter([
   { path: "/", element: <Admin /> },
   { path: "/category", element: <Categories /> },
   { path: "/category/create", element: <CreateCategory /> },
   { path: "/category/edit/:id", element: <EditCategory /> },
+
+  { path: "/product", element: <Products /> },
   { path: "/product/create/", element: <CreateProduct /> },
+  { path: "/product/edit/:id", element: <EditPrd /> },
 
   { path: "/*", element: <Navigate to="/" replace /> },
 ]);
