@@ -34,7 +34,7 @@ const Login = () => {
       setLoading(false);
       setSnackbar({
         isOpen: true,
-        message: error.message,
+        message: error.response?.data?.message || error.message,
         severity: "error",
       });
       setPassword("");
