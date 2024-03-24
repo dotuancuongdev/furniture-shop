@@ -9,7 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const appContext = useContext(AppContext);
-  const { setSnackbar } = appContext;
+  const { setSnackbar, setLoading } = appContext;
 
   const userContext = useContext(AppContext);
   const { setUser } = userContext;
@@ -22,15 +22,19 @@ const Login = () => {
 
   const login = async () => {
     try {
+      setLoading(true);
       const respone = await api.post("/auth/login", { username, password });
 
       setUser(respone.data.user);
       localStorage.setItem(USER, JSON.stringify(respone.data.user));
       localStorage.setItem(TOKEN, respone.data.token);
+      setLoading(false);
     } catch (error) {
+      console.log(error);
+      setLoading(false);
       setSnackbar({
         isOpen: true,
-        message: error.response.data.message,
+        message: error.message,
         severity: "error",
       });
       setPassword("");

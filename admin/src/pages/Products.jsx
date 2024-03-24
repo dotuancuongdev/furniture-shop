@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import api from "../api";
 import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  PAGE_SIZE_OPTIONS,
+} from "../constants";
+import { AppContext } from "../context";
+import {
   Box,
   Button,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   Paper,
@@ -25,165 +30,125 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import AddIcon from "@mui/icons-material/Add";
 
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  PAGE_SIZE_OPTIONS,
-} from "../constants";
-import { AppContext } from "../context";
 import { useNavigate } from "react-router-dom";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 let totalPages;
 let totalItems;
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
+
+const Products = () => {
+  const [products, setProducts] = useState([]);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageNumberInput, setPageNumberInput] = useState(`${pageNumber}`);
   const appContext = useContext(AppContext);
-  const { setSnackbar, setLoading } = appContext;
+  const { setLoading, setSnackbar } = appContext;
   const navigate = useNavigate();
 
   let emptyRowsCount =
-    pageSize - categories.length < 0 ? 1 : pageSize - categories.length;
-  // if (emptyRowsCount < 0) {
-  //   emptyRowsCount = 0;
-  // }
-
+    pageSize - products.length < 0 ? 1 : pageSize - products.length;
   const emptyRows = Array(emptyRowsCount).fill(0);
 
   useEffect(() => {
     let ignore = false;
-    const getCategories = async () => {
+    const getProducts = async () => {
       try {
         setLoading(true);
-        const respone = await api.get("/categories", {
-          params: {
-            pageSize,
-            pageNumber,
-          },
+        const response = await api.get(`/products`, {
+          params: { pageSize, pageNumber },
         });
-        if (!ignore) {
-          setCategories(respone.data.items);
 
-          totalPages = respone.data.totalPages;
-          totalItems = respone.data.totalItems;
-
-          setLoading(false);
-        }
+        setProducts(response.data.items);
+        totalItems = response.data.totalItems;
+        totalPages = response.data.totalPages;
+        setLoading(false);
       } catch (error) {
         setSnackbar({
           isOpen: true,
           message: error.message,
           severity: "error",
         });
-
         setLoading(false);
       }
     };
-
-    getCategories();
+    getProducts();
     return () => {
       ignore = true;
     };
-  }, [pageSize, pageNumber]);
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
+  }, []);
 
   const handleChangePageSize = (e) => {
     setPageSize(e.target.value);
-    setPageNumber(1);
-    setPageNumberInput(`1`);
   };
-
   const handleChangePageNumber = (e) => {
     setPageNumberInput(e.target.value);
   };
   const handleEnterPageNumber = (e) => {
-    if (e.keyCode === 13) {
-      if (!pageNumberInput || parseInt(pageNumberInput) > totalPages) {
-        return;
-      }
-
+    if (e.key === "Enter") {
+      if (!pageNumberInput || parseInt(pageNumberInput) > totalPages) return;
       setPageNumber(parseInt(pageNumberInput));
     }
   };
-  const handleNextPage = () => {
-    if (pageNumber === totalPages) return;
-    const nextPage = pageNumber + 1;
-    setPageNumber(nextPage);
-
-    setPageNumberInput(`${nextPage}`);
-  };
   const handlePrevPage = () => {
     if (pageNumber === 1) return;
-    const prevPage = pageNumber - 1;
-    setPageNumber(prevPage);
-    setPageNumberInput(`${prevPage}`);
+    setPageNumber(pageNumber - 1);
+    setPageNumberInput(`${pageNumber - 1}`);
   };
-
-  return categories.length === 0 ? (
+  const handleNextPage = () => {
+    if (pageNumber === totalPages) return;
+    setPageNumber(pageNumber + 1);
+    setPageNumberInput(`${pageNumber + 1}`);
+  };
+  return products.length === 0 ? (
     <Box>no data</Box>
   ) : (
     <>
-      <Box className="flex justify-end mb-5">
-        <Button
-          variant="contained"
-          className="bg-green-500 flex justify-center items-center"
-          onClick={() => navigate(`/category/create`)}
-        >
-          <AddIcon className="text-xl mr-1" />
-          <Box>create</Box>
-        </Button>
-      </Box>
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>#</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell align="center">Price</StyledTableCell>
+              <StyledTableCell align="center">Stock</StyledTableCell>
               <StyledTableCell>Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {categories.map((c, idx) => (
-              <StyledTableRow key={c._id}>
+            {products.map((prd, idx) => (
+              <StyledTableRow key={prd._id}>
                 <StyledTableCell>
                   {(pageNumber - 1) * pageSize + idx + 1}
                 </StyledTableCell>
-                <StyledTableCell>{c.name}</StyledTableCell>
-                <StyledTableCell>
-                  {c.description?.length > 30
-                    ? `${c.description.slice(0, 30).trim()}...`
-                    : c.description}
-                </StyledTableCell>
+                <StyledTableCell>{prd.name}</StyledTableCell>
+                <StyledTableCell align="center">{prd.price}</StyledTableCell>
+                <StyledTableCell align="center">{prd.stock}</StyledTableCell>
+
                 <StyledTableCell>
                   <Box className="flex gap-1">
                     <Button
                       className="text-zinc-400 hover:text-black"
-                      onClick={() => navigate(`/category/edit/${c._id}`)}
+                      onClick={() => navigate(`/product/edit/${prd._id}`)}
                     >
                       <EditIcon className=" " />
                     </Button>
@@ -207,7 +172,6 @@ const Categories = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
       <Box className="mt-3 flex justify-end items-center gap-2">
         <Typography>Total {totalItems} items</Typography>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -258,4 +222,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Products;
