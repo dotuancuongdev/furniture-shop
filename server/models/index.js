@@ -10,6 +10,12 @@ const categorySchema = new Schema({
   description: {
     type: String,
   },
+  thumbnail: {
+    type: String,
+  },
+  creditURL: {
+    type: String,
+  },
   productCategories: [
     {
       type: Schema.Types.ObjectId,
@@ -34,6 +40,13 @@ const productSchema = new Schema({
     type: Number,
     default: 0,
     validator: (value) => value >= 0,
+  },
+  originalPrice: {
+    type: Number,
+    validator: (value) => value >= 0,
+  },
+  creditURL: {
+    type: String,
   },
   productVersions: [
     {
@@ -136,7 +149,7 @@ const orderProductVersion = new Schema({
   quantity: {
     type: Number,
     required: true,
-    min: 1,
+    validator: (value) => value > 0,
   },
 })
 
