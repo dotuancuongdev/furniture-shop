@@ -48,7 +48,7 @@ const CreateCategory = () => {
     postCategory();
   };
   return (
-    <Box className="h-screen w-full flex justify-center items-center">
+    <Box className=" w-full flex justify-center items-center">
       <Box className="flex flex-col gap-3 w-1/3 rounded-md shadow-xl p-5">
         <Typography className="uppercase text-center font-medium">
           create a new category
