@@ -2,7 +2,11 @@
     "compilerOptions": {
       "baseUrl": ".",
       "checkJs": true,
-      "jsx": "preserve"
+      "jsx": "preserve",
+      "lib": [
+        "ES2021.String",
+        "dom"
+      ]
     }
   }
   
