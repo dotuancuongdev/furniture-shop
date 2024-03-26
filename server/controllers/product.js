@@ -12,6 +12,17 @@ const getForCommerce = async (req, res) => {
   }
 }
 
+const getDetailForCommerce = async (req, res) => {
+  const { id } = req.params
+  try {
+    const item = await productService.getDetailForCommerce(id)
+    if (!item) throw new Error()
+    res.status(200).json(item)
+  } catch (error) {
+    res.status(404).json({ code: 404, message: STATUS_CODE_MESSAGE[404] })
+  }
+}
+
 const get = async (req, res) => {
   const { query } = req
   try {
@@ -87,6 +98,7 @@ const remove = async (req, res) => {
 
 const productController = {
   getForCommerce,
+  getDetailForCommerce,
   get,
   getDetail,
   create,

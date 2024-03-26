@@ -80,6 +80,32 @@ const getForCommerce = async (query) => {
   }
 }
 
+const getDetailForCommerce = async (id) => {
+  const product = await Product.findById(id)
+    .populate({
+      path: "productVersions",
+      match: { isActive: { $eq: true } },
+    })
+    .populate({ path: "productCategories", populate: "category" })
+    .select("_id summary description images stock originalPrice")
+    .lean()
+    .exec()
+
+  const item = { ...product }
+  if (product.productVersions.length > 0) {
+    const version = product.productVersions[0]
+    item.name = version.name
+    item.price = version.price
+    item.thumbnail = version.thumbnail
+  }
+  item.categoryNames = product.productCategories.map((pc) => pc.category.name)
+
+  item.productVersions = undefined
+  item.productCategories = undefined
+
+  return item
+}
+
 const get = async (query) => {
   const { pageSize, pageNumber } = query
   const size = pageSize && pageSize > 0 ? parseInt(pageSize) : DEFAULT_PAGE_SIZE
@@ -213,6 +239,7 @@ const remove = async (id) => {
 
 const productService = {
   getForCommerce,
+  getDetailForCommerce,
   get,
   getDetail,
   create,
