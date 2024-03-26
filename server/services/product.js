@@ -1,4 +1,4 @@
-import { Op } from "sequelize"
+import mongoose from "mongoose"
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../constants.js"
 import {
   Category,
@@ -6,7 +6,79 @@ import {
   ProductCategory,
   ProductVersion,
 } from "../models/index.js"
-import mongoose from "mongoose"
+
+const getForCommerce = async (query) => {
+  const { pageSize, pageNumber, categoryIds, minPrice, maxPrice, sortBy } =
+    query
+
+  const size = pageSize && pageSize > 0 ? parseInt(pageSize) : DEFAULT_PAGE_SIZE
+  const number =
+    pageNumber && pageNumber > 0 ? parseInt(pageNumber) : DEFAULT_PAGE_NUMBER
+
+  let priceFilter = {}
+  if (minPrice && parseInt(minPrice)) {
+    priceFilter = { ...priceFilter, $gte: parseInt(minPrice) }
+  }
+  if (maxPrice && parseInt(maxPrice)) {
+    priceFilter = { ...priceFilter, $lte: parseInt(maxPrice) }
+  }
+
+  let categoryFilter = {}
+  if (categoryIds && categoryIds.length > 0) {
+    categoryFilter = { _id: { $in: categoryIds } }
+  }
+
+  const products = await Product.find()
+    .populate({
+      path: "productVersions",
+      match: {
+        isActive: { $eq: true },
+        price: priceFilter,
+      },
+    })
+    .populate({
+      path: "productCategories",
+      populate: {
+        path: "category",
+        match: categoryFilter,
+      },
+    })
+    .select("_id originalPrice stock")
+    .lean()
+    .exec()
+
+  const items = products
+    .filter(
+      (p) =>
+        p.productVersions.length > 0 &&
+        p.productCategories.some((pc) => pc.category)
+    )
+    .map((p) => {
+      const prd = { ...p }
+      if (p.productVersions.length > 0) {
+        const version = p.productVersions[0]
+        prd.name = version.name
+        prd.price = version.price
+        prd.thumbnail = version.thumbnail
+      }
+      prd.productVersions = undefined
+      prd.productCategories = undefined
+      return prd
+    })
+
+  const totalItems = items.length
+  const totalPages = Math.ceil(totalItems / size)
+  const skipItemsCount = pageSize * (pageNumber - 1)
+  const chunkedItems = items.slice(skipItemsCount, pageSize)
+
+  return {
+    items: chunkedItems,
+    pageSize: size,
+    pageNumber: number,
+    totalItems,
+    totalPages,
+  }
+}
 
 const get = async (query) => {
   const { pageSize, pageNumber } = query
@@ -25,7 +97,7 @@ const get = async (query) => {
       match: { isActive: { $eq: true } },
     })
     .populate({ path: "productCategories", populate: "category" })
-    .select("_id summary description images stock")
+    .select("_id summary description images stock originalPrice")
     .lean()
     .exec()
 
@@ -58,7 +130,7 @@ const getDetail = async (id) => {
       match: { isActive: { $eq: true } },
     })
     .populate({ path: "productCategories", populate: "category" })
-    .select("_id summary description images stock")
+    .select("_id summary description images stock originalPrice")
     .lean()
     .exec()
 
@@ -79,8 +151,6 @@ const create = async (payload) => {
   const { summary, description, images, stock, categoryIds } = payload
   const { name, price, thumbnail } = payload
 
-  console.log(payload)
-
   const session = await mongoose.startSession()
   try {
     session.startTransaction()
@@ -100,7 +170,6 @@ const create = async (payload) => {
       product: product?._id,
       category: cId,
     }))
-    console.log("productCategories", productCategories)
     const prdCtgrs = await ProductCategory.insertMany(productCategories, {
       session,
     })
@@ -143,6 +212,7 @@ const remove = async (id) => {
 }
 
 const productService = {
+  getForCommerce,
   get,
   getDetail,
   create,

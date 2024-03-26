@@ -2,6 +2,16 @@ import { ProductVersion } from "../models/index.js"
 import { STATUS_CODE_MESSAGE } from "../constants.js"
 import productService from "../services/product.js"
 
+const getForCommerce = async (req, res) => {
+  const { query } = req
+  try {
+    const result = await productService.getForCommerce(query)
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
 const get = async (req, res) => {
   const { query } = req
   try {
@@ -76,6 +86,7 @@ const remove = async (req, res) => {
 }
 
 const productController = {
+  getForCommerce,
   get,
   getDetail,
   create,

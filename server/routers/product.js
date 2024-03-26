@@ -4,8 +4,9 @@ import productController from "../controllers/product.js"
 
 const productRouter = express.Router()
 
-productRouter.get("/", productController.get)
-productRouter.get("/:id", productController.getDetail)
+productRouter.get("/commerce", productController.getForCommerce)
+productRouter.get("/", userAuth, adminAuth, productController.get)
+productRouter.get("/:id", userAuth, adminAuth, productController.getDetail)
 productRouter.post("/", userAuth, adminAuth, productController.create)
 productRouter.put("/:id", userAuth, adminAuth, productController.update)
 // productRouter.delete("/:id", userAuth, adminAuth, productController.remove)
