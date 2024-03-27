@@ -23,6 +23,14 @@ const getForCommerce = async (query) => {
     priceFilter = { ...priceFilter, $lte: parseInt(maxPrice) }
   }
 
+  const versionMatch = {
+    isActive: { $eq: true },
+  }
+
+  if (Object.keys(priceFilter).length > 0) {
+    versionMatch.price = priceFilter
+  }
+
   let categoryFilter = {}
   if (categoryIds && categoryIds.length > 0) {
     categoryFilter = { _id: { $in: categoryIds } }
@@ -31,10 +39,7 @@ const getForCommerce = async (query) => {
   const products = await Product.find()
     .populate({
       path: "productVersions",
-      match: {
-        isActive: { $eq: true },
-        price: priceFilter,
-      },
+      match: versionMatch,
     })
     .populate({
       path: "productCategories",
@@ -68,8 +73,8 @@ const getForCommerce = async (query) => {
 
   const totalItems = items.length
   const totalPages = Math.ceil(totalItems / size)
-  const skipItemsCount = pageSize * (pageNumber - 1)
-  const chunkedItems = items.slice(skipItemsCount, pageSize)
+  const skipItemsCount = size * (number - 1)
+  const chunkedItems = items.slice(skipItemsCount, skipItemsCount + size)
 
   return {
     items: chunkedItems,
