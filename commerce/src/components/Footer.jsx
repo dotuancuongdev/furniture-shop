@@ -42,7 +42,7 @@ const Footer = () => {
         {policies.map((item, idx) => (
           <Box
             key={idx}
-            className="flex-1 p-5 text-zinc-700 flex flex-col justify-center items-center hover:bg-zinc-200 duration-200"
+            className="flex-1 p-5 text-zinc-700 flex flex-col justify-center items-center hover:bg-slate-100 duration-200"
           >
             {item.icon}
             <Typography className="text-2xl">{item.text1}</Typography>
@@ -50,7 +50,7 @@ const Footer = () => {
           </Box>
         ))}
       </Box>
-      <Box className="bg-zinc-200 flex p-5 gap-5 ">
+      <Box className="bg-slate-200 flex p-5 gap-5 ">
         <Box className="flex-1 ">
           <Typography variant="h5" className="uppercase mb-2">
             Nội thất
@@ -101,16 +101,16 @@ const Footer = () => {
           <Typography variant="h5" className="uppercase mb-2">
             fanpage
           </Typography>
-          <Box className="flex gap-2">
-            <FacebookIcon />
+          <Box className="flex gap-2 cursor-pointer">
+            <FacebookIcon color="info" />
             <Typography>Facebook</Typography>
           </Box>
-          <Box className="flex gap-2">
-            <YouTubeIcon />
+          <Box className="flex gap-2 cursor-pointer">
+            <YouTubeIcon color="error" />
             <Typography>Youtube</Typography>
           </Box>
-          <Box className="flex gap-2">
-            <InstagramIcon />
+          <Box className="flex gap-2 cursor-pointer">
+            <InstagramIcon color="action" />
             <Typography>Instagram</Typography>
           </Box>
         </Box>
