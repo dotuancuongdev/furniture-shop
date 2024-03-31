@@ -1,4 +1,3 @@
-import { Op } from "sequelize"
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../constants.js"
 import { Category } from "../models/index.js"
 

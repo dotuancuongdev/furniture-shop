@@ -83,6 +83,12 @@ const productVersionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Product",
   },
+  orderProductVersions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "OrderProductVersion",
+    },
+  ],
 })
 
 const productCategorySchema = new Schema({
@@ -135,6 +141,12 @@ const orderSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "City",
   },
+  orderProductVersions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "OrderProductVersion",
+    },
+  ],
 })
 
 const orderProductVersion = new Schema({
