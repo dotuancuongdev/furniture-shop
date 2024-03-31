@@ -3,8 +3,7 @@ import orderController from "../controllers/order.js"
 
 const orderRouter = express.Router()
 
+orderRouter.get("/:id", orderController.getDetail)
 orderRouter.post("/", orderController.create)
-
-// orderRouter.get("/", orderController.get)
 
 export default orderRouter

@@ -8,16 +8,45 @@ import {
   ProductVersion,
 } from "../models/index.js"
 
-// const get = async (query) => {
-//   const { search } = query
-//   const items = await Order.find({
-//     name: { $regex: search || "", $options: "i" },
-//   })
-//     .sort({ name: "asc" })
-//     .select("_id name")
-//     .exec()
-//   return items
-// }
+const getDetail = async (id) => {
+  const order = await Order.findById(id)
+    .populate({
+      path: "city",
+      select: "name",
+    })
+    .populate({
+      path: "orderProductVersions",
+      select: "productVersion quantity",
+      populate: {
+        path: "productVersion",
+        select: "_id name price thumbnail",
+        populate: {
+          path: "product",
+          select: "_id",
+        },
+      },
+    })
+    .select("_id name email phone address status")
+    .lean()
+    .exec()
+
+  const item = { ...order }
+  if (order.city) {
+    item.cityName = order.city.name
+    item.city = undefined
+  }
+  if (order.orderProductVersions.length > 0) {
+    item.products = order.orderProductVersions.map((opv) => ({
+      _id: opv.productVersion.product._id,
+      name: opv.productVersion.name,
+      price: opv.productVersion.price,
+      thumbnail: opv.productVersion.thumbnail,
+    }))
+    item.orderProductVersions = undefined
+  }
+
+  return item
+}
 
 const create = async (payload) => {
   const { name, email, phone, address, cityId, productsWithQuantity } = payload
@@ -88,7 +117,7 @@ const create = async (payload) => {
 }
 
 const orderService = {
-  // get,
+  getDetail,
   create,
 }
 
