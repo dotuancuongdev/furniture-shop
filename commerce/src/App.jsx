@@ -1,31 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
+import { Alert, Box, CircularProgress, Snackbar, Stack } from "@mui/material";
 import "./App.css";
-import {
-  Box,
-  Paper,
-  Button,
-  Typography,
-  Snackbar,
-  Alert,
-  Stack,
-  CircularProgress,
-} from "@mui/material";
-import Carousel from "react-material-ui-carousel";
 
-import Products from "./pages/Products";
-import Detail from "./pages/Detail";
 import Checkout from "./pages/Checkout";
-
-import Home from "./pages/Home";
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
-import Header from "./components/Header";
+import Products from "./pages/Products";
+ß;
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 import { AppContext } from "./context";
+import Home from "./pages/Home";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -39,6 +24,7 @@ const AppSnackbar = () => {
 
     setSnackbar({ isOpen: false, message: "", severity: "" });
   };
+
   return (
     <Snackbar
       open={isOpen}
@@ -72,32 +58,37 @@ const AppLoading = () => {
   );
 };
 
+const routers = [
+  {
+    path: "/",
+    element: <Home />,
+  },
+
+  {
+    path: "/product",
+    element: <Products />,
+  },
+
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  },
+  { path: "/*", element: <Navigate to="/" replace /> },
+];
+
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Home />,
-    },
-
-    {
-      path: "/product",
-      element: <Products />,
-    },
-
-    {
-      path: "/checkout",
-      element: <Checkout />,
-    },
-    { path: "/*", element: <Navigate to="/" replace /> },
-  ]);
   return (
-    <>
+    <BrowserRouter>
       <AppLoading />
       <AppSnackbar />
       <Header />
-      <RouterProvider router={router} />
+      <Routes>
+        {routers.map((r) => (
+          <Route key={r.path} path={r.path} element={r.element} />
+        ))}
+      </Routes>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
