@@ -1,4 +1,8 @@
-import { ORDER_STATUS } from "../constants.js"
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  ORDER_STATUS,
+} from "../constants.js"
 import mongoose from "mongoose"
 import {
   City,
@@ -7,6 +11,69 @@ import {
   Product,
   ProductVersion,
 } from "../models/index.js"
+
+const get = async (query) => {
+  const { pageSize, pageNumber } = query
+  const size = pageSize && pageSize > 0 ? parseInt(pageSize) : DEFAULT_PAGE_SIZE
+  const number =
+    pageNumber && pageNumber > 0 ? parseInt(pageNumber) : DEFAULT_PAGE_NUMBER
+
+  const totalItems = await Order.countDocuments()
+  const totalPages = Math.ceil(totalItems / size)
+  const skipItemsCount = (number - 1) * size
+  const orders = await Order.find()
+    .skip(skipItemsCount)
+    .limit(pageSize)
+    .populate({
+      path: "city",
+      select: "name",
+    })
+    .populate({
+      path: "orderProductVersions",
+      select: "productVersion quantity",
+      populate: {
+        path: "productVersion",
+        select: "_id name price thumbnail",
+        populate: {
+          path: "product",
+          select: "_id",
+        },
+      },
+    })
+    .select("_id name email phone address status createdDate")
+    .lean()
+    .exec()
+
+  console.log("orders", orders)
+
+  const items = orders.map((o) => {
+    const ord = { ...o }
+    if (o.city) {
+      ord.cityName = o.city.name
+      ord.city = undefined
+    }
+    if (o.orderProductVersions?.length > 0) {
+      let totalQuantity = 0
+      let totalPrice = 0
+      o.orderProductVersions.forEach((p) => {
+        totalQuantity += p.quantity
+        totalPrice += p.productVersion.price * p.quantity
+      })
+      ord.totalQuantity = totalQuantity
+      ord.totalPrice = totalPrice
+      ord.orderProductVersions = undefined
+    }
+    return ord
+  })
+
+  return {
+    items,
+    pageSize: size,
+    pageNumber: number,
+    totalItems,
+    totalPages,
+  }
+}
 
 const getDetail = async (id) => {
   const order = await Order.findById(id)
@@ -26,7 +93,7 @@ const getDetail = async (id) => {
         },
       },
     })
-    .select("_id name email phone address status")
+    .select("_id name email phone address status createdDate")
     .lean()
     .exec()
 
@@ -117,6 +184,7 @@ const create = async (payload) => {
 }
 
 const orderService = {
+  get,
   getDetail,
   create,
 }

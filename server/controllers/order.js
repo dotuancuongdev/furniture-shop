@@ -1,6 +1,16 @@
 import { STATUS_CODE_MESSAGE } from "../constants.js"
 import orderService from "../services/order.js"
 
+const get = async (req, res) => {
+  const { query } = req
+  try {
+    const result = await orderService.get(query)
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
 const getDetail = async (req, res) => {
   const { id } = req.params
   try {
@@ -30,6 +40,7 @@ const create = async (req, res) => {
 }
 
 const orderController = {
+  get,
   getDetail,
   create,
 }

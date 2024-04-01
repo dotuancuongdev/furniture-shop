@@ -141,6 +141,11 @@ const orderSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "City",
   },
+  createdDate: {
+    type: Schema.Types.Date,
+    required: true,
+    default: new Date(),
+  },
   orderProductVersions: [
     {
       type: Schema.Types.ObjectId,
