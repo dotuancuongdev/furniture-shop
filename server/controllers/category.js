@@ -13,9 +13,35 @@ const get = async (req, res) => {
 }
 
 const getAll = async (req, res) => {
-  const { query } = req
   try {
-    const result = await categoryService.getAll(query)
+    const result = await categoryService.getAll()
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
+const getCollections = async (req, res) => {
+  try {
+    const result = await categoryService.getCollections()
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
+const getFeaturedCategories = async (req, res) => {
+  try {
+    const result = await categoryService.getFeaturedCategories()
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
+const getPromotions = async (req, res) => {
+  try {
+    const result = await categoryService.getPromotions()
     res.status(200).json(result)
   } catch (error) {
     res.status(400).json({ code: 400, message: error.message })
@@ -92,6 +118,9 @@ const remove = async (req, res) => {
 const categoryController = {
   get,
   getAll,
+  getCollections,
+  getFeaturedCategories,
+  getPromotions,
   getDetail,
   create,
   update,

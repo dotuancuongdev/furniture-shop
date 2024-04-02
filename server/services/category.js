@@ -24,9 +24,45 @@ const get = async (query) => {
   }
 }
 
-const getAll = async (query) => {
-  const { search } = query
-  const items = await Category.find().select("_id name description").exec()
+const getAll = async () => {
+  const items = await Category.find().select("_id name").exec()
+  return items
+}
+
+const getCollections = async () => {
+  const items = await Category.find({
+    name: { $regex: "collection" || "", $options: "i" },
+  })
+    .select("_id name")
+    .exec()
+  return items
+}
+
+const getFeaturedCategories = async () => {
+  const totalCount = await Category.countDocuments({
+    name: { $not: /collection/i },
+  })
+  const limit = Math.ceil(totalCount / 2)
+  const items = await Category.find({
+    name: { $not: /collection/i },
+  })
+    .limit(limit)
+    .select("_id name")
+    .exec()
+  return items
+}
+
+const getPromotions = async () => {
+  const totalCount = await Category.countDocuments({
+    name: { $not: /collection/i },
+  })
+  const startIndex = Math.ceil(totalCount / 2)
+  const items = await Category.find({
+    name: { $not: /collection/i },
+  })
+    .skip(startIndex)
+    .select("_id name")
+    .exec()
   return items
 }
 
@@ -53,6 +89,9 @@ const remove = async (id) => {
 const categoryService = {
   get,
   getAll,
+  getCollections,
+  getFeaturedCategories,
+  getPromotions,
   getDetail,
   create,
   update,
