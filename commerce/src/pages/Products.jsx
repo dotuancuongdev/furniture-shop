@@ -2,20 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context";
 import axios from "axios";
 import { Box, Pagination, Stack, TextField, Typography } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api";
+import { formatPrice, shortenString } from "../helper";
 
-const formatPrice = (x) => {
-  return x.toLocaleString("vi", { style: "currency", currency: "VND" });
-};
-
-function shortenString(str, maxLength) {
-  if (str.length <= maxLength) {
-    return str;
-  } else {
-    return str.substring(0, maxLength) + "...";
-  }
-}
 let totalPages;
 let totalItems;
 const pageSize = 8;
@@ -26,6 +16,7 @@ const Products = () => {
   const [pageNumber, setpageNumber] = useState(1);
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar } = appContext;
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get("categoryId");
@@ -52,7 +43,6 @@ const Products = () => {
             categoryIds: [query],
           },
         });
-        console.log(res.data.items);
         if (!ignore) {
           setProducts(res.data.items);
           setLoading(false);
@@ -94,9 +84,13 @@ const Products = () => {
         />
       </Box>
 
-      <Box className="max-w-6xl mx-auto grid grid-cols-4 gap-5">
+      <Box className="max-w-6xl mx-auto grid grid-cols-4 gap-5 mb-10">
         {products.map((item, idx) => (
-          <Box key={idx} className="cursor-pointer relative ">
+          <Box
+            key={idx}
+            className="cursor-pointer relative"
+            onClick={() => navigate(`/product/${item._id}`)}
+          >
             <Box
               className={`absolute top-3 left-3 bg-[#F41919] text-white px-1 py-[2px] ${
                 Math.floor((1 - item.price / item.originalPrice) * 100) === 0
@@ -140,14 +134,16 @@ const Products = () => {
           </Box>
         ))}
       </Box>
-      <Stack spacing={2} className="mx-auto">
-        <Pagination
-          count={totalPages}
-          shape="rounded"
-          onChange={handleChangePageNumber}
-          page={pageNumber}
-        />
-      </Stack>
+      <Box className="flex">
+        <Stack spacing={2} className="mx-auto">
+          <Pagination
+            count={totalPages}
+            shape="rounded"
+            onChange={handleChangePageNumber}
+            page={pageNumber}
+          />
+        </Stack>
+      </Box>
     </>
   );
 };

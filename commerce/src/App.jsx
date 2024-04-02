@@ -5,7 +5,6 @@ import "./App.css";
 
 import Checkout from "./pages/Checkout";
 import Products from "./pages/Products";
-ß;
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
