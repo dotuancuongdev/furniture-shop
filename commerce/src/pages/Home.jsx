@@ -20,6 +20,7 @@ import { AppContext } from "../context";
 import api from "../api";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { formatPrice, shortenString } from "../helper";
 
 const slideShowImgs = [
   {

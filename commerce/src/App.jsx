@@ -10,6 +10,8 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { AppContext } from "./context";
 import Home from "./pages/Home";
+import Detail from "./pages/Detail";
+import Order from "./pages/Order";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -66,6 +68,18 @@ const routers = [
   {
     path: "/product",
     element: <Products />,
+  },
+  {
+    path: "/product/:id",
+    element: <Detail />,
+  },
+  {
+    path: "/product/:id",
+    element: <Detail />,
+  },
+  {
+    path: "/order-tracking",
+    element: <Order />,
   },
 
   {

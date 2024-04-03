@@ -6,6 +6,9 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { formatPrice } from "../helper";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const Detail = () => {
   const params = useParams();
@@ -93,7 +96,7 @@ const Detail = () => {
         <>
           <Box className="flex justify-center">
             <Box className="flex-[6] flex gap-3">
-              <Box className="flex-1 flex flex-col gap-2 h-[400px] overflow-y-scroll">
+              <Box className="flex-1 flex flex-col gap-2 h-[450px] overflow-y-scroll">
                 <Box>
                   {detail.images.map((img, idx) => (
                     <Box

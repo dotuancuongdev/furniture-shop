@@ -20,7 +20,7 @@ input[type="number"] {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 9px;
 }
 
 /* Track */
@@ -37,7 +37,7 @@ input[type="number"] {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #b30000;
+  background: rgb(85, 85, 85);
 }
 
 .abc img {

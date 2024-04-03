@@ -54,6 +54,7 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 
 import { handleLogOut } from "./helper";
 import EditPrd from "./pages/EditPrd";
+import Order from "./pages/Order";
 
 const adminRoutes = [
   { path: "/", element: <Admin /> },
