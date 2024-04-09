@@ -3,7 +3,7 @@ import { TOKEN } from "./constants";
 import { handleLogOut } from "./helper";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8888/api/",
+  baseURL: `${import.meta.env.VITE_SERVER_URL}/api/`,
   timeout: 30000,
 });
 
