@@ -38,11 +38,11 @@ const policies = [
 const Footer = () => {
   return (
     <Box>
-      <Box className="flex  mt-7 mb-10">
+      <Box className="flex  my-5">
         {policies.map((item, idx) => (
           <Box
             key={idx}
-            className="flex-1 p-5 text-zinc-700 flex flex-col justify-center items-center hover:bg-slate-100 duration-200"
+            className="flex-1 py-5 text-zinc-700 flex flex-col justify-center items-center hover:bg-slate-100 duration-200"
           >
             {item.icon}
             <Typography className="text-2xl">{item.text1}</Typography>

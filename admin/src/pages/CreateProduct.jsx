@@ -83,7 +83,6 @@ const CreateProduct = () => {
         });
         setLoading(false);
       } catch (error) {
-        console.log(error);
         setSnackbar({
           isOpen: true,
           message: error.response?.data?.message || error.message,
@@ -96,8 +95,6 @@ const CreateProduct = () => {
   };
 
   const handleChangeCategory = (event) => {
-    console.log(event.target);
-
     setValue("categoryIds", event.target.value);
   };
   const selectedCategoryValues = watch("categoryIds", []);

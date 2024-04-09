@@ -40,6 +40,18 @@ input[type="number"] {
   background: rgb(85, 85, 85);
 }
 
-.abc img {
+.prdDescription img {
   max-width: 90%;
+}
+.prdDescription p,
+span {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.prdSummary p,
+span {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+li {
+  list-style: none;
+  text-decoration: none;
 }

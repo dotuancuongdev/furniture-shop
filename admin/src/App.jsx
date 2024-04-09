@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 
 import {
   Alert,
+  AppBar,
   Box,
   Button,
   CircularProgress,
@@ -19,7 +20,6 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  AppBar,
   Snackbar,
   Stack,
   Toolbar,
@@ -54,7 +54,6 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 
 import { handleLogOut } from "./helper";
 import EditPrd from "./pages/EditPrd";
-import Order from "./pages/Order";
 
 const adminRoutes = [
   { path: "/", element: <Admin /> },

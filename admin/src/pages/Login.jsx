@@ -30,7 +30,6 @@ const Login = () => {
       localStorage.setItem(TOKEN, respone.data.token);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
       setSnackbar({
         isOpen: true,

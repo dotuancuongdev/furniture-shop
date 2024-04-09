@@ -73,12 +73,9 @@ const routers = [
     path: "/product/:id",
     element: <Detail />,
   },
+
   {
-    path: "/product/:id",
-    element: <Detail />,
-  },
-  {
-    path: "/order-tracking",
+    path: "/order-tracking/:id?",
     element: <Order />,
   },
 
@@ -95,11 +92,14 @@ function App() {
       <AppLoading />
       <AppSnackbar />
       <Header />
-      <Routes>
-        {routers.map((r) => (
-          <Route key={r.path} path={r.path} element={r.element} />
-        ))}
-      </Routes>
+
+      <Box className={"min-h-[calc(100vh-400px)] pt-[140px]"}>
+        <Routes>
+          {routers.map((r) => (
+            <Route key={r.path} path={r.path} element={r.element} />
+          ))}
+        </Routes>
+      </Box>
       <Footer />
     </BrowserRouter>
   );

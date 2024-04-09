@@ -12,23 +12,26 @@ import {
   Typography,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import { formatPrice } from "../helper";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import api from "../api";
+import { CART } from "../constants";
+import { useNavigate } from "react-router-dom";
 
 // const regexVietnamPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const schema = yup
   .object({
     name: yup.string().required(),
-    phone: yup.number().required("Error Phone Number"),
-    email: yup.string().email().required(),
+    phone: yup.number().typeError("Error Phone Number").required(),
+    email: yup.string().email(),
     address: yup.string().required(),
     cityId: yup.string().required(),
-    district: yup.string().required(),
-    ward: yup.string().required(),
   })
   .required();
 
@@ -36,34 +39,37 @@ const Checkout = () => {
   const [cities, setCities] = useState([]);
 
   const appContext = useContext(AppContext);
-  const { cart, setLoading, setSnackbar } = appContext;
+  const { cart, setLoading, setSnackbar, setCart } = appContext;
+
+  let totalPrice = 0;
+  for (let index = 0; index < cart.length; index++) {
+    totalPrice = totalPrice + cart[index].price * cart[index].quantity;
+  }
+
+  const navigate = useNavigate();
+
   const {
     register,
     control,
     getValues,
+    handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+
   const onSubmit = () => {
     const values = getValues();
-    const foundAddress = cities.find((item) => item._id === values.cityId);
-    const nameAdd = foundAddress.name;
 
     const productsWithQuantity = cart.map((item) => {
       return { productId: item._id, quantity: item.quantity };
     });
-    console.log(productsWithQuantity);
 
     const payload = {
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
-      address: nameAdd,
-      cityId: values.cityId,
+      ...values,
       productsWithQuantity: productsWithQuantity,
     };
-    console.log(payload);
+
     const createNewOrder = async () => {
       setLoading(true);
       try {
@@ -73,17 +79,58 @@ const Checkout = () => {
           message: "Success",
           severity: "success",
         });
+        localStorage.removeItem(CART);
+        setCart([]);
+        navigate(`/`);
+
         setLoading(false);
       } catch (error) {
         setSnackbar({
           isOpen: true,
-          message: error.message,
+          message: error.response?.data?.message || error.message,
           severity: "error",
         });
         setLoading(false);
       }
     };
+
     createNewOrder();
+  };
+
+  const handleDecrease = (id) => {
+    const foundPrd = cart.find((item) => item._id === id);
+    if (!foundPrd) return;
+    if (foundPrd.quantity < 2) return;
+    const updateCart = cart.map((item) => {
+      if (item._id === foundPrd._id) {
+        return { ...item, quantity: item.quantity - 1 };
+      }
+      return item;
+    });
+    setCart(updateCart);
+  };
+
+  const handleIncrease = (id) => {
+    const foundPrd = cart.find((item) => item._id === id);
+    if (!foundPrd) return;
+
+    const updateCart = cart.map((item) => {
+      if (item._id === foundPrd._id) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    setCart(updateCart);
+  };
+
+  const handleDelete = (id) => {
+    const confirmDelete = confirm("Do you want to delete this item?");
+    if (confirmDelete) {
+      const updateCart = cart.filter((item) => {
+        return item._id !== id;
+      });
+      setCart(updateCart);
+    }
   };
 
   useEffect(() => {
@@ -102,17 +149,20 @@ const Checkout = () => {
           message: error.message,
           severity: "error",
         });
+        setLoading(false);
       }
     };
+
     getCities();
     return () => {
       ignore = true;
     };
   }, []);
+
   return (
-    <Box className="flex h-screen max-w-7xl mx-auto">
-      <Box className="flex-1 p-5 ">
-        <form className="flex flex-col gap-5">
+    <Box className="flex  max-w-7xl mx-auto">
+      <Box className="flex-[2] px-5 ">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col ">
           <Box>
             <TextField
               id="outlined-basic"
@@ -122,29 +172,14 @@ const Checkout = () => {
               className="w-full"
               {...register("name")}
             />
+
             <Typography
-              className={`${
-                errors.name?.message ? "text-red-500" : "hidden h-6"
-              } `}
+              className={errors.name?.message ? "text-red-500" : "text-white"}
             >
-              {errors.name?.message}
+              {errors.name?.message || "a"}
             </Typography>
           </Box>
 
-          <Box>
-            <TextField
-              id="outlined-basic"
-              label="Phone Number"
-              variant="outlined"
-              size="small"
-              type="number"
-              className="w-full"
-              {...register("phone")}
-            />
-            <Typography className={`text-red-500 `}>
-              {errors.phone?.message}
-            </Typography>
-          </Box>
           <Box>
             <TextField
               id="outlined-basic"
@@ -154,13 +189,27 @@ const Checkout = () => {
               className="w-full"
               {...register("email")}
             />
-            <Typography
-              className={`${errors ? "text-red-500" : "hidden mt-5"}`}
-            >
-              {errors.email?.message}
-            </Typography>
+            <Typography className="text-white">-</Typography>
           </Box>
-          <Box className="flex">
+          <Box className="flex gap-2">
+            <Box>
+              <TextField
+                id="outlined-basic"
+                label="Phone Number"
+                variant="outlined"
+                size="small"
+                type="number"
+                className="w-full"
+                {...register("phone")}
+              />
+              <Typography
+                className={
+                  errors.phone?.message ? "text-red-500" : "text-white"
+                }
+              >
+                {errors.phone?.message || "a"}
+              </Typography>
+            </Box>
             <FormControl fullWidth size="small" className="flex-1">
               <InputLabel>City</InputLabel>
               <Controller
@@ -178,79 +227,89 @@ const Checkout = () => {
                 )}
               />
             </FormControl>
-            <Box className="flex-1">
-              <TextField
-                id="outlined-basic"
-                label="District"
-                variant="outlined"
-                size="small"
-                {...register("district")}
-              />
-              <Typography
-                className={`${
-                  errors.district?.message ? "text-red-500" : "hidden h-6"
-                } `}
-              >
-                {errors.district?.message}
-              </Typography>
-            </Box>
-            <Box className="flex-1">
-              <TextField
-                id="outlined-basic"
-                label="Ward"
-                variant="outlined"
-                size="small"
-                {...register("ward")}
-              />
-              <Typography
-                className={`${
-                  errors.ward?.message ? "text-red-500" : "hidden h-6"
-                } `}
-              >
-                {errors.district?.message}
-              </Typography>
-            </Box>
           </Box>
 
-          <Button
-            variant="contained"
-            className="bg-purple-400"
-            onClick={onSubmit}
-          >
+          <Box>
+            <TextField
+              id="outlined-basic"
+              label="Address"
+              variant="outlined"
+              size="small"
+              className="w-full"
+              {...register("address")}
+            />
+            <Typography
+              className={
+                errors.address?.message ? "text-red-500" : "text-white"
+              }
+            >
+              {errors.address?.message || "a"}
+            </Typography>
+          </Box>
+
+          <Button variant="contained" className="bg-purple-600" type="submit">
             thanh toán
           </Button>
         </form>
       </Box>
 
-      {cart.length === 0 ? (
-        <Box className="flex-1 bg-zinc-100 p-5">
+      <Box className="flex-[3] bg-zinc-100 p-5">
+        {cart.length === 0 ? (
           <Typography className="text-center text-xl">Empty Cart</Typography>
-        </Box>
-      ) : (
-        <Box className="flex-1 bg-zinc-100 p-5">
-          <Box className="h-[500px] overflow-auto">
-            {cart.map((item, idx) => (
-              <Box key={idx} className="flex gap-5 mt-4 mb-2">
-                <Box className="flex justify-center items-center gap-4">
-                  <Badge badgeContent={item.quantity} color="success">
-                    <img src={item.thumbnail} alt="" className="w-16 h-16" />
-                  </Badge>
-                  <Typography>{item.name}</Typography>
+        ) : (
+          <>
+            <Box className="h-[500px] overflow-auto">
+              {cart.map((item, idx) => (
+                <Box key={idx} className="flex items-center  mt-4 mb-2">
+                  <Box className="flex justify-center items-center gap-4 flex-[3] ">
+                    <Box
+                      className=" p-2  cursor-pointer"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      <DeleteSweepIcon className="text-red-500" />
+                    </Box>
+                    <Box className="flex-1 flex items-center gap-3">
+                      <Badge badgeContent={item.quantity} color="success">
+                        <img
+                          src={item.thumbnail}
+                          alt=""
+                          className="w-16 h-16"
+                        />
+                      </Badge>
+                      <Typography>{item.name}</Typography>
+                    </Box>
+                  </Box>
+                  <Box className="flex gap-3 mx-2 flex-1">
+                    <Box
+                      onClick={() => handleDecrease(item._id)}
+                      className="cursor-pointer"
+                    >
+                      <RemoveIcon />
+                    </Box>
+                    <Typography> {item.quantity}</Typography>
+                    <Box
+                      onClick={() => handleIncrease(item._id)}
+                      className="cursor-pointer"
+                    >
+                      <AddIcon />
+                    </Box>
+                    <Typography>
+                      {formatPrice(item.price * item.quantity)}
+                    </Typography>
+                  </Box>
                 </Box>
+              ))}
+            </Box>
 
-                {/* <Typography>{formatPrice(item.price)}</Typography> */}
-                <Box className="flex w-full justify-end items-center flex-1">
-                  <Typography>
-                    {formatPrice(item.price * item.quantity)}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-
-          <Divider />
-        </Box>
-      )}
+            <Divider />
+            <Box className="flex justify-end pt-2">
+              <Typography variant="h6">
+                Total Price: {formatPrice(totalPrice)}
+              </Typography>
+            </Box>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };

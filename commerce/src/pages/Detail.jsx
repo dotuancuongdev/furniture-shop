@@ -1,21 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../api";
 import { AppContext } from "../context";
-import { Box, Button, TextField, Typography } from "@mui/material";
 import { formatPrice } from "../helper";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 const Detail = () => {
   const params = useParams();
+
   const [detail, setDetail] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [quantityString, setQuantityString] = useState(`${quantity}`);
   const [imgIdx, setImgIdx] = useState(0);
+
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar, cart, setCart } = appContext;
 
@@ -25,7 +23,6 @@ const Detail = () => {
       try {
         setLoading(true);
         const res = await api.get(`/products/commerce/${params.id}`);
-        // console.log(res.data);
 
         if (!ignore) {
           setDetail(res.data);
@@ -47,18 +44,19 @@ const Detail = () => {
     };
   }, []);
 
-  const handleChangeNumberInput = (e) => {
-    setQuantityString(e.target.value);
+  const handleChangeQuantityInput = (e) => {
     setQuantity(parseInt(e.target.value));
   };
-  const handleIncrease = () => {
+  const handleIncreaseQuantity = () => {
+    if (quantity === detail.stock) {
+      alert("exceeding the permitted limits");
+      return;
+    }
     setQuantity(quantity + 1);
-    setQuantityString(`${quantity + 1}`);
   };
-  const handleDecrease = () => {
+  const handleDecreaseQuantity = () => {
     if (quantity === 1) return;
     setQuantity(quantity - 1);
-    setQuantityString(`${quantity - 1}`);
   };
   const handleChangeImgIdx = (idx) => {
     setImgIdx(idx);
@@ -90,14 +88,15 @@ const Detail = () => {
       severity: "success",
     });
   };
+
   return (
     <Box className="max-w-5xl mx-auto">
-      {!detail ? null : (
+      {detail && (
         <>
           <Box className="flex justify-center">
-            <Box className="flex-[6] flex gap-3">
-              <Box className="flex-1 flex flex-col gap-2 h-[450px] overflow-y-scroll">
-                <Box>
+            <Box className="flex-[6] flex gap-3 ">
+              <Box className="flex-1  ">
+                <Box className="flex flex-col gap-2 h-[450px] rounded-lg overflow-y-scroll pr-2">
                   {detail.images.map((img, idx) => (
                     <Box
                       key={idx}
@@ -107,14 +106,18 @@ const Detail = () => {
                       <img
                         src={img}
                         alt=""
-                        className="object-cover cursor-pointer w-full"
+                        className="object-cover cursor-pointer w-full rounded-lg"
                       />
                     </Box>
                   ))}
                 </Box>
               </Box>
-              <Box className="flex-[4]">
-                <img src={detail.images[imgIdx]} alt="" className="w-full " />
+              <Box className="flex-[4] ">
+                <img
+                  src={detail.images[imgIdx]}
+                  alt=""
+                  className="w-full rounded-lg"
+                />
               </Box>
             </Box>
             <Box className="flex-[4] pl-5 flex flex-col gap-6">
@@ -146,33 +149,33 @@ const Detail = () => {
                   </Box>
                 )}
               </Box>
+              <Typography>Stock: {detail.stock}</Typography>
               <Box className="flex flex-col gap-2">
-                <Box className=" flex gap-2 h-9">
-                  <Button
-                    variant="contained"
-                    className="bg-zinc-400"
-                    onClick={handleDecrease}
+                <Box className="h-10 flex gap-2 ">
+                  <button
+                    className="bg-zinc-200 w-16 border-none rounded-md flex justify-center items-center"
+                    onClick={handleDecreaseQuantity}
                     disabled={quantity === 1}
                   >
                     <RemoveIcon />
-                  </Button>
+                  </button>
 
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
                     size="small"
                     type="number"
-                    className="h-2 w-16"
+                    className=" w-16"
                     value={quantity}
-                    onChange={handleChangeNumberInput}
+                    onChange={handleChangeQuantityInput}
                   />
-                  <Button
-                    variant="contained"
-                    className="bg-zinc-400"
-                    onClick={handleIncrease}
+                  <button
+                    className="bg-zinc-200 w-16 border-none rounded-md flex justify-center items-center"
+                    onClick={handleIncreaseQuantity}
+                    // disabled={quantity === detail.stock}
                   >
                     <AddIcon />
-                  </Button>
+                  </button>
                 </Box>
 
                 <Button
@@ -183,17 +186,17 @@ const Detail = () => {
                   thêm vào giỏ
                 </Button>
               </Box>
-              <Box className="max-h-48 overflow-y-auto">
+              <Box className="max-h-48 overflow-y-auto pr-1">
                 <div
-                  className="text-lg"
+                  className="text-lg prdSummary"
                   dangerouslySetInnerHTML={{ __html: detail.summary }}
                 />
               </Box>
             </Box>
           </Box>
-          <Box className="flex justify-center border border-solid p-4 rounded-sm">
+          <Box className="flex justify-center border border-solid p-4 rounded-sm mt-7">
             <div
-              className="abc"
+              className="prdDescription"
               // className="w-full"
               dangerouslySetInnerHTML={{ __html: detail.description }}
             />
