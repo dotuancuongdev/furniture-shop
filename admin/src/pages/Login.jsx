@@ -50,6 +50,9 @@ const Login = () => {
               size="small"
               value={username}
               onChange={handleChangeUsername}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <TextField
               type="password"
@@ -57,6 +60,9 @@ const Login = () => {
               size="small"
               value={password}
               onChange={handleChangePassword}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <Button variant="contained" onClick={login} className="mt-7">
               login
