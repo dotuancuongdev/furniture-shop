@@ -20,6 +20,7 @@ const Order = () => {
   };
 
   useEffect(() => {
+    if (!targetId) return;
     getOrderDetail();
   }, []);
 

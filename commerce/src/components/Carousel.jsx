@@ -45,34 +45,35 @@ function Carousel({ items }) {
         <Card sx={{ maxWidth: 345 }}>
           <CardActionArea>
             <CardMedia component="img" height="140" image={item.img} />
-            <CardContent className="flex flex-col h-36">
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                className="inline-block w-[240px] whitespace-nowrap overflow-hidden text-ellipsis"
-              >
-                {item.name}
-              </Typography>
-              {item.rate && (
+            {item.name && item.rate && item.text && (
+              <CardContent className="flex flex-col h-36">
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  className="inline-block w-[240px] whitespace-nowrap overflow-hidden text-ellipsis"
+                >
+                  {item.name}
+                </Typography>
+
                 <Rating
                   name="read-only"
                   precision={0.2}
                   value={item.rate}
                   readOnly
                 />
-              )}
 
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                className="flex-1 mb-1"
-              >
-                {item.text?.length > 125
-                  ? `${item.text.slice(0, 125).trim()}...`
-                  : item.text}
-              </Typography>
-            </CardContent>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="flex-1 mb-1"
+                >
+                  {item.text?.length > 125
+                    ? `${item.text.slice(0, 125).trim()}...`
+                    : item.text}
+                </Typography>
+              </CardContent>
+            )}
           </CardActionArea>
         </Card>
       </Grid>

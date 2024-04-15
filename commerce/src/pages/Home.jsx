@@ -209,7 +209,7 @@ const Home = () => {
           <Typography className="my-5 text-2xl font-mono">
             Khách hàng
           </Typography>
-          {/* <MyCarousel items={partners} /> */}
+          <MyCarousel items={partners} />
         </Box>
       </Box>
     </>

@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -34,5 +36,6 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "vite": "^5.1.4"
-  }
+  },
+  "homepage": "http://dotuancuongdev.github.io/furniture-shop/commerce"
 }
