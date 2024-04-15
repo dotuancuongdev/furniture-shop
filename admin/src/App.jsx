@@ -43,6 +43,8 @@ import CreateCategory from "./pages/CreateCategory";
 import CreateProduct from "./pages/CreateProduct";
 import EditCategory from "./pages/EditCategory";
 import Products from "./pages/Products";
+import EditPrd from "./pages/EditPrd";
+import Order from "./pages/Order";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
@@ -53,7 +55,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
 import { handleLogOut } from "./helper";
-import EditPrd from "./pages/EditPrd";
 
 const adminRoutes = [
   { path: "/", element: <Admin /> },
@@ -63,6 +64,8 @@ const adminRoutes = [
   { path: "/product", element: <Products /> },
   { path: "/product/create/", element: <CreateProduct /> },
   { path: "/product/edit/:id", element: <EditPrd /> },
+  { path: "/order", element: <Order /> },
+  { path: "/*", element: <Admin /> },
 ];
 
 const authRoutes = [{ path: "/", element: <Login /> }];

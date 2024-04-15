@@ -26,6 +26,7 @@ import {
   tableCellClasses,
 } from "@mui/material";
 
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -95,7 +96,7 @@ const Products = () => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [pageNumber, pageSize]);
 
   const handleChangePageSize = (e) => {
     setPageSize(e.target.value);
@@ -120,9 +121,20 @@ const Products = () => {
     setPageNumberInput(`${pageNumber + 1}`);
   };
   return products.length === 0 ? (
-    <Box>no data</Box>
+    <></>
   ) : (
     <>
+      <Box className="flex justify-end mb-5">
+        <Button
+          variant="contained"
+          className="bg-green-500 flex justify-center items-center"
+          onClick={() => navigate(`/product/create`)}
+        >
+          <AddIcon className="text-xl mr-1" />
+          <Box>create</Box>
+        </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -147,12 +159,13 @@ const Products = () => {
                 <StyledTableCell>
                   <Box className="flex gap-1">
                     <Button
-                      className="text-zinc-400 hover:text-black"
+                      variant="contained"
+                      className=""
                       onClick={() => navigate(`/product/edit/${prd._id}`)}
                     >
                       <EditIcon className=" " />
                     </Button>
-                    <Button className="text-red-400 hover:text-red-600">
+                    <Button variant="contained" className="bg-red-600">
                       <DeleteForeverIcon className=" " />
                     </Button>
                   </Box>

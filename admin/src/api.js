@@ -6,7 +6,6 @@ const api = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}/api/`,
   timeout: 30000,
 });
-
 api.interceptors.request.use(
   function (config) {
     const token = localStorage.getItem(TOKEN);

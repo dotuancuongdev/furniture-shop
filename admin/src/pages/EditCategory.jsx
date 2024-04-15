@@ -62,7 +62,7 @@ const EditCategory = () => {
     }
   };
   return (
-    <Box className="w-full h-screen flex justify-center items-center">
+    <Box className="w-full  flex justify-center ">
       <Box className="flex flex-col gap-3 w-1/3 rounded-md shadow-xl p-5">
         <Typography className="uppercase text-center font-medium">
           update category

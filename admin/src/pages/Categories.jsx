@@ -48,10 +48,6 @@ const Categories = () => {
 
   let emptyRowsCount =
     pageSize - categories.length < 0 ? 1 : pageSize - categories.length;
-  // if (emptyRowsCount < 0) {
-  //   emptyRowsCount = 0;
-  // }
-
   const emptyRows = Array(emptyRowsCount).fill(0);
 
   useEffect(() => {
@@ -143,7 +139,7 @@ const Categories = () => {
   };
 
   return categories.length === 0 ? (
-    <Box>no data</Box>
+    <></>
   ) : (
     <>
       <Box className="flex justify-end mb-5">
@@ -182,12 +178,13 @@ const Categories = () => {
                 <StyledTableCell>
                   <Box className="flex gap-1">
                     <Button
-                      className="text-zinc-400 hover:text-black"
+                      variant="contained"
+                      className=" "
                       onClick={() => navigate(`/category/edit/${c._id}`)}
                     >
                       <EditIcon className=" " />
                     </Button>
-                    <Button className="text-red-400 hover:text-red-600">
+                    <Button variant="contained" className="bg-red-600">
                       <DeleteForeverIcon className=" " />
                     </Button>
                   </Box>
