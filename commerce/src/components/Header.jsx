@@ -1,8 +1,8 @@
-import { Badge, Box, Button, Typography } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Badge, Box, Button, Typography } from "@mui/material";
 
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { AppContext } from "../context";
 
@@ -92,71 +92,19 @@ const Header = () => {
           onClick={() => navigate(`/`)}
         />
         <Box className="flex gap-10">
-          <Box className="relative cursor-pointer p-2">
-            <Typography className="hover:text-orange-500">
-              Collections
-            </Typography>
-            {/* <Box className="absolute top-11 left-[-16px] bg-white p-4 w-44 h-[300px] overflow-y-auto z-[999]">
-              <ul className="flex flex-col gap-4">
-                {collections.map((item, idx) => (
-                  <li key={idx} className="hover:text-orange-500">
-                    <Link
-                      style={{ textDecoration: "none", color: "black" }}
-                      to={`/product?categoryId=${item._id}`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Box> */}
-          </Box>
-          <Box className="relative cursor-pointer p-2">
-            <Typography className="hover:text-orange-500">Featured</Typography>
-            {/* <Box className="absolute top-11 left-[-16px] bg-white px-4 w-44 h-[400px] overflow-y-auto z-[999]">
-            <ul>
-              {featured.map((item, idx) => (
-                <li key={idx} className="hover:text-orange-500">
-                  <Link
-                    style={{ textDecoration: "none", color: "black" }}
-                    to={`/product?categoryId=${item._id}`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Box> */}
-          </Box>
-          <Box className="relative cursor-pointer p-2">
-            <Typography className="hover:text-orange-500">
-              Promotions
-            </Typography>
-            {/* <Box className="absolute top-11 left-[-16px] bg-white px-4 w-44 h-[400px] overflow-y-auto z-[999]">
-            <ul>
-              {promotions.map((item, idx) => (
-                <li key={idx} className="hover:text-orange-500">
-                  <Link
-                    style={{ textDecoration: "none", color: "black" }}
-                    to={`/product?categoryId=${item._id}`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Box> */}
-          </Box>
-          <Typography className="cursor-pointer p-2 hover:text-green-500">
+          <MenuItem name="Collections" subItems={collections} />
+          <MenuItem name="Featured" subItems={featured} />
+          <MenuItem name="Promotions" subItems={promotions} />
+          <Typography className="cursor-pointer p-2 hover:text-orange-500">
             Service
           </Typography>
-          <Typography className="cursor-pointer p-2 hover:text-green-500">
+          <Typography className="cursor-pointer p-2 hover:text-orange-500">
             Blog
           </Typography>
-          <Typography className="cursor-pointer p-2 hover:text-green-500">
+          <Typography className="cursor-pointer p-2 hover:text-orange-500">
             About Us
           </Typography>
-          <Typography className="cursor-pointer p-2 hover:text-green-500">
+          <Typography className="cursor-pointer p-2 hover:text-orange-500">
             Showroom
           </Typography>
         </Box>
@@ -171,6 +119,30 @@ const Header = () => {
             <ShoppingCartIcon color="action" />
           </Badge>
         </Box>
+      </Box>
+    </Box>
+  );
+};
+
+const MenuItem = ({ name, subItems }) => {
+  const navigate = useNavigate();
+  return (
+    <Box className="relative cursor-pointer p-2 group">
+      <Typography className="hover:text-orange-500">{name}</Typography>
+      <Box className="hidden bg-white p-2 absolute top-8 left-[-50%] flex-col gap-2 w-max max-w-72 max-h-[50vh] overflow-y-auto group-hover:flex hover:flex">
+        {subItems.map((c) => (
+          <Button
+            title={c.name}
+            key={c._id}
+            onClick={() => {
+              navigate(`product?categoryId=${c._id}`);
+            }}
+          >
+            <Typography className="text-ellipsis whitespace-nowrap overflow-hidden max-w-[200px] w-full">
+              {c.name}
+            </Typography>
+          </Button>
+        ))}
       </Box>
     </Box>
   );

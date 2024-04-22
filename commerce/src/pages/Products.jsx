@@ -14,7 +14,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api";
 import { AppContext } from "../context";
-import { formatPrice, shortenString } from "../helper";
+import { formatPrice } from "../helper";
 
 let totalPages;
 const pageSize = 8;
@@ -123,8 +123,9 @@ const Products = () => {
         <Box className=" grid grid-cols-4 gap-5 mb-10 flex-[3]">
           {products.map((item) => (
             <Card
+              title={item.name}
               key={item._id}
-              sx={{ maxWidth: 345 }}
+              className="max-w-[480px]"
               onClick={() => navigate(`/product/${item._id}`)}
             >
               <CardActionArea>
@@ -157,7 +158,7 @@ const Products = () => {
                 />
 
                 <CardContent>
-                  <Typography className="inline-block w-[240px] whitespace-nowrap overflow-hidden text-ellipsis">
+                  <Typography className="inline-block w-full whitespace-nowrap overflow-hidden text-ellipsis">
                     {item.name}
                   </Typography>
 
@@ -169,7 +170,7 @@ const Products = () => {
                         </Typography>
                       </Box>
                     ) : (
-                      <Box className="flex gap-4">
+                      <Box className="flex gap-2 flex-wrap">
                         <Typography className="text-orange-500">
                           {formatPrice(item.price)}
                         </Typography>
