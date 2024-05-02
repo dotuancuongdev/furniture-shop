@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import TurnLeftIcon from "@mui/icons-material/TurnLeft";
 import {
   Box,
   Button,
@@ -11,6 +12,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+
+import { Done } from "@mui/icons-material";
 import { Editor } from "@tinymce/tinymce-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -24,8 +27,8 @@ const TINYMCE_KEY = import.meta.env.VITE_TINYMCE_API_KEY;
 const schema = yup
   .object({
     name: yup.string().required(),
-    price: yup.number().required(),
-    stock: yup.number().required(),
+    price: yup.number().typeError("price is a required field").required(),
+    stock: yup.number().typeError("stock is a required field").required(),
     thumbnail: yup.string(),
     images: yup.array(),
     categoryIds: yup.array(),
@@ -54,6 +57,7 @@ function getStyles(category, categories, theme) {
 
 const CreateProduct = () => {
   const [categories, setCategories] = useState([]);
+
   const editorDescriptionRef = useRef(null);
   const editorSummaryRef = useRef(null);
 
@@ -61,7 +65,7 @@ const CreateProduct = () => {
   const theme = useTheme();
 
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar } = appContext;
+  const { setLoading, setSnackbar, setHeader } = appContext;
 
   const {
     control,
@@ -91,7 +95,7 @@ const CreateProduct = () => {
         await api.post(`/products`, formValues);
         setSnackbar({
           isOpen: true,
-          message: "Success",
+          message: "Create successful products",
           severity: "success",
         });
         setLoading(false);
@@ -119,8 +123,10 @@ const CreateProduct = () => {
       try {
         setLoading(true);
         const res = await api.get(`/categories/all`);
-        setCategories(res.data);
-        setLoading(false);
+        if (!ignore) {
+          setCategories(res.data);
+          setLoading(false);
+        }
       } catch (error) {
         setSnackbar({
           isOpen: true,
@@ -137,23 +143,33 @@ const CreateProduct = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setHeader("Create Product");
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box>
-        <TextField
-          id="outlined-basic"
-          label="Name"
-          variant="outlined"
-          size="small"
-          className={`${errors.name ? "" : "mb-6"} w-full`}
-          {...register("name")}
-        />
-        {errors.name && (
-          <Typography className="text-red-500">
-            {errors.name.message}
-          </Typography>
-        )}
+      <Box className="flex justify-end gap-3 mb-4">
+        <Button variant="contained" onClick={() => navigate(`/product`)}>
+          <TurnLeftIcon />
+        </Button>
+
+        <Button type="submit" variant="contained" className="bg-green-500">
+          <Done />
+        </Button>
       </Box>
+
+      <TextField
+        id="outlined-basic"
+        label="Name"
+        variant="outlined"
+        size="small"
+        className={`${errors.name ? "" : "mb-6"} w-full`}
+        {...register("name")}
+      />
+      {errors.name && (
+        <Typography className="text-red-500">{errors.name.message}</Typography>
+      )}
 
       <Box className="flex gap-2">
         <Box className="flex-1">
@@ -166,12 +182,13 @@ const CreateProduct = () => {
             className={`${errors.price ? "" : "mb-6"} w-full`}
             {...register("price")}
           />
-          {errors.price && (
-            <Typography className="text-red-500">
-              {errors.price.message}
-            </Typography>
-          )}
+          <Typography
+            className={errors.price?.message ? "text-red-500" : "text-white"}
+          >
+            {errors.price?.message || "a"}
+          </Typography>
         </Box>
+
         <Box className="flex-1">
           <TextField
             id="outlined-basic"
@@ -182,41 +199,40 @@ const CreateProduct = () => {
             className={`${errors.stock ? "" : "mb-6"} w-full`}
             {...register("stock")}
           />
-          {errors.stock && (
-            <Typography className="text-red-500">
-              {errors.stock.message}
-            </Typography>
-          )}
+          <Typography
+            className={errors.stock?.message ? "text-red-500" : "text-white"}
+          >
+            {errors.stock?.message || "a"}
+          </Typography>
         </Box>
-        <Box className="flex-[2]">
-          <FormControl className="w-full ">
-            <InputLabel id="demo-multiple-name-label">Category</InputLabel>
-            <Select
-              labelId="demo-multiple-name-label"
-              id="demo-multiple-name"
-              multiple
-              size="small"
-              input={<OutlinedInput label="Categories" />}
-              MenuProps={MenuProps}
-              {...register("categoryIds")}
-              value={selectedCategoryValues}
-              onChange={handleChangeCategory}
-            >
-              {categories.map((category) => (
-                <MenuItem
-                  key={category._id}
-                  value={category._id}
-                  style={getStyles(category, categories, theme)}
-                >
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+
+        <FormControl className="w-full flex-[2]">
+          <InputLabel id="demo-multiple-name-label">Category</InputLabel>
+          <Select
+            labelId="demo-multiple-name-label"
+            id="demo-multiple-name"
+            multiple
+            size="small"
+            input={<OutlinedInput label="Categories" />}
+            MenuProps={MenuProps}
+            {...register("categoryIds")}
+            value={selectedCategoryValues}
+            onChange={handleChangeCategory}
+          >
+            {categories.map((category) => (
+              <MenuItem
+                key={category._id}
+                value={category._id}
+                style={getStyles(category, categories, theme)}
+              >
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
-      <Box>
+      <>
         <Typography variant="h6">Summary</Typography>
         <Editor
           apiKey={TINYMCE_KEY}
@@ -254,11 +270,11 @@ const CreateProduct = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
-      </Box>
+      </>
 
       <br />
 
-      <Box>
+      <>
         <Typography variant="h6">Description</Typography>
         <Editor
           apiKey={TINYMCE_KEY}
@@ -296,13 +312,7 @@ const CreateProduct = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
-      </Box>
-
-      <Box className="flex justify-center">
-        <Button type="submit" variant="contained" className="bg-green-500">
-          Create
-        </Button>
-      </Box>
+      </>
     </form>
   );
 };

@@ -1,15 +1,22 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../context";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
+import TurnLeftIcon from "@mui/icons-material/TurnLeft";
+import DoneIcon from "@mui/icons-material/Done";
+
+const TINYMCE_KEY = import.meta.env.VITE_TINYMCE_API_KEY;
 
 const CreateCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar } = appContext;
+  const { setLoading, setSnackbar, setHeader } = appContext;
+
   const navigate = useNavigate();
+
   const handleChangeName = (e) => {
     setName(e.target.value);
   };
@@ -25,13 +32,14 @@ const CreateCategory = () => {
       });
       return;
     }
+
     const postCategory = async () => {
       try {
         setLoading(true);
         await api.post("/categories", { name, description });
         setSnackbar({
           isOpen: true,
-          message: "Success",
+          message: "Update successfully",
           severity: "success",
         });
         setLoading(false);
@@ -45,38 +53,48 @@ const CreateCategory = () => {
         setLoading(false);
       }
     };
+
     postCategory();
   };
+
+  useEffect(() => {
+    setHeader("Create Category");
+  }, []);
+
   return (
-    <Box className=" w-full flex justify-center items-center">
-      <Box className="flex flex-col gap-3 w-1/3 rounded-md shadow-xl p-5">
-        <Typography className="uppercase text-center font-medium">
-          create a new category
-        </Typography>
-        <TextField
-          label="Name"
-          id="outlined-size-small"
-          size="small"
-          value={name}
-          onChange={handleChangeName}
-        />
-        <TextField
-          label="Descpription"
-          id="outlined-size-small"
-          size="small"
-          multiline
-          rows={2}
-          value={description}
-          onChange={handleChangeDescription}
-        />
+    <Box className="">
+      <Box className="flex justify-end gap-3 mb-4">
+        <Button variant="contained" onClick={() => navigate(`/category`)}>
+          <TurnLeftIcon />
+        </Button>
         <Button
           variant="contained"
           onClick={handleCreateNewCategory}
-          className="bg-green-500 mt-6"
+          className="bg-green-500"
         >
-          create
+          <DoneIcon />
         </Button>
       </Box>
+
+      <TextField
+        label="Name"
+        id="outlined-size-small"
+        size="small"
+        className="w-full mb-3"
+        value={name}
+        onChange={handleChangeName}
+      />
+
+      <TextField
+        label="Descpription"
+        id="outlined-size-small"
+        size="small"
+        multiline
+        rows={3}
+        className="w-full"
+        value={description}
+        onChange={handleChangeDescription}
+      />
     </Box>
   );
 };

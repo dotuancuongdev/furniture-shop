@@ -13,3 +13,7 @@ export function convertDate(d) {
   });
   return formattedDate;
 }
+
+export const formatPrice = (x) => {
+  return x.toLocaleString("vi", { style: "currency", currency: "VND" });
+};

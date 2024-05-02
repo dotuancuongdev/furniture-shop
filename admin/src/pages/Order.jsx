@@ -22,6 +22,7 @@ import {
   Backdrop,
   Box,
   Button,
+  Divider,
   Fade,
   FormControl,
   InputLabel,
@@ -31,7 +32,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { convertDate } from "../helper";
+import { convertDate, formatPrice } from "../helper";
 let totalPages;
 let totalItems;
 
@@ -44,7 +45,7 @@ const Order = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar } = appContext;
+  const { setLoading, setSnackbar, setHeader } = appContext;
 
   let emptyRowsCount =
     pageSize - orders.length < 0 ? 1 : pageSize - orders.length;
@@ -52,8 +53,9 @@ const Order = () => {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: theme.palette.primary.main,
       color: theme.palette.common.white,
+      fontWeight: "bold",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -87,8 +89,8 @@ const Order = () => {
     setOpenModal(true);
     try {
       const res = await api.get(`/orders/${id}`);
-      setOrderDetail(res.data);
       console.log(res.data);
+      setOrderDetail(res.data);
     } catch (error) {
       setSnackbar({
         isOpen: true,
@@ -164,135 +166,147 @@ const Order = () => {
     }
   };
 
-  return orders.length === 0 ? (
-    <></>
-  ) : (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>#</StyledTableCell>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Phone</StyledTableCell>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell>Address</StyledTableCell>
-              <StyledTableCell>View</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order, idx) => (
-              <StyledTableRow key={order._id}>
-                <StyledTableCell>
-                  {(pageNumber - 1) * pageSize + idx + 1}
-                </StyledTableCell>
-                <StyledTableCell>{order.name}</StyledTableCell>
-                <StyledTableCell>{order.phone}</StyledTableCell>
-                <StyledTableCell>{order.email}</StyledTableCell>
-                <StyledTableCell>{order.cityName}</StyledTableCell>
-                <StyledTableCell>
-                  <Button
-                    onClick={() => handleGetOrderDetail(order._id)}
-                    variant="contained"
-                  >
-                    <VisibilityIcon />
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-            {pageNumber !== 1
-              ? emptyRows.map((c, idx) => (
+  useEffect(() => {
+    setHeader("Order List");
+  }, []);
+
+  return (
+    orders.length > 0 && (
+      <>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>#</StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Phone</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+                <StyledTableCell>View</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {orders.map((order, idx) => (
+                <StyledTableRow key={order._id}>
+                  <StyledTableCell>
+                    {(pageNumber - 1) * pageSize + idx + 1}
+                  </StyledTableCell>
+                  <StyledTableCell>{order.name}</StyledTableCell>
+                  <StyledTableCell>{order.phone}</StyledTableCell>
+                  <StyledTableCell>{order.email}</StyledTableCell>
+                  <StyledTableCell>{order.cityName}</StyledTableCell>
+                  <StyledTableCell>
+                    <Button
+                      onClick={() => handleGetOrderDetail(order._id)}
+                      variant="contained"
+                    >
+                      <VisibilityIcon />
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+              {pageNumber !== 1 &&
+                emptyRows.map((c, idx) => (
                   <StyledTableRow key={idx} className="h-[68.8px]">
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <Box className="mt-3 flex justify-end items-center gap-2">
-        <Typography>Total {totalItems} items</Typography>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="demo-select-small-label">PageSize</InputLabel>
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={pageSize}
-            label="PageSize"
-            onChange={handleChangePageSize}
-          >
-            {PAGE_SIZE_OPTIONS.map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Box className="flex justify-center items-center">
-          <Button
-            className="text-zinc-700 hover:text-black"
-            disabled={pageNumber === 1}
-            onClick={handlePrevPage}
-          >
-            <NavigateBeforeIcon />
-          </Button>
-          <TextField
-            size="small"
-            // label="PageNumber"
-            type="number"
-            className=" w-16 mr-2"
-            value={pageNumberInput}
-            onChange={handleChangePageNumber}
-            onKeyDown={handleEnterPageNumber}
-          />
+        <Box className="mt-3 flex justify-end items-center gap-2">
+          <Typography>Total {totalItems} items</Typography>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small-label">PageSize</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={pageSize}
+              label="PageSize"
+              onChange={handleChangePageSize}
+            >
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <MenuItem key={size} value={size}>
+                  {size}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Box className="flex justify-center items-center">
+            <Button
+              className="text-zinc-700 hover:text-black"
+              disabled={pageNumber === 1}
+              onClick={handlePrevPage}
+            >
+              <NavigateBeforeIcon />
+            </Button>
+            <TextField
+              size="small"
+              // label="PageNumber"
+              type="number"
+              className=" w-16 mr-2"
+              value={pageNumberInput}
+              onChange={handleChangePageNumber}
+              onKeyDown={handleEnterPageNumber}
+            />
 
-          <Typography>of {totalPages} Pages</Typography>
-          <Button
-            className="text-black"
-            disabled={pageNumber === totalPages}
-            onClick={handleNextPage}
-          >
-            <NavigateNextIcon />
-          </Button>
+            <Typography>of {totalPages} Pages</Typography>
+            <Button
+              className="text-black"
+              disabled={pageNumber === totalPages}
+              onClick={handleNextPage}
+            >
+              <NavigateNextIcon />
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      {orderDetail && (
-        <Box>
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={openModal}
-            onClose={handleCloseModal}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <Fade in={openModal}>
-              <Box sx={styleModal}>
-                <Typography>Name: {orderDetail.name}</Typography>
-                <Typography>Phone: {orderDetail.phone}</Typography>
-                <Typography>Email: {orderDetail.email}</Typography>
-                <Typography>
-                  Address: {orderDetail.address} - {orderDetail.cityName}
-                </Typography>
-                <Typography>
-                  Create Date: {convertDate(orderDetail.createdDate)}
-                </Typography>
-                <Typography>Status: {orderDetail.status}</Typography>
-              </Box>
-            </Fade>
-          </Modal>
-        </Box>
-      )}
-    </>
+        {orderDetail && (
+          <Box>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              open={openModal}
+              onClose={handleCloseModal}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  timeout: 500,
+                },
+              }}
+            >
+              <Fade in={openModal}>
+                <Box sx={styleModal}>
+                  <Typography>Name: {orderDetail.name}</Typography>
+                  <Typography>Phone: {orderDetail.phone}</Typography>
+                  <Typography>Email: {orderDetail.email}</Typography>
+                  <Typography>
+                    Address: {orderDetail.address} - {orderDetail.cityName}
+                  </Typography>
+                  <Typography>
+                    Create Date: {convertDate(orderDetail.createdDate)}
+                  </Typography>
+                  <Typography>Status: {orderDetail.status}</Typography>
+
+                  {/* {orderDetail.products.map((item, idx) => (
+                    <Box key={idx} className="flex">
+                      <Typography>{item._id}</Typography>
+                      <Typography>{formatPrice(item.price)}</Typography>
+                      <Typography>Quantity: {item.quantity}</Typography>
+                      <Divider />
+                    </Box>
+                  ))} */}
+                </Box>
+              </Fade>
+            </Modal>
+          </Box>
+        )}
+      </>
+    )
   );
 };
 

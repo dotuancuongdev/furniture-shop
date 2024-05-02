@@ -1,18 +1,17 @@
-import { Box, Button, Grid, Snackbar, TextField } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+
+import { useContext, useState } from "react";
 import api from "../api";
-import axios from "axios";
-import React, { useContext, useState } from "react";
-import { AppContext } from "../context";
 import { TOKEN, USER } from "../constants";
+import { AppContext } from "../context";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const appContext = useContext(AppContext);
-  const { setSnackbar, setLoading } = appContext;
+  const { setSnackbar, setLoading, setUser } = appContext;
 
-  const userContext = useContext(AppContext);
-  const { setUser } = userContext;
   const handleChangeUsername = (e) => {
     setUsername(e.target.value);
   };
@@ -39,34 +38,67 @@ const Login = () => {
       setPassword("");
     }
   };
+
   return (
     <>
-      <Box className="h-screen w-full flex">
-        <Box className="flex-1 bg-zinc-200"></Box>
-        <Box className="flex-1 flex justify-center items-center">
-          <Box className="flex flex-col gap-2 w-1/3 p-3 shadow-md">
-            <TextField
-              label="Username"
-              size="small"
-              value={username}
-              onChange={handleChangeUsername}
-              InputLabelProps={{
-                shrink: true,
-              }}
+      <Box className="h-screen w-full flex justify-center items-center bg-[url(https://wallpapers.com/images/hd/material-design-1920-x-1080-background-ej5wql37ojrto2i6.jpg)]">
+        <Box className="w-5/6 h-5/6 bg-white flex rounded-lg">
+          <Box className="flex-1 flex flex-col justify-center items-center gap-4">
+            <img
+              src="https://cdni.iconscout.com/illustration/premium/thumb/admin-login-5146573-4297423.png?f=webp"
+              alt=""
+              className="w-7/12 "
             />
-            <TextField
-              type="password"
-              label="Password"
-              size="small"
-              value={password}
-              onChange={handleChangePassword}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <Button variant="contained" onClick={login} className="mt-7">
-              login
-            </Button>
+            <Typography className="uppercase font-mono text-2xl">
+              furniture shop
+            </Typography>
+          </Box>
+          <Box className="bg-gradient-to-r from-purple-500 to-pink-500 w-[1px] h-5/6 my-auto" />
+          <Box className="flex-1 flex flex-col justify-center items-center">
+            <Box className="w-2/3 flex flex-col gap-6">
+              <Box>
+                <Typography variant="h4">Welcome Back</Typography>
+                <Typography>
+                  Welcome back! Please enter your details below.
+                </Typography>
+              </Box>
+
+              <TextField
+                label="Username"
+                size="small"
+                value={username}
+                onChange={handleChangeUsername}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextField
+                type="password"
+                label="Password"
+                size="small"
+                value={password}
+                onChange={handleChangePassword}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={login}
+                className="mt-4 bg-purple-500"
+              >
+                sign in
+                <LoginIcon />
+              </Button>
+              <Box className="flex justify-center items-center gap-2">
+                <Box className="h-[1px] w-full bg-zinc-300" />
+                <Typography className="text-zinc-400">OR</Typography>
+                <Box className="h-[1px] w-full bg-zinc-300" />
+              </Box>
+              <Button variant="contained" className="bg-white text-black">
+                sign in with google
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>

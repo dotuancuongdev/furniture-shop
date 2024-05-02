@@ -3,13 +3,11 @@ import React, { useContext } from "react";
 import { AppContext } from "../context";
 
 const Admin = () => {
-  const userContext = useContext(AppContext);
-  const { setUser } = userContext;
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.clear();
-  };
-  return <Box>admin home page</Box>;
+  const appContext = useContext(AppContext);
+  const { setHeader } = appContext;
+  setHeader("Admin Home Page");
+
+  return <Box>admin </Box>;
 };
 
 export default Admin;

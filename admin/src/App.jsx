@@ -65,7 +65,6 @@ const adminRoutes = [
   { path: "/product/create/", element: <CreateProduct /> },
   { path: "/product/edit/:id", element: <EditPrd /> },
   { path: "/order", element: <Order /> },
-  { path: "/*", element: <Admin /> },
 ];
 
 const authRoutes = [{ path: "/", element: <Login /> }];
@@ -160,6 +159,9 @@ const AdminLayout = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const appContext = useContext(AppContext);
+  const { header } = appContext;
+
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openProfileMenu = !!anchorEl;
@@ -210,7 +212,7 @@ const AdminLayout = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Admin panel
+              Furniture Admin Dashboard
             </Typography>
           </Box>
           <Box>
@@ -293,6 +295,8 @@ const AdminLayout = () => {
       >
         <DrawerHeader />
         <Box className="p-4 min-h-[calc(100vh-64px)]">
+          <Typography variant="h5">{header}</Typography>
+          <Divider className="my-3" />
           <Routes>
             {adminRoutes.map((r, idx) => (
               <Route key={idx} path={r.path} element={r.element} />

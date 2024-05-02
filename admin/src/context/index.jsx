@@ -11,6 +11,7 @@ const AppProvider = ({ children }) => {
     severity: "",
   });
   const [loading, setLoading] = useState(false);
+  const [header, setHeader] = useState("");
 
   try {
     const localUser = localStorage.getItem(USER);
@@ -19,9 +20,19 @@ const AppProvider = ({ children }) => {
       setUser(parseUser);
     }
   } catch {}
+
   return (
     <AppContext.Provider
-      value={{ user, setUser, snackbar, setSnackbar, loading, setLoading }}
+      value={{
+        user,
+        setUser,
+        snackbar,
+        setSnackbar,
+        loading,
+        setLoading,
+        header,
+        setHeader,
+      }}
     >
       {children}
     </AppContext.Provider>
