@@ -8,14 +8,14 @@ import { AppContext } from "../context";
 import { formatPrice } from "../helper";
 
 const Detail = () => {
-  const params = useParams();
-
   const [detail, setDetail] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
 
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar, cart, setCart } = appContext;
+
+  const params = useParams();
 
   useEffect(() => {
     let ignore = false;
@@ -38,7 +38,9 @@ const Detail = () => {
         setLoading(false);
       }
     };
+
     getDetail();
+
     return () => {
       ignore = true;
     };
@@ -54,10 +56,12 @@ const Detail = () => {
     }
     setQuantity(quantity + 1);
   };
+
   const handleDecreaseQuantity = () => {
     if (quantity === 1) return;
     setQuantity(quantity - 1);
   };
+
   const handleChangeImgIdx = (idx) => {
     setImgIdx(idx);
   };
@@ -74,7 +78,7 @@ const Detail = () => {
       setCart(updateProducts);
       setSnackbar({
         isOpen: true,
-        message: "Success",
+        message: "Added to cart successfully",
         severity: "success",
       });
       return;
@@ -90,13 +94,13 @@ const Detail = () => {
   };
 
   return (
-    <Box className="max-w-5xl mx-auto">
+    <Box className="max-w-6xl mx-auto">
       {detail && (
         <>
           <Box className="flex justify-center">
             <Box className="flex-[6] flex gap-3 ">
               <Box className="flex-1  ">
-                <Box className="flex flex-col gap-2 h-[450px] rounded-lg overflow-y-scroll pr-2">
+                <Box className="flex flex-col gap-2 h-[500px] rounded-lg overflow-y-scroll pr-2">
                   {detail.images.map((img, idx) => (
                     <Box
                       key={idx}

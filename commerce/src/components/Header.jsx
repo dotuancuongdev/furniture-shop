@@ -20,7 +20,7 @@ const Header = () => {
     let ignore = false;
     const getCollections = async () => {
       try {
-        const res = await api.get(`categories/collections`);
+        const res = await api.get(`/categories/collections`);
         if (!ignore) {
           setCollections(res.data);
         }
@@ -42,7 +42,7 @@ const Header = () => {
     let ignore = false;
     const getFeatured = async () => {
       try {
-        const res = await api.get(`categories/featured`);
+        const res = await api.get(`/categories/featured`);
         if (!ignore) {
           setFeatured(res.data);
         }
@@ -64,7 +64,7 @@ const Header = () => {
     let ignore = false;
     const getPromotions = async () => {
       try {
-        const res = await api.get(`categories/promotions`);
+        const res = await api.get(`/categories/promotions`);
         if (!ignore) {
           setPromotions(res.data);
         }

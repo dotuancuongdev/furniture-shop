@@ -57,10 +57,8 @@ const Login = () => {
           <Box className="flex-1 flex flex-col justify-center items-center">
             <Box className="w-2/3 flex flex-col gap-6">
               <Box>
-                <Typography variant="h4">Welcome Back</Typography>
-                <Typography>
-                  Welcome back! Please enter your details below.
-                </Typography>
+                <Typography variant="h4">Welcome </Typography>
+                <Typography>Please enter your details below.</Typography>
               </Box>
 
               <TextField

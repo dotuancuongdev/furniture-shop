@@ -23,10 +23,8 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [minPriceString, setMinPriceString] = useState("");
-
   const [maxPrice, setMaxPrice] = useState(0);
   const [maxPriceString, setMaxPriceString] = useState("");
-
   const [pageNumber, setPageNumber] = useState(1);
 
   const appContext = useContext(AppContext);
@@ -120,7 +118,7 @@ const Products = () => {
           </Button>
         </Box>
 
-        <Box className=" grid grid-cols-4 gap-5 mb-10 flex-[3]">
+        <Box className=" grid grid-cols-4 gap-5 mb-10 flex-[4]">
           {products.map((item) => (
             <Card
               title={item.name}
