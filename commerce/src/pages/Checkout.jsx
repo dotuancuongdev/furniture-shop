@@ -41,11 +41,9 @@ const Checkout = () => {
   const appContext = useContext(AppContext);
   const { cart, setLoading, setSnackbar, setCart } = appContext;
 
-  let totalPrice = 0;
-  for (let index = 0; index < cart.length; index++) {
-    totalPrice = totalPrice + cart[index].price * cart[index].quantity;
-  }
-
+  const totalPrice = cart.reduce((x, y) => {
+    return x + y.price * y.quantity;
+  }, 0);
   const navigate = useNavigate();
 
   const {
