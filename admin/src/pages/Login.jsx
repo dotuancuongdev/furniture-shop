@@ -88,14 +88,6 @@ const Login = () => {
                 sign in
                 <LoginIcon />
               </Button>
-              <Box className="flex justify-center items-center gap-2">
-                <Box className="h-[1px] w-full bg-zinc-300" />
-                <Typography className="text-zinc-400">OR</Typography>
-                <Box className="h-[1px] w-full bg-zinc-300" />
-              </Box>
-              <Button variant="contained" className="bg-white text-black">
-                sign in with google
-              </Button>
             </Box>
           </Box>
         </Box>
