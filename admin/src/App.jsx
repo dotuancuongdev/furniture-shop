@@ -25,6 +25,7 @@ import {
   Toolbar,
   Typography,
   styled,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { AppContext } from "./context";
@@ -55,6 +56,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
 import { handleLogOut } from "./helper";
+import MobilePage from "./components/MobilePage";
 
 const adminRoutes = [
   { path: "/", element: <Admin /> },
@@ -136,13 +138,16 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 function App() {
   const appContext = useContext(AppContext);
   const { user } = appContext;
+  const matches = useMediaQuery("(min-width:900px)");
 
-  return (
+  return matches ? (
     <BrowserRouter>
       <AppLoading />
       <AppSnackbar />
       {user ? <AdminLayout /> : <AuthLayout />}
     </BrowserRouter>
+  ) : (
+    <MobilePage />
   );
 }
 

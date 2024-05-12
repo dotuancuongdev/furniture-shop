@@ -1,6 +1,13 @@
 import { useContext } from "react";
 
-import { Alert, Box, CircularProgress, Snackbar, Stack } from "@mui/material";
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Snackbar,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
 import "./App.css";
 
 import Checkout from "./pages/Checkout";
@@ -12,6 +19,7 @@ import { AppContext } from "./context";
 import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import Order from "./pages/Order";
+import MobilePage from "./components/MobilePage";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -87,7 +95,9 @@ const routers = [
 ];
 
 function App() {
-  return (
+  const matches = useMediaQuery("(min-width:900px)");
+
+  return matches ? (
     <BrowserRouter>
       <AppLoading />
       <AppSnackbar />
@@ -102,6 +112,8 @@ function App() {
       </Box>
       <Footer />
     </BrowserRouter>
+  ) : (
+    <MobilePage />
   );
 }
 
