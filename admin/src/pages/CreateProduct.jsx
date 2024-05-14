@@ -103,7 +103,7 @@ const CreateProduct = () => {
   });
 
   const onSubmit = async (data) => {
-    const { thumbnail } = data;
+    const { thumbnail, images } = data;
 
     const uploadThumbnail = async () => {
       setLoading(true);
@@ -132,14 +132,43 @@ const CreateProduct = () => {
       thumbnailUrl = result.data.url;
     }
 
+    const uploadImages = async () => {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        images.forEach((img) => {
+          formData.append("files", img);
+        });
+        const res = await api.post(`/assets/multiple-upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        setLoading(false);
+        return res;
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.response?.data?.message || error.message,
+          severity: "error",
+        });
+        setLoading(false);
+      }
+    };
+
+    let imageUrls = [];
+
+    if (images && images.length > 0) {
+      const result = await uploadImages();
+      imageUrls = result.data.urls;
+    }
+
     const formValues = {
       ...data,
       thumbnail: thumbnailUrl,
+      images: imageUrls,
       summary: editorSummaryRef.current.getContent(),
       description: editorDescriptionRef.current.getContent(),
     };
 
-    console.log(formValues);
     const postProduct = async () => {
       setLoading(true);
       try {
@@ -161,7 +190,7 @@ const CreateProduct = () => {
       }
     };
 
-    // postProduct();
+    postProduct();
   };
 
   const handleChangeCategory = (event) => {
@@ -242,7 +271,7 @@ const CreateProduct = () => {
       }
       selectedImgs.push(file.name);
     });
-    setValue("images", selectedImgs);
+    setValue("images", filesArray);
     setImgs(selectedImgs);
   };
 
@@ -391,7 +420,7 @@ const CreateProduct = () => {
             onClick={handleRemoveThumbnail}
             className="bg-red-500  "
           >
-            remove
+            Remove thumbnail
           </Button>
           <img
             id="thumbnail"
@@ -420,13 +449,6 @@ const CreateProduct = () => {
               className="h-9"
               onChange={handleChangeImgs}
             />
-          </Button>
-          <Button
-            variant="contained"
-            className="bg-red-500"
-            onClick={handleRemoveImgs}
-          >
-            remove
           </Button>
           <Box className="flex flex-wrap flex-1 gap-3 max-h-12 overflow-y-scroll">
             {imgs &&
