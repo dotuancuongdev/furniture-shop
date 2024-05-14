@@ -13,6 +13,9 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
 import { Done } from "@mui/icons-material";
 import { Editor } from "@tinymce/tinymce-react";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -24,12 +27,15 @@ import { AppContext } from "../context";
 
 const TINYMCE_KEY = import.meta.env.VITE_TINYMCE_API_KEY;
 
+const allowedExtensions = ["png", "jpg", "jpeg"];
+const maxSizeInBytes = 5 * Math.pow(2, 10) * Math.pow(2, 10);
+
 const schema = yup
   .object({
     name: yup.string().required(),
     price: yup.number().typeError("price is a required field").required(),
     stock: yup.number(),
-    thumbnail: yup.string(),
+    thumbnail: yup.object(),
     images: yup.array(),
     categoryIds: yup.array(),
   })
@@ -54,6 +60,18 @@ function getStyles(category, categories, theme) {
         : theme.typography.fontWeightMedium,
   };
 }
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const CreateProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -117,6 +135,47 @@ const CreateProduct = () => {
     setValue("categoryIds", event.target.value);
   };
   const selectedCategoryValues = watch("categoryIds", []);
+
+  function handleChangeThumbnail(event) {
+    if (!event.target.files || !event.target.files[0]) return;
+    const file = event.target.files[0];
+    const fileName = file.name;
+    const extension = fileName.split(".").pop();
+    const lowerCaseExtension = extension.toLowerCase();
+    const checkExtension = allowedExtensions.includes(lowerCaseExtension);
+    if (!checkExtension) {
+      setSnackbar({
+        isOpen: true,
+        message: `Allowed Extension:  ${allowedExtensions.join(", ")}`,
+        severity: "warning",
+      });
+      return;
+    }
+
+    const size = file.size;
+    if (size > maxSizeInBytes) {
+      setSnackbar({
+        isOpen: true,
+        message: `Maximum file's size is 5MB`,
+        severity: "warning",
+      });
+    }
+
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      document.getElementById("thumbnail").src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+
+    setValue("thumbnail", file);
+  }
+  const removeThumbnail = () => {
+    document.getElementById("thumbnail").src = "";
+    document.getElementById("inputThumbnail").value = null;
+    setValue("thumbnail", null);
+  };
 
   useEffect(() => {
     let ignore = false;
@@ -314,6 +373,27 @@ const CreateProduct = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
+      </>
+      <>
+        <Typography variant="h6">Thumbnail</Typography>
+        <Box className="flex">
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput
+              type="file"
+              id="inputThumbnail"
+              onChange={handleChangeThumbnail}
+            />
+          </Button>
+          <img id="thumbnail" src="" alt="" className="max-w-20" />
+        </Box>
+        <Button onClick={removeThumbnail}>remove thumbnail</Button>
       </>
     </form>
   );
