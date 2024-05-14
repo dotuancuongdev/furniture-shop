@@ -15,6 +15,19 @@ const upload = async (path) => {
   return res
 }
 
-const assetService = { upload }
+const multipleUpload = async (paths) => {
+  const responses = []
+
+  for (const p of paths) {
+    const res = await cloudinary.uploader.upload(p, {
+      resource_type: "auto",
+    })
+    responses.push(res)
+  }
+
+  return responses
+}
+
+const assetService = { upload, multipleUpload }
 
 export default assetService

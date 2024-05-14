@@ -14,4 +14,12 @@ assetRouter.post(
   assetController.upload
 )
 
+assetRouter.post(
+  "/multiple-upload",
+  userAuth,
+  adminAuth,
+  upload.array("files"),
+  assetController.multipleUpload
+)
+
 export default assetRouter

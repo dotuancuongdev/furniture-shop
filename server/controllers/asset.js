@@ -20,6 +20,26 @@ const upload = async (req, res) => {
   }
 }
 
-const assetController = { upload }
+const multipleUpload = async (req, res) => {
+  const { files } = req
+  if (!files || files.length === 0) {
+    res.status(400).json({ code: 400, message: "No files" })
+    return
+  }
+
+  try {
+    const paths = files.map((f) => f.path)
+    const results = await authService.multipleUpload(paths)
+    const urls = results.map((res) => res.url)
+
+    fs.rmSync("uploads", { recursive: true, force: true })
+
+    res.status(200).json({ urls })
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
+const assetController = { upload, multipleUpload }
 
 export default assetController
