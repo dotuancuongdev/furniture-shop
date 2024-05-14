@@ -186,7 +186,7 @@ const create = async (payload) => {
   try {
     session.startTransaction()
     const newProducts = await Product.create(
-      [{ summary, description, images, stock }],
+      [{ summary, description, images, stock, originalPrice: price }],
       { session }
     )
     const product = newProducts[0]
