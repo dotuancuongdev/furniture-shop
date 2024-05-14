@@ -76,6 +76,8 @@ const VisuallyHiddenInput = styled("input")({
 const CreateProduct = () => {
   const [categories, setCategories] = useState([]);
 
+  const [imgs, setImgs] = useState(null);
+
   const editorDescriptionRef = useRef(null);
   const editorSummaryRef = useRef(null);
 
@@ -137,6 +139,7 @@ const CreateProduct = () => {
       description: editorDescriptionRef.current.getContent(),
     };
 
+    console.log(formValues);
     const postProduct = async () => {
       setLoading(true);
       try {
@@ -158,7 +161,7 @@ const CreateProduct = () => {
       }
     };
 
-    postProduct();
+    // postProduct();
   };
 
   const handleChangeCategory = (event) => {
@@ -189,6 +192,7 @@ const CreateProduct = () => {
         message: `Maximum file's size is 5MB`,
         severity: "warning",
       });
+      return;
     }
 
     var reader = new FileReader();
@@ -201,10 +205,51 @@ const CreateProduct = () => {
 
     setValue("thumbnail", file);
   }
-  const removeThumbnail = () => {
+  const handleRemoveThumbnail = () => {
     document.getElementById("thumbnail").src = "";
     document.getElementById("inputThumbnail").value = null;
     setValue("thumbnail", null);
+  };
+
+  const handleChangeImgs = (event) => {
+    if (!event.target.files) return;
+    const files = event.target.files;
+
+    const filesArray = Object.values(files);
+    const selectedImgs = [];
+    filesArray.forEach((file) => {
+      const fileName = file.name;
+      const extension = fileName.split(".").pop();
+      const lowerCaseExtension = extension.toLowerCase();
+      const checkExtension = allowedExtensions.includes(lowerCaseExtension);
+      if (!checkExtension) {
+        setSnackbar({
+          isOpen: true,
+          message: `Allowed Extension:  ${allowedExtensions.join(", ")}`,
+          severity: "warning",
+        });
+        return;
+      }
+
+      const size = file.size;
+      if (size > maxSizeInBytes) {
+        setSnackbar({
+          isOpen: true,
+          message: `Maximum file's size is 5MB`,
+          severity: "warning",
+        });
+        return;
+      }
+      selectedImgs.push(file.name);
+    });
+    setValue("images", selectedImgs);
+    setImgs(selectedImgs);
+  };
+
+  const handleRemoveImgs = () => {
+    document.getElementById("inputImages").value = null;
+    setValue("images", []);
+    setImgs(null);
   };
 
   useEffect(() => {
@@ -324,6 +369,80 @@ const CreateProduct = () => {
       </Box>
 
       <>
+        <Typography variant="h6">Thumbnail</Typography>
+        <Box className="flex items-center gap-5 h-20">
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="h-9"
+          >
+            Upload thumbnail
+            <VisuallyHiddenInput
+              type="file"
+              id="inputThumbnail"
+              onChange={handleChangeThumbnail}
+            />
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleRemoveThumbnail}
+            className="bg-red-500  "
+          >
+            remove
+          </Button>
+          <img
+            id="thumbnail"
+            src=""
+            alt=""
+            className="w-20 max-h-20 object-cover"
+          />
+        </Box>
+      </>
+      <>
+        <Typography variant="h6">Images</Typography>
+        <Box className="flex items-center gap-5 h-20">
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="h-9"
+          >
+            Upload images
+            <VisuallyHiddenInput
+              type="file"
+              multiple
+              id="inputImages"
+              className="h-9"
+              onChange={handleChangeImgs}
+            />
+          </Button>
+          <Button
+            variant="contained"
+            className="bg-red-500"
+            onClick={handleRemoveImgs}
+          >
+            remove
+          </Button>
+          <Box className="flex flex-wrap flex-1 gap-3 max-h-12 overflow-y-scroll">
+            {imgs &&
+              imgs.length > 0 &&
+              imgs.map((img) => {
+                return (
+                  <Typography key={img} className="text-blue-500">
+                    {img}
+                  </Typography>
+                );
+              })}
+          </Box>
+        </Box>
+      </>
+
+      <>
         <Typography variant="h6">Summary</Typography>
         <Editor
           apiKey={TINYMCE_KEY}
@@ -403,27 +522,6 @@ const CreateProduct = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
-      </>
-      <>
-        <Typography variant="h6">Thumbnail</Typography>
-        <Box className="flex">
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload file
-            <VisuallyHiddenInput
-              type="file"
-              id="inputThumbnail"
-              onChange={handleChangeThumbnail}
-            />
-          </Button>
-          <img id="thumbnail" src="" alt="" className="max-w-20" />
-        </Box>
-        <Button onClick={removeThumbnail}>remove thumbnail</Button>
       </>
     </form>
   );
