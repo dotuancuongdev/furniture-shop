@@ -44,8 +44,6 @@ const get = async (query) => {
     .lean()
     .exec()
 
-  console.log("orders", orders)
-
   const items = orders.map((o) => {
     const ord = { ...o }
     if (o.city) {
@@ -102,12 +100,13 @@ const getDetail = async (id) => {
     item.cityName = order.city.name
     item.city = undefined
   }
-  if (order.orderProductVersions.length > 0) {
+  if (order.orderProductVersions?.length > 0) {
     item.products = order.orderProductVersions.map((opv) => ({
       _id: opv.productVersion.product._id,
       name: opv.productVersion.name,
       price: opv.productVersion.price,
       thumbnail: opv.productVersion.thumbnail,
+      quantity: opv.quantity,
     }))
     item.orderProductVersions = undefined
   }
@@ -172,6 +171,12 @@ const create = async (payload) => {
       { _id: { $in: productVersionIds } },
       { $push: { orderProductVersions: newOrderProductVersionIds } }
     )
+
+    productsWithQuantity.forEach(async (prd) => {
+      const product = await Product.findOne({ _id: prd.productId })
+      if (product) product.stock -= prd.quantity
+      await product.save()
+    })
 
     await session.commitTransaction()
     await session.endSession()
