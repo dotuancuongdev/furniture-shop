@@ -159,7 +159,7 @@ const Detail = () => {
                   <button
                     className="bg-zinc-200 w-16 border-none rounded-md flex justify-center items-center"
                     onClick={handleDecreaseQuantity}
-                    disabled={quantity === 1}
+                    disabled={detail.stock === 0 || quantity === 1}
                   >
                     <RemoveIcon />
                   </button>
@@ -176,7 +176,7 @@ const Detail = () => {
                   <button
                     className="bg-zinc-200 w-16 border-none rounded-md flex justify-center items-center"
                     onClick={handleIncreaseQuantity}
-                    // disabled={quantity === detail.stock}
+                    disabled={detail.stock === 0}
                   >
                     <AddIcon />
                   </button>
@@ -186,6 +186,7 @@ const Detail = () => {
                   variant="contained"
                   className="  bg-orange-500 "
                   onClick={handleAddToCart}
+                  disabled={detail.stock === 0}
                 >
                   thêm vào giỏ
                 </Button>
