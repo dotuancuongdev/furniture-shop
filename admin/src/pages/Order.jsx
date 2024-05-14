@@ -211,6 +211,8 @@ const Order = () => {
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
                 ))}
             </TableBody>
