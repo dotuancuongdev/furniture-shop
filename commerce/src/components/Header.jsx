@@ -110,8 +110,11 @@ const Header = () => {
           <Typography className="cursor-pointer p-2 hover:text-orange-500">
             About Us
           </Typography>
-          <Typography className="cursor-pointer p-2 hover:text-orange-500">
-            Showroom
+          <Typography
+            className="cursor-pointer p-2 hover:text-orange-500"
+            onClick={() => navigate(`/order-tracking`)}
+          >
+            Order-Tracking
           </Typography>
         </Box>
 

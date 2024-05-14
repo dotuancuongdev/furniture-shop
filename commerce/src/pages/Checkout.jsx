@@ -74,7 +74,7 @@ const Checkout = () => {
         await api.post(`/orders`, payload);
         setSnackbar({
           isOpen: true,
-          message: "Success",
+          message: "Order successfully placed",
           severity: "success",
         });
         localStorage.removeItem(CART);

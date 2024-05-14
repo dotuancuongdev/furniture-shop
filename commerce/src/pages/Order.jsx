@@ -76,7 +76,7 @@ const Order = () => {
 
             <Box>
               <Typography>Products Information:</Typography>
-              <Box className="h-[380px] overflow-y-auto pr-3">
+              <Box className="max-h-[380px] overflow-y-auto pr-3">
                 {orderDetail.products.map((item, idx) => (
                   <Box key={idx} className="flex  items-center gap-4 mt-3">
                     <Box className="flex  items-center gap-4">
