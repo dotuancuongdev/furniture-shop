@@ -89,7 +89,6 @@ const Order = () => {
     setOpenModal(true);
     try {
       const res = await api.get(`/orders/${id}`);
-      console.log(res.data);
       setOrderDetail(res.data);
     } catch (error) {
       setSnackbar({

@@ -100,7 +100,7 @@ const Detail = () => {
           <Box className="flex justify-center">
             <Box className="flex-[6] flex gap-3 ">
               <Box className="flex-1  ">
-                <Box className="flex flex-col gap-2 h-[500px] rounded-lg overflow-y-scroll pr-2">
+                <Box className="flex flex-col gap-2 max-h-[480px] rounded-lg overflow-y-scroll pr-2">
                   {detail.images.map((img, idx) => (
                     <Box
                       key={idx}
@@ -118,9 +118,9 @@ const Detail = () => {
               </Box>
               <Box className="flex-[4] ">
                 <img
-                  src={detail.images[imgIdx]}
+                  src={detail.thumbnail}
                   alt=""
-                  className="w-full rounded-lg"
+                  className="w-full rounded-lg max-h-[480px]"
                 />
               </Box>
             </Box>

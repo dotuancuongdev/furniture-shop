@@ -35,7 +35,7 @@ const schema = yup
     name: yup.string().required(),
     price: yup.number().typeError("price is a required field").required(),
     stock: yup.number(),
-    thumbnail: yup.object(),
+    // thumbnail: yup.object(),
     images: yup.array(),
     categoryIds: yup.array(),
   })
@@ -100,9 +100,39 @@ const CreateProduct = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const { thumbnail } = data;
+
+    const uploadThumbnail = async () => {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", thumbnail);
+        const res = await api.post(`/assets/upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        setLoading(false);
+        return res;
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.response?.data?.message || error.message,
+          severity: "error",
+        });
+        setLoading(false);
+      }
+    };
+
+    let thumbnailUrl = null;
+
+    if (thumbnail) {
+      const result = await uploadThumbnail();
+      thumbnailUrl = result.data.url;
+    }
+
     const formValues = {
       ...data,
+      thumbnail: thumbnailUrl,
       summary: editorSummaryRef.current.getContent(),
       description: editorDescriptionRef.current.getContent(),
     };
