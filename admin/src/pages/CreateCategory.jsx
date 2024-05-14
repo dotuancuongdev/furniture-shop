@@ -39,7 +39,7 @@ const CreateCategory = () => {
         await api.post("/categories", { name, description });
         setSnackbar({
           isOpen: true,
-          message: "Update successfully",
+          message: "Create category successfully",
           severity: "success",
         });
         setLoading(false);

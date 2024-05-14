@@ -62,7 +62,7 @@ const EditCategory = () => {
       await api.put(`/categories/${category.id}`, detailCategory);
       setSnackbar({
         isOpen: true,
-        message: "Update Category Successfully",
+        message: "Update category successfully",
         severity: "success",
       });
       setLoading(false);

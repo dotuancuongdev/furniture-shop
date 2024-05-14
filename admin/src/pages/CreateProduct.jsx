@@ -28,7 +28,7 @@ const schema = yup
   .object({
     name: yup.string().required(),
     price: yup.number().typeError("price is a required field").required(),
-    stock: yup.number().typeError("stock is a required field").required(),
+    stock: yup.number(),
     thumbnail: yup.string(),
     images: yup.array(),
     categoryIds: yup.array(),
@@ -95,10 +95,11 @@ const CreateProduct = () => {
         await api.post(`/products`, formValues);
         setSnackbar({
           isOpen: true,
-          message: "Create successful products",
+          message: "Create product successfully",
           severity: "success",
         });
         setLoading(false);
+        navigate(`/product`);
       } catch (error) {
         setSnackbar({
           isOpen: true,
@@ -196,6 +197,7 @@ const CreateProduct = () => {
             variant="outlined"
             type="number"
             size="small"
+            defaultValue={0}
             className={`${errors.stock ? "" : "mb-6"} w-full`}
             {...register("stock")}
           />

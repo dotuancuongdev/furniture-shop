@@ -92,6 +92,12 @@ const Header = () => {
           onClick={() => navigate(`/`)}
         />
         <Box className="flex gap-10">
+          <Typography
+            className="cursor-pointer p-2 hover:text-orange-500"
+            onClick={() => navigate(`/product`)}
+          >
+            Products
+          </Typography>
           <MenuItem name="Collections" subItems={collections} />
           <MenuItem name="Featured" subItems={featured} />
           <MenuItem name="Promotions" subItems={promotions} />

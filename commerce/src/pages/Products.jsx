@@ -168,7 +168,7 @@ const Products = () => {
                         </Typography>
                       </Box>
                     ) : (
-                      <Box className="flex gap-2 flex-wrap">
+                      <Box className="flex gap-[5px] flex-wrap">
                         <Typography className="text-orange-500">
                           {formatPrice(item.price)}
                         </Typography>
