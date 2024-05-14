@@ -218,7 +218,9 @@ const Order = () => {
         </TableContainer>
 
         <Box className="mt-3 flex justify-end items-center gap-2">
-          <Typography>Total {totalItems} items</Typography>
+          <Typography className="text-blue-700">
+            Total {totalItems} items
+          </Typography>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel id="demo-select-small-label">PageSize</InputLabel>
             <Select
@@ -264,45 +266,62 @@ const Order = () => {
           </Box>
         </Box>
         {orderDetail && (
-          <Box>
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              open={openModal}
-              onClose={handleCloseModal}
-              closeAfterTransition
-              slots={{ backdrop: Backdrop }}
-              slotProps={{
-                backdrop: {
-                  timeout: 500,
-                },
-              }}
-            >
-              <Fade in={openModal}>
-                <Box sx={styleModal}>
-                  <Typography>Name: {orderDetail.name}</Typography>
-                  <Typography>Phone: {orderDetail.phone}</Typography>
-                  <Typography>Email: {orderDetail.email}</Typography>
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={openModal}
+            onClose={handleCloseModal}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+              backdrop: {
+                timeout: 500,
+              },
+            }}
+          >
+            <Fade in={openModal}>
+              <Box sx={styleModal}>
+                <Typography>
+                  {" "}
+                  <strong>Name:</strong> {orderDetail.name}
+                </Typography>
+                <Typography>
+                  <strong>Phone:</strong> {orderDetail.phone}
+                </Typography>
+                <Typography>
+                  <strong>Email:</strong> {orderDetail.email}
+                </Typography>
+                <Typography>
+                  <strong>Address:</strong> {orderDetail.address} -{" "}
+                  {orderDetail.cityName}
+                </Typography>
+                {orderDetail.createDate ? (
                   <Typography>
-                    Address: {orderDetail.address} - {orderDetail.cityName}
+                    <strong>Create Date: </strong>
+                    {convertDate(orderDetail.createdDate)}
                   </Typography>
+                ) : (
                   <Typography>
-                    Create Date: {convertDate(orderDetail.createdDate)}
+                    <strong>Create Date:</strong> N/A
                   </Typography>
-                  <Typography>Status: {orderDetail.status}</Typography>
+                )}
+                <Typography>
+                  <strong>Status:</strong> {orderDetail.status}
+                </Typography>
 
-                  {/* {orderDetail.products.map((item, idx) => (
-                    <Box key={idx} className="flex">
-                      <Typography>{item._id}</Typography>
+                <Box className="max-h-[50vh] overflow-y-auto ">
+                  {orderDetail.products?.map((item, idx) => (
+                    <Box key={idx} className="flex gap-3 items-center mt-2">
+                      <img src={item.thumbnail} alt="" className="w-16 " />
                       <Typography>{formatPrice(item.price)}</Typography>
                       <Typography>Quantity: {item.quantity}</Typography>
                       <Divider />
                     </Box>
-                  ))} */}
+                  ))}
                 </Box>
-              </Fade>
-            </Modal>
-          </Box>
+              </Box>
+            </Fade>
+          </Modal>
         )}
       </>
     )
