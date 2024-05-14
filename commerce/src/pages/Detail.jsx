@@ -93,6 +93,8 @@ const Detail = () => {
     });
   };
 
+  const showcase = [detail.thumbnail, ...detail.images];
+
   return (
     <Box className="max-w-6xl mx-auto">
       {detail && (
@@ -101,7 +103,7 @@ const Detail = () => {
             <Box className="flex-[6] flex gap-3 ">
               <Box className="flex-1  ">
                 <Box className="flex flex-col gap-2 max-h-[480px] rounded-lg overflow-y-scroll pr-2">
-                  {detail.images.map((img, idx) => (
+                  {showcase.map((img, idx) => (
                     <Box
                       key={idx}
                       className=""
@@ -118,7 +120,7 @@ const Detail = () => {
               </Box>
               <Box className="flex-[4] ">
                 <img
-                  src={detail.thumbnail}
+                  src={showcase[imgIdx]}
                   alt=""
                   className="w-full rounded-lg max-h-[480px]"
                 />

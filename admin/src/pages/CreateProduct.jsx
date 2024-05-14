@@ -400,39 +400,37 @@ const CreateProduct = () => {
       <>
         <Typography variant="h6">Thumbnail</Typography>
         <Box className="flex items-center gap-5 h-20">
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="h-9"
-          >
-            Upload thumbnail
-            <VisuallyHiddenInput
-              type="file"
-              id="inputThumbnail"
-              onChange={handleChangeThumbnail}
-            />
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleRemoveThumbnail}
-            className="bg-red-500  "
-          >
-            Remove thumbnail
-          </Button>
-          <img
-            id="thumbnail"
-            src=""
-            alt=""
-            className="w-20 max-h-20 object-cover"
-          />
+          <Box className="flex flex-col gap-2">
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+              className="h-9"
+            >
+              Upload thumbnail
+              <VisuallyHiddenInput
+                type="file"
+                id="inputThumbnail"
+                onChange={handleChangeThumbnail}
+              />
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleRemoveThumbnail}
+              className="bg-red-500  "
+            >
+              Remove thumbnail
+            </Button>
+          </Box>
+          <img id="thumbnail" src="" alt="" className="max-h-20 object-cover" />
         </Box>
       </>
-      <>
+
+      <Box className="mt-8">
         <Typography variant="h6">Images</Typography>
-        <Box className="flex items-center gap-5 h-20">
+        <Box className="flex gap-10">
           <Button
             component="label"
             role={undefined}
@@ -450,21 +448,19 @@ const CreateProduct = () => {
               onChange={handleChangeImgs}
             />
           </Button>
-          <Box className="flex flex-wrap flex-1 gap-3 max-h-12 overflow-y-scroll">
-            {imgs &&
-              imgs.length > 0 &&
-              imgs.map((img) => {
-                return (
-                  <Typography key={img} className="text-blue-500">
-                    {img}
-                  </Typography>
-                );
-              })}
+          <Box className="flex flex-wrap flex-1 gap-3">
+            {imgs && imgs.length > 0 && (
+              <ul className="list-disc">
+                {imgs.map((img, idx) => (
+                  <li key={idx}>{img}</li>
+                ))}
+              </ul>
+            )}
           </Box>
         </Box>
-      </>
+      </Box>
 
-      <>
+      <Box className="mt-8">
         <Typography variant="h6">Summary</Typography>
         <Editor
           apiKey={TINYMCE_KEY}
@@ -502,7 +498,7 @@ const CreateProduct = () => {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
-      </>
+      </Box>
 
       <br />
 
