@@ -205,8 +205,6 @@ const Categories = () => {
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
                 ))}
             </TableBody>
