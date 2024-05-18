@@ -191,6 +191,8 @@ const Products = () => {
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
                 ))}
             </TableBody>
