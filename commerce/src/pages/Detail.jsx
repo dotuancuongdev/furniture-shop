@@ -93,7 +93,10 @@ const Detail = () => {
     });
   };
 
-  const showcase = [detail.thumbnail, ...detail.images];
+  let showcase = [];
+  if (detail?.thumbnail) showcase = [detail.thumbnail];
+  if (detail?.images && detail.images.length > 0)
+    showcase = [...showcase, ...detail.images];
 
   return (
     <Box className="max-w-6xl mx-auto">
