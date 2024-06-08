@@ -1,5 +1,14 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Badge, Box, Button, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  Badge,
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  Paper,
+  Typography,
+} from "@mui/material";
 
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -82,6 +91,27 @@ const Header = () => {
     };
   }, []);
 
+  return (
+    <>
+      <Box className="p-6">
+        <Box className="border border-solid rounded-sm border-zinc-300">
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search ..." />
+        </Box>
+      </Box>
+
+      <Box className="flex justify-center gap-5 text-zinc-400 ">
+        <Typography className="text-sm">0968-666-888</Typography>
+        <Box className="flex items-center">
+          <ShoppingCartIcon className="text-sm" />
+          <Typography className="uppercase text-sm">{`cart (${cart.length})`}</Typography>
+        </Box>
+        <Typography className="uppercase text-sm">checkout</Typography>
+      </Box>
+    </>
+  );
   return (
     <Box className="">
       <Box className="flex justify-evenly items-center shadow-xl h-[100px] fixed top-0 left-0 w-full z-[9999] bg-white">
