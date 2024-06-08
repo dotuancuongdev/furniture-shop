@@ -95,15 +95,13 @@ const routers = [
 ];
 
 function App() {
-  const matches = useMediaQuery("(min-width:900px)");
-
-  return matches ? (
+  return (
     <BrowserRouter>
       <AppLoading />
       <AppSnackbar />
       <Header />
 
-      <Box className={"min-h-[calc(100vh-400px)] pt-[140px]"}>
+      <Box className="pt-28">
         <Routes>
           {routers.map((r) => (
             <Route key={r.path} path={r.path} element={r.element} />
@@ -112,8 +110,6 @@ function App() {
       </Box>
       <Footer />
     </BrowserRouter>
-  ) : (
-    <MobilePage />
   );
 }
 
