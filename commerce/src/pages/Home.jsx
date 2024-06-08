@@ -3,6 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Divider,
   TextField,
   Typography,
@@ -11,6 +12,10 @@ import Carousel from "react-material-ui-carousel";
 import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context";
+import api from "../api";
+import { useNavigate } from "react-router-dom";
 
 const carouselHomePage = [
   {
@@ -28,7 +33,7 @@ const carouselHomePage = [
   },
 ];
 
-const collections = [
+const collectionsHomePage = [
   {
     name: "living room",
     url: "https://storage.atlasplan.com/public/assets/press/2023-09-living-room-wall-cladding/1-living-room-in-atlas-plan-porcelain-stoneware-clamp_960_960_50.jpg",
@@ -71,26 +76,99 @@ function Item(props) {
     <Box className="relative">
       <img src={props.item.url} alt="" className="w-full " />
       <Box className="absolute top-1/2 left-5 w-2/3 text-white">
-        <button className="border-none py-2 px-3 bg-[#FFEBBB] rounded-sm uppercase">
+        <button className="border-none py-2 px-3 bg-[#FFEBBB] rounded-sm uppercase xl:py-3 xl:px-5 xl:text-xl xl:mb-4">
           shop now
         </button>
-        <Typography variant="h5">{props.item.text}</Typography>
+        <Typography variant="h5" className="xl:text-5xl">
+          {props.item.text}
+        </Typography>
       </Box>
     </Box>
   );
 }
 
 const Home = () => {
+  const [collections, setCollections] = useState([]);
+  const [featured, setFeatured] = useState([]);
+  const [promotions, setPromotions] = useState([]);
+
+  const appContext = useContext(AppContext);
+  const { setLoading, setSnackbar, cart } = appContext;
+  useEffect(() => {
+    let ignore = false;
+    const getCollections = async () => {
+      try {
+        const res = await api.get(`/categories/collections`);
+        if (!ignore) {
+          setCollections(res.data);
+        }
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.message,
+          severity: "error",
+        });
+      }
+    };
+    getCollections();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    const getFeatured = async () => {
+      try {
+        const res = await api.get(`/categories/featured`);
+        if (!ignore) {
+          setFeatured(res.data);
+        }
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.message,
+          severity: "error",
+        });
+      }
+    };
+    getFeatured();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    const getPromotions = async () => {
+      try {
+        const res = await api.get(`/categories/promotions`);
+        if (!ignore) {
+          setPromotions(res.data);
+        }
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.message,
+          severity: "error",
+        });
+      }
+    };
+    getPromotions();
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <>
       <Typography className=" text-center my-6" variant="h3">
         Beau - Paris
       </Typography>
-      <Box className="mb-12">
-        <Divider className="mb-[1px]" />
-        <Divider />
+      <Box className="mb-12 xl:px-48">
+        <Divider className="mb-[1px]  " />
+        <Divider className="" />
 
-        <Accordion className="mb-[1px]">
+        <Accordion className="mb-[1px] xl:hidden">
           <AccordionSummary
             expandIcon={<DensityMediumIcon className="text-base" />}
             aria-controls="panel1-content"
@@ -100,18 +178,28 @@ const Home = () => {
           </AccordionSummary>
           <AccordionDetails>detail</AccordionDetails>
         </Accordion>
-        {/* <Divider className="mb-[1px]" /> */}
-        <Divider />
+
+        <Box className="hidden xl:flex justify-center items-center gap-7 py-4">
+          <Typography className="uppercase">home</Typography>
+          <MenuItem name="COLLECTIONS" subItems={collections} />
+          <MenuItem name="FEATURED" subItems={featured} />
+          <MenuItem name="PROMOTIONS" subItems={promotions} />
+          <Typography className="uppercase">contact us</Typography>
+          <Typography className="uppercase">faq</Typography>
+        </Box>
+
+        <Divider className="mb-[1px]  " />
+        <Divider className=" " />
       </Box>
 
-      <Carousel animation="slide" duration={550}>
+      <Carousel className="mb-10" animation="slide" duration={550}>
         {carouselHomePage.map((item, i) => (
           <Item key={i} item={item} />
         ))}
       </Carousel>
-      <Box className="px-5">
-        {collections.map((item) => (
-          <Box className="mb-5">
+      <Box className="px-5 xl:px-48 xl:flex xl:gap-4 xl:flex-wrap">
+        {collectionsHomePage.map((item) => (
+          <Box className="mb-5 xl:w-[49%] xl:hover:cursor-pointer xl:hover:text-[#dba932]">
             <img src={item.url} alt="" className="w-full" />
             <Typography variant="h6" className="uppercase text-center py-2">
               {item.name}
@@ -126,24 +214,37 @@ const Home = () => {
         className="w-full"
       />
 
-      <Box className="px-5">
+      <Box className="px-5 xl:px-48">
         <Box className="border-y-[1px] border-x-0 border-solid border-zinc-400 mb-5">
           <Typography variant="h5" className="text-center text-[#003872] py-2">
             Blog Post
           </Typography>
         </Box>
-        <Box>
+        <Box className="xl:flex gap-6">
           {posts.map((item, idx) => (
-            <Box key={idx} className="mb-9 flex flex-col gap-6">
-              <img src={item.url} alt="" className="w-full" />
-              <Typography variant="h5" className="text-[#003872] ">
-                {item.title}
-              </Typography>
-              <Typography className="text-zinc-400">{item.date}</Typography>
-              <Typography className="">{item.description}</Typography>
-              <Box className="flex text-zinc-500">
-                <Typography>Continue Reading </Typography>
-                <NavigateNextIcon />
+            <Box key={idx} className="mb-9 flex flex-col gap-6 xl:flex-1">
+              <Box className="h-[300px]">
+                <img
+                  src={item.url}
+                  alt=""
+                  className="w-full h-full object-cover cursor-pointer xl:hover:scale-105 xl:hover:duration-700 transition-transform "
+                />
+              </Box>
+              <Box className="xl:flex-1">
+                <Typography
+                  variant="h5"
+                  className="text-[#003872] mb-1 cursor-pointer"
+                >
+                  {item.title}
+                </Typography>
+                <Typography className="text-zinc-400 mb-5">
+                  {item.date}
+                </Typography>
+                <Typography className="">{item.description}</Typography>
+                <Box className="flex text-zinc-500 cursor-pointer">
+                  <Typography>Continue Reading </Typography>
+                  <NavigateNextIcon />
+                </Box>
               </Box>
             </Box>
           ))}
@@ -158,24 +259,25 @@ const Home = () => {
             Be the first to know about exciting new designs, special events and
             much more.
           </Typography>
-          <Box className="flex flex-col gap-3">
+          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/3 xl:mx-auto">
             <input
               type="text"
               placeholder="First name"
-              className="border border-zinc-300 h-10 px-3 rounded-sm"
+              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
             />
             <input
               type="text"
               placeholder="Last name"
-              className="border border-zinc-300 h-10 px-3 rounded-sm"
+              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
             />
-
+          </Box>
+          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/3 xl:mx-auto">
             <input
               type="text"
-              placeholder="Email"
-              className="border border-zinc-300 h-10 px-3 rounded-sm"
+              placeholder="Email address"
+              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1 xl:w-[200px]"
             />
-            <button className="uppercase border-none bg-[#FFEBBB] h-10 rounded-sm">
+            <button className="uppercase cursor-pointer border-none bg-[#FFEBBB] h-10 rounded-sm px-4">
               sign up
             </button>
           </Box>
@@ -261,4 +363,27 @@ const Home = () => {
   // );
 };
 
+const MenuItem = ({ name, subItems }) => {
+  const navigate = useNavigate();
+  return (
+    <Box className="relative cursor-pointer group">
+      <Typography className="hover:text-orange-500">{name}</Typography>
+      <Box className="hidden bg-white p-2 absolute top-8 left-[-50%] flex-col gap-2 w-max max-w-72 max-h-[50vh] overflow-y-auto group-hover:flex hover:flex">
+        {subItems.map((c) => (
+          <Button
+            title={c.name}
+            key={c._id}
+            onClick={() => {
+              navigate(`product?categoryId=${c._id}`);
+            }}
+          >
+            <Typography className="text-ellipsis whitespace-nowrap overflow-hidden max-w-[200px] w-full">
+              {c.name}
+            </Typography>
+          </Button>
+        ))}
+      </Box>
+    </Box>
+  );
+};
 export default Home;
