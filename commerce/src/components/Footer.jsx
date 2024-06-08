@@ -1,15 +1,5 @@
-import React from "react";
-import { Box, Divider, Typography } from "@mui/material";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import LoopIcon from "@mui/icons-material/Loop";
-import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EmailIcon from "@mui/icons-material/Email";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import InstagramIcon from "@mui/icons-material/Instagram";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Box, Typography } from "@mui/material";
 
 const quickLinks = ["Theme Info", "FAQs", "Search"];
 const paymentMethodLogos = [
@@ -21,35 +11,38 @@ const paymentMethodLogos = [
 ];
 const Footer = () => {
   return (
-    <Box className="">
-      <Box className="text-center">
-        <Typography variant="h5" className="mb-7">
-          Quick Links
-        </Typography>
-        <ul className="text-zinc-400 text-sm mb-7 flex flex-col gap-3">
-          {quickLinks.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+    <Box className="py-8 mt-7 xl:px-48  border-t border-solid border-l-0 border-r-0 border-b-0">
+      <Box className="w-5/6 mx-auto xl:flex justify-between">
+        <Box className="text-center xl:flex-1">
+          <Typography variant="h5" className="mb-7">
+            Quick Links
+          </Typography>
+          <ul className="text-zinc-400 text-sm mb-7 flex flex-col gap-3">
+            {quickLinks.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </Box>
+        <Box className="flex-[2]"></Box>
+        <Box className="text-center mb-7 xl:flex-1">
+          <Typography variant="h5" className="mb-7">
+            Theme Info
+          </Typography>
+          <Typography className="text-zinc-400 text-sm">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry.
+            <i>
+              <strong>Lorem Ipsum</strong>
+            </i>
+            has been the industry's standard dummy text ever since the 1500s.
+          </Typography>
+          <Typography className="text-zinc-400 text-sm">
+            Redfield@robertredfield
+          </Typography>
+        </Box>
       </Box>
-      <Box className="text-center mb-7">
-        <Typography variant="h5" className="mb-7">
-          Theme Info
-        </Typography>
-        <Typography className="text-zinc-400 text-sm">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry.
-          <i>
-            <strong>Lorem Ipsum</strong>
-          </i>
-          has been the industry's standard dummy text ever since the 1500s.
-        </Typography>
-        <Typography className="text-zinc-400 text-sm">
-          Redfield@robertredfield
-        </Typography>
-      </Box>
-      <Box className="h-[1px] bg-black w-5/6 mx-auto mb-5"></Box>
-      <Box className="border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center flex justify-center gap-3 mb-7">
+      <Box className="h-[1px] bg-zinc-300 w-4/5 xl:w-full mx-auto mb-5"></Box>
+      <Box className="border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center flex justify-center gap-3 mb-7 xl:w-1/4">
         <Typography className="uppercase">vietnam (cad $)</Typography>
         <KeyboardArrowDownIcon />
       </Box>

@@ -1,5 +1,7 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
 import {
   Badge,
   Box,
@@ -92,23 +94,29 @@ const Header = () => {
   }, []);
 
   return (
-    <Box className="fixed top-0 left-0 w-full z-[9999] bg-white">
-      <Box className="px-6 py-4">
-        <Box className="border border-solid rounded-sm border-zinc-300">
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search ..." />
+    <Box className="fixed top-0 left-0 w-full z-[9999] bg-white ">
+      <Box className="mx-auto xl:w-4/5 xl:flex xl:justify-between items-center ">
+        <Box className="mx-6 my-4 xl:my-4 ">
+          <Box className="border border-solid rounded-sm border-zinc-300 w-full">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+            <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search ..." />
+          </Box>
+          {/* <Box className="hidden border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center xl:flex justify-center gap-3 mb-7">
+            <Typography className="uppercase">vietnam (cad $)</Typography>
+            <KeyboardArrowDownIcon />
+          </Box> */}
         </Box>
-      </Box>
 
-      <Box className="flex justify-center gap-5 text-zinc-400 pb-3">
-        <Typography className="text-sm">0968-666-888</Typography>
-        <Box className="flex items-center">
-          <ShoppingCartIcon className="text-sm" />
-          <Typography className="uppercase text-sm">{`cart (${cart.length})`}</Typography>
+        <Box className="flex justify-center gap-5 text-zinc-400 pb-3">
+          <Typography className="text-sm">0968-666-888</Typography>
+          <Box className="flex items-center">
+            <ShoppingCartIcon className="text-sm" />
+            <Typography className="uppercase text-sm">{`cart (${cart.length})`}</Typography>
+          </Box>
+          <Typography className="uppercase text-sm">checkout</Typography>
         </Box>
-        <Typography className="uppercase text-sm">checkout</Typography>
       </Box>
     </Box>
   );
