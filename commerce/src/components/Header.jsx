@@ -92,8 +92,8 @@ const Header = () => {
   }, []);
 
   return (
-    <>
-      <Box className="p-6">
+    <Box className="fixed top-0 left-0 w-full z-[9999] bg-white">
+      <Box className="px-6 py-4">
         <Box className="border border-solid rounded-sm border-zinc-300">
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <SearchIcon />
@@ -102,7 +102,7 @@ const Header = () => {
         </Box>
       </Box>
 
-      <Box className="flex justify-center gap-5 text-zinc-400 ">
+      <Box className="flex justify-center gap-5 text-zinc-400 pb-3">
         <Typography className="text-sm">0968-666-888</Typography>
         <Box className="flex items-center">
           <ShoppingCartIcon className="text-sm" />
@@ -110,7 +110,7 @@ const Header = () => {
         </Box>
         <Typography className="uppercase text-sm">checkout</Typography>
       </Box>
-    </>
+    </Box>
   );
   return (
     <Box className="">

@@ -21,50 +21,47 @@ const paymentMethodLogos = [
 ];
 const Footer = () => {
   return (
-    <>
-      <Box className="">
-        <Divider className="mb-7" />
-        <Box className="text-center">
-          <Typography variant="h5" className="mb-7">
-            Quick Links
-          </Typography>
-          <ul className="text-zinc-400 text-sm mb-7 flex flex-col gap-3">
-            {quickLinks.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </Box>
-        <Box className="text-center mb-7">
-          <Typography variant="h5" className="mb-7">
-            Theme Info
-          </Typography>
-          <Typography className="text-zinc-400 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-            <i>
-              <strong>Lorem Ipsum</strong>
-            </i>
-            has been the industry's standard dummy text ever since the 1500s.
-          </Typography>
-          <Typography className="text-zinc-400 text-sm">
-            Redfield@robertredfield
-          </Typography>
-        </Box>
-        <Box className="h-[1px] bg-black w-5/6 mx-auto mb-5"></Box>
-        <Box className="border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center flex justify-center gap-3 mb-7">
-          <Typography className="uppercase">vietnam (cad $)</Typography>
-          <KeyboardArrowDownIcon />
-        </Box>
-        <Typography className="text-zinc-400 text-sm text-center mb-7">
-          © 2024 Sephora USA, Inc. All rights reserved.
+    <Box className="">
+      <Box className="text-center">
+        <Typography variant="h5" className="mb-7">
+          Quick Links
         </Typography>
-        <Box className="flex justify-center items-center gap-5">
-          {paymentMethodLogos.map((item) => (
-            <img key={item} src={item} alt="" className="w-10  object-cover" />
+        <ul className="text-zinc-400 text-sm mb-7 flex flex-col gap-3">
+          {quickLinks.map((item) => (
+            <li key={item}>{item}</li>
           ))}
-        </Box>
+        </ul>
       </Box>
-    </>
+      <Box className="text-center mb-7">
+        <Typography variant="h5" className="mb-7">
+          Theme Info
+        </Typography>
+        <Typography className="text-zinc-400 text-sm">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry.
+          <i>
+            <strong>Lorem Ipsum</strong>
+          </i>
+          has been the industry's standard dummy text ever since the 1500s.
+        </Typography>
+        <Typography className="text-zinc-400 text-sm">
+          Redfield@robertredfield
+        </Typography>
+      </Box>
+      <Box className="h-[1px] bg-black w-5/6 mx-auto mb-5"></Box>
+      <Box className="border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center flex justify-center gap-3 mb-7">
+        <Typography className="uppercase">vietnam (cad $)</Typography>
+        <KeyboardArrowDownIcon />
+      </Box>
+      <Typography className="text-zinc-400 text-sm text-center mb-7">
+        © 2024 Sephora USA, Inc. All rights reserved.
+      </Typography>
+      <Box className="flex justify-center items-center gap-5">
+        {paymentMethodLogos.map((item) => (
+          <img key={item} src={item} alt="" className="w-10  object-cover" />
+        ))}
+      </Box>
+    </Box>
   );
 
   // return (
