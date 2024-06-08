@@ -259,7 +259,7 @@ const Home = () => {
             Be the first to know about exciting new designs, special events and
             much more.
           </Typography>
-          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/3 xl:mx-auto">
+          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/2 xl:mx-auto">
             <input
               type="text"
               placeholder="First name"
@@ -271,7 +271,7 @@ const Home = () => {
               className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
             />
           </Box>
-          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/3 xl:mx-auto">
+          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/2 xl:mx-auto">
             <input
               type="text"
               placeholder="Email address"
