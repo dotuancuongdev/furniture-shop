@@ -20,6 +20,7 @@ import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import Order from "./pages/Order";
 import MobilePage from "./components/MobilePage";
+import Navbar from "./components/Navbar";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -100,8 +101,8 @@ function App() {
       <AppLoading />
       <AppSnackbar />
       <Header />
-
-      <Box className="pt-28">
+      <Navbar />
+      <Box className="">
         <Routes>
           {routers.map((r) => (
             <Route key={r.path} path={r.path} element={r.element} />
