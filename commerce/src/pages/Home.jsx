@@ -39,6 +39,10 @@ const collectionsHomePage = [
     url: "https://storage.atlasplan.com/public/assets/press/2023-09-living-room-wall-cladding/1-living-room-in-atlas-plan-porcelain-stoneware-clamp_960_960_50.jpg",
   },
   {
+    name: "workroom",
+    url: "https://imgmedia.lbb.in/media/2023/11/6556fe9ff9ed621efb5cc77e_1700200095922.jpg",
+  },
+  {
     name: "kitchen",
     url: "https://static.thcdn.com/productimg/960/960/14235050-6945036437967079.jpg",
   },
@@ -165,8 +169,10 @@ const Home = () => {
         Beau - Paris
       </Typography>
       <Box className="mb-12 xl:px-48">
-        <Divider className="mb-[1px]  " />
-        <Divider className="" />
+        <Box className="flex flex-col gap-[1px]">
+          <Divider className=" bg-zinc-400" />
+          <Divider className="bg-zinc-400" />
+        </Box>
 
         <Accordion className="mb-[1px] xl:hidden">
           <AccordionSummary
@@ -188,8 +194,10 @@ const Home = () => {
           <Typography className="uppercase">faq</Typography>
         </Box>
 
-        <Divider className="mb-[1px]  " />
-        <Divider className=" " />
+        <Box className="flex flex-col gap-[1px]">
+          <Divider className="  bg-zinc-400" />
+          <Divider className=" bg-zinc-400" />
+        </Box>
       </Box>
 
       <Carousel className="mb-10" animation="slide" duration={550}>
@@ -214,73 +222,73 @@ const Home = () => {
         className="w-full"
       />
 
-      <Box className="px-5 xl:px-48">
-        <Box className="border-y-[1px] border-x-0 border-solid border-zinc-400 mb-5">
-          <Typography variant="h5" className="text-center text-[#003872] py-2">
-            Blog Post
-          </Typography>
-        </Box>
-        <Box className="xl:flex gap-6">
-          {posts.map((item, idx) => (
-            <Box key={idx} className="mb-9 flex flex-col gap-6 xl:flex-1">
-              <Box className="h-[300px]">
-                <img
-                  src={item.url}
-                  alt=""
-                  className="w-full h-full object-cover cursor-pointer xl:hover:scale-105 xl:hover:duration-700 transition-transform "
-                />
-              </Box>
-              <Box className="xl:flex-1">
-                <Typography
-                  variant="h5"
-                  className="text-[#003872] mb-1 cursor-pointer"
-                >
-                  {item.title}
-                </Typography>
-                <Typography className="text-zinc-400 mb-5">
-                  {item.date}
-                </Typography>
-                <Typography className="">{item.description}</Typography>
-                <Box className="flex text-zinc-500 cursor-pointer">
-                  <Typography>Continue Reading </Typography>
-                  <NavigateNextIcon />
-                </Box>
+      <Box className="px-5 xl:px-48  mb-5">
+        <Divider className="bg-zinc-400" />
+        <Typography variant="h5" className="text-center text-[#003872] py-2">
+          Blog Post
+        </Typography>
+        <Divider className="bg-zinc-400" />
+      </Box>
+      <Box className="xl:flex gap-6 px-5 xl:px-48">
+        {posts.map((item, idx) => (
+          <Box key={idx} className="mb-9 flex flex-col gap-6 xl:flex-1">
+            <Box className="h-[300px]">
+              <img
+                src={item.url}
+                alt=""
+                className="w-full h-full object-cover cursor-pointer xl:hover:scale-105 xl:hover:duration-700 transition-transform "
+              />
+            </Box>
+            <Box className="xl:flex-1">
+              <Typography
+                variant="h5"
+                className="text-[#003872] mb-1 cursor-pointer"
+              >
+                {item.title}
+              </Typography>
+              <Typography className="text-zinc-400 mb-5">
+                {item.date}
+              </Typography>
+              <Typography className="">{item.description}</Typography>
+              <Box className="flex text-zinc-500 cursor-pointer">
+                <Typography>Continue Reading </Typography>
+                <NavigateNextIcon />
               </Box>
             </Box>
-          ))}
-        </Box>
-        <Box className=" border border-dashed border-zinc-300" />
+          </Box>
+        ))}
+      </Box>
+      <Box className=" border border-dashed border-zinc-300" />
 
-        <Box className="mb-8">
-          <Typography variant="h5" className="my-5 pb-3 text-center">
-            Latest from Beau Paris
-          </Typography>
-          <Typography className=" my-5 pb-3 text-center">
-            Be the first to know about exciting new designs, special events and
-            much more.
-          </Typography>
-          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/2 xl:mx-auto">
-            <input
-              type="text"
-              placeholder="First name"
-              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
-            />
-            <input
-              type="text"
-              placeholder="Last name"
-              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
-            />
-          </Box>
-          <Box className="flex flex-col gap-3 mb-3 xl:flex-row xl:w-1/2 xl:mx-auto">
-            <input
-              type="text"
-              placeholder="Email address"
-              className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1 xl:w-[200px]"
-            />
-            <button className="uppercase cursor-pointer border-none bg-[#FFEBBB] h-10 rounded-sm px-4">
-              sign up
-            </button>
-          </Box>
+      <Box className="mb-8">
+        <Typography variant="h5" className="my-5 pb-3 text-center">
+          Latest from Beau Paris
+        </Typography>
+        <Typography className=" my-5 pb-3 text-center">
+          Be the first to know about exciting new designs, special events and
+          much more.
+        </Typography>
+        <Box className="flex flex-col gap-3 mb-3 mx-5 xl:flex-row xl:w-1/2 xl:mx-auto">
+          <input
+            type="text"
+            placeholder="First name"
+            className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
+          />
+          <input
+            type="text"
+            placeholder="Last name"
+            className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
+          />
+        </Box>
+        <Box className="flex flex-col gap-3 mb-8 mx-5 xl:flex-row xl:w-1/2 xl:mx-auto">
+          <input
+            type="text"
+            placeholder="Email address"
+            className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1 xl:w-[200px]"
+          />
+          <button className="uppercase cursor-pointer border-none bg-[#FFEBBB] h-10 rounded-sm px-4">
+            sign up
+          </button>
         </Box>
 
         <Box className=" border border-dashed border-zinc-300" />

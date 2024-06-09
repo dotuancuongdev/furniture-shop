@@ -11,7 +11,7 @@ const paymentMethodLogos = [
 ];
 const Footer = () => {
   return (
-    <Box className="py-8 mt-7 xl:px-48  border-t border-solid border-l-0 border-r-0 border-b-0">
+    <Box className="py-8 mt-7 xl:px-48  border-t border-solid border-t-zinc-200 border-l-0 border-r-0 border-b-0">
       <Box className="w-5/6 mx-auto xl:flex justify-between">
         <Box className="text-center xl:flex-1">
           <Typography variant="h5" className="mb-7">
@@ -41,7 +41,7 @@ const Footer = () => {
           </Typography>
         </Box>
       </Box>
-      <Box className="h-[1px] bg-zinc-300 w-4/5 xl:w-full mx-auto mb-5"></Box>
+      <Box className="h-[1px] bg-zinc-400 w-4/5 xl:w-full mx-auto mb-5"></Box>
       <Box className="border border-solid border-zinc-400 rounded-sm py-3 w-1/2 mx-auto text-center flex justify-center gap-3 mb-7 xl:w-1/4">
         <Typography className="uppercase">vietnam (cad $)</Typography>
         <KeyboardArrowDownIcon />
