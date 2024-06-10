@@ -1,11 +1,16 @@
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../api";
 import { AppContext } from "../context";
 import { formatPrice } from "../helper";
+
+import XIcon from "@mui/icons-material/X";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 const Detail = () => {
   const [detail, setDetail] = useState(null);
@@ -99,6 +104,125 @@ const Detail = () => {
     showcase = [...showcase, ...detail.images];
 
   return (
+    <>
+      {detail && (
+        <Box>
+          <Box className="px-5 xl:px-48 ">
+            <Box className="xl:flex xl:gap-4">
+              <Box className="mb-8 xl:flex-[3]">
+                <img src={showcase[imgIdx]} alt="" className="w-full mb-2" />
+                <Box className="flex gap-2 w-full overflow-x-auto">
+                  {showcase.map((img, idx) => (
+                    <Box
+                      key={idx}
+                      onClick={() => handleChangeImgIdx(idx)}
+                      className=" min-w-24 xl:min-w-14 "
+                    >
+                      <img src={img} alt="" className=" w-full " />
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box className="xl:flex-[2]">
+                <Typography className="text-2xl text-[#003872] mb-2">
+                  {detail.name}
+                </Typography>
+                <Divider className="mb-6" />
+
+                <Box className="mb-2">
+                  {detail.price === detail.originalPrice ? (
+                    <Typography className="text-orange-500 text-lg font-semibold">
+                      {formatPrice(detail.price)}
+                    </Typography>
+                  ) : (
+                    <Box className="flex gap-4 items-center">
+                      <Typography className="text-orange-500 text-lg font-semibold">
+                        {formatPrice(detail.price)}
+                      </Typography>
+                      <Typography className="text-zinc-400 line-through ">
+                        {formatPrice(detail.originalPrice)}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                <Box className=" mb-6">
+                  <div
+                    className="text-lg prdSummary"
+                    dangerouslySetInnerHTML={{ __html: detail.summary }}
+                  />
+                </Box>
+
+                <Box className="xl:flex gap-3">
+                  <Box className="w-full flex border border-solid border-zinc-200 rounded-sm mb-6 xl:flex-[2]">
+                    <button
+                      onClick={handleDecreaseQuantity}
+                      disabled={detail.stock === 0 || quantity === 1}
+                      className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200"
+                    >
+                      <RemoveIcon />
+                    </button>
+                    <Box className="w-[1px] bg-zinc-200" />
+                    <input
+                      value={quantity}
+                      onChange={handleChangeQuantityInput}
+                      className="w-full  text-lg text-center border-none"
+                    />
+                    <Box className="w-[1px] bg-zinc-200" />
+
+                    <button
+                      onClick={handleIncreaseQuantity}
+                      disabled={detail.stock === 0}
+                      className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200"
+                    >
+                      <AddIcon />
+                    </button>
+                  </Box>
+                  <button
+                    className="cursor-pointer w-full border border-solid border-[#FFEBBB] rounded-sm bg-[#FFEBBB] uppercase h-12 xl:flex-[3]"
+                    onClick={handleAddToCart}
+                    disabled={detail.stock === 0}
+                  >
+                    add to cart
+                  </button>
+                </Box>
+                <Divider className="mb-6" />
+
+                <Box className="flex justify-evenly ">
+                  <Box className="flex items-center gap-1">
+                    <XIcon className="text-xs" />
+                    <Typography className="text-xs">Twitter</Typography>
+                  </Box>
+                  <Box className="flex items-center gap-1">
+                    <FacebookIcon className="text-xs" />
+                    <Typography className="text-xs">Facebook</Typography>
+                  </Box>
+                  <Box className="flex items-center gap-1">
+                    <InstagramIcon className="text-xs" />
+                    <Typography className="text-xs">Instagram</Typography>
+                  </Box>
+                  <Box className="flex items-center gap-1">
+                    <MailOutlineIcon className="text-xs" />
+                    <Typography className="text-xs">Email</Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box className="flex justify-center border border-solid p-4 rounded-sm mt-7">
+              <div
+                className="prdDescription"
+                dangerouslySetInnerHTML={{ __html: detail.description }}
+              />
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </>
+  );
+
+  return (
     <Box className="max-w-6xl mx-auto">
       {detail && (
         <>
@@ -173,8 +297,8 @@ const Detail = () => {
                     id="outlined-basic"
                     variant="outlined"
                     size="small"
-                    type="number"
                     className=" w-16"
+                    type="number"
                     value={quantity}
                     onChange={handleChangeQuantityInput}
                   />
