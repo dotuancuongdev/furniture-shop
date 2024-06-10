@@ -1,6 +1,13 @@
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../api";
@@ -11,16 +18,38 @@ import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import { useNavigate } from "react-router-dom";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: 480,
+  width: "70%",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  padding: "16px 24px",
+  borderRadius: 1,
+};
 
 const Detail = () => {
   const [detail, setDetail] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
 
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar, cart, setCart } = appContext;
 
   const params = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     let ignore = false;
@@ -81,11 +110,7 @@ const Detail = () => {
         return prd;
       });
       setCart(updateProducts);
-      setSnackbar({
-        isOpen: true,
-        message: "Added to cart successfully",
-        severity: "success",
-      });
+      setOpenModal(true);
       return;
     }
 
@@ -107,6 +132,67 @@ const Detail = () => {
     <>
       {detail && (
         <Box>
+          <Modal
+            open={openModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Box>
+                <Box className=" text-end" onClick={handleCloseModal}>
+                  <CloseIcon className="cursor-pointer" />
+                </Box>
+                <Typography className="text-zinc-400">View Cart</Typography>
+                <Box className="flex gap-2 text-[#003872]">
+                  <DoneIcon className="text-xl xl:text-3xl" />
+                  <Typography className="text-xl xl:text-3xl">
+                    Just Added
+                  </Typography>
+                </Box>
+                <Divider className="my-4" />
+                <Box className="mb-5">
+                  <Box className="xl:flex items-center gap-5 xl:mb-3">
+                    <img
+                      src={detail.thumbnail}
+                      alt=""
+                      className="w-20 hidden xl:block"
+                    />
+                    <Typography className="mb-2">{detail.name}</Typography>
+                  </Box>
+                  <Typography>
+                    {quantity} * {formatPrice(detail.price)}
+                  </Typography>
+                </Box>
+                <Box className="xl:flex justify-center items-center gap-3">
+                  <button
+                    className="border-none bg-[#ffebbb] rounded-sm px-4 py-3 text-sm uppercase cursor-pointer mb-4 xl:m-0"
+                    onClick={() => {
+                      setOpenModal(false);
+                      navigate(`/checkout`);
+                    }}
+                  >
+                    checkout
+                  </button>
+                  <Typography>
+                    or
+                    <strong
+                      className="cursor-pointer ml-[4px] hover:underline-offset-2"
+                      onClick={() => {
+                        setOpenModal(false);
+                        navigate(`/product`);
+                      }}
+                    >
+                      Continue Shopping
+                    </strong>
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography
+                id="modal-modal-description"
+                sx={{ mt: 2 }}
+              ></Typography>
+            </Box>
+          </Modal>
           <Box className="px-5 xl:px-48 ">
             <Box className="xl:flex xl:gap-4">
               <Box className="mb-8 xl:flex-[3]">
@@ -116,7 +202,7 @@ const Detail = () => {
                     <Box
                       key={idx}
                       onClick={() => handleChangeImgIdx(idx)}
-                      className=" min-w-24 xl:min-w-14 "
+                      className=" min-w-24 xl:min-w-10 "
                     >
                       <img src={img} alt="" className=" w-full " />
                     </Box>

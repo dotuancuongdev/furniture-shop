@@ -83,7 +83,7 @@ function Item(props) {
         <button className="border-none py-2 px-3 bg-[#FFEBBB] rounded-sm uppercase xl:py-3 xl:px-5 xl:text-xl xl:mb-4">
           shop now
         </button>
-        <Typography variant="h5" className="xl:text-5xl">
+        <Typography variant="h5" className="xl:text-5xl ">
           {props.item.text}
         </Typography>
       </Box>
