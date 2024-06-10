@@ -46,6 +46,7 @@ const Navbar = () => {
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar, cart } = appContext;
 
+  const navigate = useNavigate();
   useEffect(() => {
     let ignore = false;
     const getCollections = async () => {
@@ -114,7 +115,11 @@ const Navbar = () => {
 
   return (
     <Box className="pt-20">
-      <Typography className=" text-center my-6" variant="h3">
+      <Typography
+        className=" text-center my-6 cursor-pointer"
+        variant="h3"
+        onClick={() => navigate(`/`)}
+      >
         Beau - Paris
       </Typography>
       <Box className="mb-12 xl:px-48">
@@ -135,12 +140,27 @@ const Navbar = () => {
         </Accordion>
 
         <Box className="hidden xl:flex justify-center items-center gap-7 py-4">
-          <Typography className="uppercase">home</Typography>
+          <Typography
+            className="uppercase cursor-pointer hover:text-orange-500"
+            onClick={() => navigate(`/`)}
+          >
+            home
+          </Typography>
+          <Typography
+            className="uppercase cursor-pointer hover:text-orange-500"
+            onClick={() => navigate(`/product`)}
+          >
+            products
+          </Typography>
           <MenuItem name="COLLECTIONS" subItems={collections} />
           <MenuItem name="FEATURED" subItems={featured} />
           <MenuItem name="PROMOTIONS" subItems={promotions} />
-          <Typography className="uppercase">contact us</Typography>
-          <Typography className="uppercase">faq</Typography>
+          <Typography className="uppercase cursor-pointer hover:text-orange-500">
+            contact us
+          </Typography>
+          <Typography className="uppercase cursor-pointer hover:text-orange-500">
+            faq
+          </Typography>
         </Box>
 
         <Box className="flex flex-col gap-[1px]">

@@ -113,9 +113,17 @@ const Header = () => {
           <Typography className="text-sm">0968-666-888</Typography>
           <Box className="flex items-center">
             <ShoppingCartIcon className="text-sm" />
-            <Typography className="uppercase text-sm">{`cart (${cart.length})`}</Typography>
+            <Typography
+              className="uppercase text-sm cursor-pointer"
+              onClick={() => navigate(`/checkout`)}
+            >{`cart (${cart.length})`}</Typography>
           </Box>
-          <Typography className="uppercase text-sm">checkout</Typography>
+          <Typography
+            className="uppercase text-sm cursor-pointer"
+            onClick={() => navigate(`/checkout`)}
+          >
+            checkout
+          </Typography>
         </Box>
       </Box>
     </Box>
