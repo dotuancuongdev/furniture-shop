@@ -100,8 +100,11 @@ const Home = () => {
         ))}
       </Carousel>
       <Box className="px-5 xl:px-48 xl:flex xl:gap-4 xl:flex-wrap">
-        {collectionsHomePage.map((item) => (
-          <Box className="mb-5 xl:w-[49%] xl:hover:cursor-pointer xl:hover:text-[#dba932]">
+        {collectionsHomePage.map((item, idx) => (
+          <Box
+            key={idx}
+            className="mb-5 xl:w-[49%] xl:hover:cursor-pointer xl:hover:text-[#dba932]"
+          >
             <img src={item.url} alt="" className="w-full" />
             <Typography variant="h6" className="uppercase text-center py-2">
               {item.name}
@@ -155,7 +158,7 @@ const Home = () => {
       <Box className=" border border-dashed border-zinc-300" />
 
       <Box className="mb-8">
-        <Typography variant="h5" className="my-5 pb-3 text-center">
+        <Typography variant="h5" className="mb-5 mt-10 pb-3 text-center">
           Latest from Beau Paris
         </Typography>
         <Typography className=" my-5 pb-3 text-center">
@@ -174,7 +177,7 @@ const Home = () => {
             className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1"
           />
         </Box>
-        <Box className="flex flex-col gap-3 mb-8 mx-5 xl:flex-row xl:w-1/2 xl:mx-auto">
+        <Box className="flex flex-col gap-3 mb-10 mx-5 xl:flex-row xl:w-1/2 xl:mx-auto">
           <input
             type="text"
             placeholder="Email address"

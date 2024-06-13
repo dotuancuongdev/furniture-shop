@@ -85,7 +85,7 @@ const Detail = () => {
   };
   const handleIncreaseQuantity = () => {
     if (quantity === detail.stock) {
-      alert("exceeding the permitted limits");
+      alert(`The number of products in stock is ${detail.stock}`);
       return;
     }
     setQuantity(quantity + 1);
@@ -116,11 +116,7 @@ const Detail = () => {
 
     const newPrd = { ...detail, quantity: quantity };
     setCart([...cart, newPrd]);
-    setSnackbar({
-      isOpen: true,
-      message: "Success",
-      severity: "success",
-    });
+    setOpenModal(true);
   };
 
   let showcase = [];
@@ -194,7 +190,7 @@ const Detail = () => {
             </Box>
           </Modal>
           <Box className="px-5 xl:px-48 ">
-            <Box className="xl:flex xl:gap-4">
+            <Box className="xl:flex xl:gap-6">
               <Box className="mb-8 xl:flex-[3]">
                 <img src={showcase[imgIdx]} alt="" className="w-full mb-2" />
                 <Box className="flex gap-2 w-full overflow-x-auto">
