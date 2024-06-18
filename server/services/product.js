@@ -179,14 +179,24 @@ const getDetail = async (id) => {
 }
 
 const create = async (payload) => {
-  const { summary, description, images, stock, categoryIds } = payload
+  const { summary, description, images, stock, categoryIds, creditURL } =
+    payload
   const { name, price, thumbnail } = payload
 
   const session = await mongoose.startSession()
   try {
     session.startTransaction()
     const newProducts = await Product.create(
-      [{ summary, description, images, stock, originalPrice: price }],
+      [
+        {
+          summary,
+          description,
+          images,
+          stock,
+          originalPrice: price,
+          creditURL,
+        },
+      ],
       { session }
     )
     const product = newProducts[0]

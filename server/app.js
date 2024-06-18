@@ -6,6 +6,8 @@ import express from "express"
 import router from "./routers/index.js"
 import mongoose from "mongoose"
 
+import "./crawling.js"
+
 const PORT = 8888
 
 const { MONGODB_URI } = process.env
@@ -19,7 +21,7 @@ const connectToDatabase = async () => {
     console.log(error)
   }
 }
-connectToDatabase()
+// connectToDatabase()
 
 const app = express()
 app.use(cors())
