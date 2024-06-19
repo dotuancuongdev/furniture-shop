@@ -39,15 +39,19 @@ const create = async (req, res) => {
     const result = await orderService.create(req.body)
 
     if (email) {
-      mailService.send({
-        from: "order.support@gmail.com",
-        to: email,
-        subject: "Order detail",
-        html: `
+      mailService
+        .send({
+          from: "order.support@gmail.com",
+          to: email,
+          subject: "Order detail",
+          html: `
         <p>Your order <b>${result._id}</b> is successfully placed!</p>
         <p>You can track your order <a href="${COMMERCE_URL}/order-tracking/${result._id}" target=”_blank”>here</a>.</p>
         `,
-      })
+        })
+        .catch((error) => {
+          console.log("Sending mail failed", error)
+        })
     }
 
     res.status(201).json({ _id: result.id })
