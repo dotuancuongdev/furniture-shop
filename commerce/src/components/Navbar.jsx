@@ -115,12 +115,10 @@ const Navbar = () => {
 
   return (
     <Box className="pt-20">
-      <Typography
-        className=" text-center my-6 cursor-pointer"
-        variant="h3"
-        onClick={() => navigate(`/`)}
-      >
-        Beau - Paris
+      <Typography className=" text-center my-6 " variant="h3">
+        <span className="cursor-pointer" onClick={() => navigate(`/`)}>
+          Beau - Paris
+        </span>
       </Typography>
       <Box className="mb-12 xl:px-48">
         <Box className="flex flex-col gap-[1px]">
@@ -136,7 +134,16 @@ const Navbar = () => {
           >
             MENU
           </AccordionSummary>
-          <AccordionDetails>detail</AccordionDetails>
+          <AccordionDetails className="flex flex-col gap-3">
+            <Typography onClick={() => navigate(`/`)}>Home</Typography>
+            <Typography onClick={() => navigate(`/product`)}>
+              Products
+            </Typography>
+            <Typography>Featured</Typography>
+            <Typography>Promotion</Typography>
+            <Typography>Contact us</Typography>
+            <Typography>FAQ</Typography>
+          </AccordionDetails>
         </Accordion>
 
         <Box className="hidden xl:flex justify-center items-center gap-7 py-4">

@@ -95,8 +95,8 @@ const Header = () => {
 
   return (
     <Box className="fixed top-0 left-0 w-full z-[9999] bg-white ">
-      <Box className="mx-auto xl:w-4/5 xl:flex xl:justify-between items-center ">
-        <Box className="mx-6 my-4 xl:my-4 ">
+      <Box className="mx-auto xl:px-48 xl:flex xl:justify-between items-center ">
+        <Box className="mx-6 my-4 xl:my-4 xl:mx-0">
           <Box className="border border-solid rounded-sm border-zinc-300 w-full">
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />

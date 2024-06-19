@@ -1,5 +1,8 @@
 export const formatPrice = (x) => {
-  return x.toLocaleString("vi", { style: "currency", currency: "VND" });
+  return x.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 };
 
 export function shortenString(str, maxLength) {

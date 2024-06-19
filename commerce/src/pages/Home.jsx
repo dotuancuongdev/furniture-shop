@@ -183,7 +183,7 @@ const Home = () => {
             placeholder="Email address"
             className="border border-zinc-300 h-10 px-3 rounded-sm xl:flex-1 xl:w-[200px]"
           />
-          <button className="uppercase cursor-pointer border-none bg-[#FFEBBB] h-10 rounded-sm px-4">
+          <button className="uppercase cursor-pointer border-none bg-[#FFEBBB] h-10 rounded-sm px-10">
             sign up
           </button>
         </Box>

@@ -202,187 +202,203 @@ const Checkout = () => {
       </Dialog>
 
       <Box className="mx-5 xl:mx-48 ">
-        <Box className="xl:flex gap-3">
-          <Box className="xl:flex-[2] ">
-            <Typography variant="h4" className="text-center text-[#003872]">
-              Shopping Cart
-            </Typography>
-            <Divider />
-            {cart.length === 0 ? (
-              <>Empty Cart</>
-            ) : (
-              <Box className="xl:h-[500px] xl:overflow-y-auto">
-                {cart.map((item, idx) => (
-                  <Box
-                    key={idx}
-                    className="mt-5 xl:flex gap-4 items-center xl:mr-2"
-                  >
-                    <Box className="xl:flex items-center gap-4 xl:flex-1">
-                      <Box className="flex items-center gap-12 xl:gap-2">
+        <Typography variant="h4" className="text-center text-[#003872]">
+          Checkout
+        </Typography>
+        {cart.length === 0 ? (
+          <Typography className="text-center mt-7">
+            There are no items in your cart.{" "}
+            <span
+              className="text-zinc-400 italic cursor-pointer hover:text-black"
+              onClick={() => {
+                navigate(`/product`);
+              }}
+            >
+              {`Continue Shopping >`}{" "}
+            </span>
+          </Typography>
+        ) : (
+          <>
+            <Box className="xl:flex gap-3">
+              <Box className="xl:flex-[2] ">
+                <Typography variant="h4" className="text-center text-[#003872]">
+                  Shopping Cart
+                </Typography>
+                <Divider />
+
+                <Box className="xl:h-[500px] xl:overflow-y-auto">
+                  {cart.map((item, idx) => (
+                    <Box
+                      key={idx}
+                      className="mt-5 xl:flex gap-4 items-center xl:mr-2"
+                    >
+                      <Box className="xl:flex items-center gap-4 xl:flex-1">
+                        <Box className="flex items-center gap-12 xl:gap-2">
+                          <Typography
+                            className="  bg-zinc-50-200 px-2 py-1 hidden xl:block text-center cursor-pointer"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            <DeleteSweepIcon className="text-red-500 hover:text-red-600 text-3xl" />
+                          </Typography>
+                          <img
+                            src={item.thumbnail}
+                            alt=""
+                            className="w-36 mb-2"
+                          />
+                          <Typography
+                            className="text-red-500 bg-zinc-50-200 px-2 py-1 rounded-sm xl:hidden cursor-pointer"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            Remove Item
+                          </Typography>
+                        </Box>
                         <Typography
-                          className="  bg-zinc-50-200 px-2 py-1 hidden xl:block text-center cursor-pointer"
-                          onClick={() => handleDelete(item._id)}
+                          className="mb-4 text-[#9f9f9f] hover:text-black cursor-pointer "
+                          onClick={() => navigate(`/product/${item._id}`)}
                         >
-                          <DeleteSweepIcon className="text-red-500 hover:text-red-600 text-3xl" />
-                        </Typography>
-                        <img
-                          src={item.thumbnail}
-                          alt=""
-                          className="w-36 mb-2"
-                        />
-                        <Typography
-                          className="text-red-500 bg-zinc-50-200 px-2 py-1 rounded-sm xl:hidden cursor-pointer"
-                          onClick={() => handleDelete(item._id)}
-                        >
-                          Remove Item
+                          {item.name}
                         </Typography>
                       </Box>
-                      <Typography
-                        className="mb-4 text-[#9f9f9f] hover:text-black cursor-pointer "
-                        onClick={() => navigate(`/product/${item._id}`)}
-                      >
-                        {item.name}
+                      <Typography className="mb-4">
+                        {formatPrice(item.price * item.quantity)}
                       </Typography>
+                      <Box className="w-1/2 flex justify-center items-center border border-solid border-zinc-200 rounded-sm mb-6 xl:flex xl:w-1/4">
+                        <button
+                          onClick={() => handleDecrease(item._id)}
+                          className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200 xl:flex-1 "
+                        >
+                          <RemoveIcon className="xl:text-base" />
+                        </button>
+
+                        <Typography className="flex-1 text-lg text-center xl:text-base">
+                          {item.quantity}
+                        </Typography>
+
+                        <button
+                          onClick={() => handleIncrease(item._id)}
+                          className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200 xl:flex-1"
+                        >
+                          <AddIcon className="xl:text-base" />
+                        </button>
+                      </Box>
                     </Box>
-                    <Typography className="mb-4">
-                      {formatPrice(item.price * item.quantity)}
-                    </Typography>
-                    <Box className="w-1/2 flex justify-center items-center border border-solid border-zinc-200 rounded-sm mb-6 xl:flex xl:w-1/4">
-                      <button
-                        onClick={() => handleDecrease(item._id)}
-                        className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200 xl:flex-1 "
-                      >
-                        <RemoveIcon className="xl:text-base" />
-                      </button>
-
-                      <Typography className="flex-1 text-lg text-center xl:text-base">
-                        {item.quantity}
-                      </Typography>
-
-                      <button
-                        onClick={() => handleIncrease(item._id)}
-                        className="cursor-pointer w-12 h-12 px-3 border-none bg-white hover:bg-zinc-200 xl:flex-1"
-                      >
-                        <AddIcon className="xl:text-base" />
-                      </button>
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </Box>
-          <Box className="mb-12 mt-12 xl:flex-1 xl:mt-0  xl:px-4">
-            <Typography variant="h4" className="text-center text-[#003872]">
-              Customer Infomation
-            </Typography>
-            <Divider />
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="flex flex-col mt-5"
-            >
-              <Box>
-                <TextField
-                  id="outlined-basic"
-                  label="Full Name"
-                  variant="outlined"
-                  size="small"
-                  className="w-full"
-                  {...register("name")}
-                />
-
-                <Typography
-                  className={
-                    errors.name?.message ? "text-red-500" : "text-white"
-                  }
-                >
-                  {errors.name?.message || "a"}
-                </Typography>
-              </Box>
-
-              <Box>
-                <TextField
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                  size="small"
-                  className="w-full"
-                  {...register("email")}
-                />
-                <Typography className="text-white">-</Typography>
-              </Box>
-              <Box className="flex gap-2">
-                <Box>
-                  <TextField
-                    id="outlined-basic"
-                    label="Phone Number"
-                    variant="outlined"
-                    size="small"
-                    type="number"
-                    className="w-full"
-                    {...register("phone")}
-                  />
-                  <Typography
-                    className={
-                      errors.phone?.message ? "text-red-500" : "text-white"
-                    }
-                  >
-                    {errors.phone?.message || "a"}
-                  </Typography>
+                  ))}
                 </Box>
-                <FormControl fullWidth size="small" className="flex-1">
-                  <InputLabel>City</InputLabel>
-                  <Controller
-                    name="cityId"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Select {...field}>
-                        {cities.map((item, idx) => (
-                          <MenuItem key={idx} value={item._id}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
               </Box>
-
-              <Box>
-                <TextField
-                  id="outlined-basic"
-                  label="Address"
-                  variant="outlined"
-                  size="small"
-                  className="w-full"
-                  {...register("address")}
-                />
-                <Typography
-                  className={
-                    errors.address?.message ? "text-red-500" : "text-white"
-                  }
-                >
-                  {errors.address?.message || "a"}
+              <Box className="mb-12 mt-12 xl:flex-1 xl:mt-0  xl:px-4">
+                <Typography variant="h4" className="text-center text-[#003872]">
+                  Customer Infomation
                 </Typography>
-              </Box>
+                <Divider />
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="flex flex-col mt-5"
+                >
+                  <Box>
+                    <TextField
+                      id="outlined-basic"
+                      label="Full Name"
+                      variant="outlined"
+                      size="small"
+                      className="w-full"
+                      {...register("name")}
+                    />
 
-              <Button
-                variant="contained"
-                className="bg-[#FFEBBB] text-black"
-                type="submit"
-              >
-                checkout
-              </Button>
-            </form>
-          </Box>
-        </Box>
-        <Box className="mt-5">
-          <Divider className="bg-zinc-400" />
-          <Typography variant="h6" className="text-end py-3">
-            Total Price: {formatPrice(totalPrice)}
-          </Typography>
-          <Divider className="bg-zinc-400" />
-        </Box>
+                    <Typography
+                      className={
+                        errors.name?.message ? "text-red-500" : "text-white"
+                      }
+                    >
+                      {errors.name?.message || "a"}
+                    </Typography>
+                  </Box>
+
+                  <Box>
+                    <TextField
+                      id="outlined-basic"
+                      label="Email"
+                      variant="outlined"
+                      size="small"
+                      className="w-full"
+                      {...register("email")}
+                    />
+                    <Typography className="text-white">-</Typography>
+                  </Box>
+                  <Box className="flex gap-2">
+                    <Box>
+                      <TextField
+                        id="outlined-basic"
+                        label="Phone Number"
+                        variant="outlined"
+                        size="small"
+                        type="number"
+                        className="w-full"
+                        {...register("phone")}
+                      />
+                      <Typography
+                        className={
+                          errors.phone?.message ? "text-red-500" : "text-white"
+                        }
+                      >
+                        {errors.phone?.message || "a"}
+                      </Typography>
+                    </Box>
+                    <FormControl fullWidth size="small" className="flex-1">
+                      <InputLabel>City</InputLabel>
+                      <Controller
+                        name="cityId"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Select {...field}>
+                            {cities.map((item, idx) => (
+                              <MenuItem key={idx} value={item._id}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                    </FormControl>
+                  </Box>
+
+                  <Box>
+                    <TextField
+                      id="outlined-basic"
+                      label="Address"
+                      variant="outlined"
+                      size="small"
+                      className="w-full"
+                      {...register("address")}
+                    />
+                    <Typography
+                      className={
+                        errors.address?.message ? "text-red-500" : "text-white"
+                      }
+                    >
+                      {errors.address?.message || "a"}
+                    </Typography>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    className="bg-[#FFEBBB] text-black"
+                    type="submit"
+                  >
+                    checkout
+                  </Button>
+                </form>
+              </Box>
+            </Box>
+            <Box className="mt-5">
+              <Divider className="bg-zinc-400" />
+              <Typography variant="h6" className="text-end py-3">
+                Total Price: {formatPrice(totalPrice)}
+              </Typography>
+              <Divider className="bg-zinc-400" />
+            </Box>
+          </>
+        )}
       </Box>
     </>
   );
