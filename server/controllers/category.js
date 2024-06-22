@@ -21,6 +21,15 @@ const getAll = async (req, res) => {
   }
 }
 
+const getFromMenu = async (req, res) => {
+  try {
+    const result = await categoryService.getFromMenu()
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ code: 400, message: error.message })
+  }
+}
+
 const getCollections = async (req, res) => {
   try {
     const result = await categoryService.getCollections()
@@ -118,6 +127,7 @@ const remove = async (req, res) => {
 const categoryController = {
   get,
   getAll,
+  getFromMenu,
   getCollections,
   getFeaturedCategories,
   getPromotions,

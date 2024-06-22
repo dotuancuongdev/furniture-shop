@@ -10,6 +10,10 @@ const categorySchema = new Schema({
   description: {
     type: String,
   },
+  isIncludedInMenu: {
+    type: Boolean,
+    default: false,
+  },
   thumbnail: {
     type: String,
   },

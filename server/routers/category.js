@@ -6,6 +6,7 @@ const categoryRouter = express.Router()
 
 categoryRouter.get("/", categoryController.get)
 categoryRouter.get("/all", categoryController.getAll)
+categoryRouter.get("/menu", categoryController.getFromMenu)
 categoryRouter.get("/collections", categoryController.getCollections)
 categoryRouter.get("/featured", categoryController.getFeaturedCategories)
 categoryRouter.get("/promotions", categoryController.getPromotions)

@@ -29,6 +29,15 @@ const getAll = async () => {
   return items
 }
 
+const getFromMenu = async () => {
+  const items = await Category.find({
+    isIncludedInMenu: true,
+  })
+    .select("_id name")
+    .exec()
+  return items
+}
+
 const getCollections = async () => {
   const items = await Category.find({
     name: { $regex: "collection" || "", $options: "i" },
@@ -89,6 +98,7 @@ const remove = async (id) => {
 const categoryService = {
   get,
   getAll,
+  getFromMenu,
   getCollections,
   getFeaturedCategories,
   getPromotions,
