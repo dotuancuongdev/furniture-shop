@@ -1,7 +1,7 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Box, Typography } from "@mui/material";
 
-const quickLinks = ["Theme Info", "FAQs", "Search"];
+const quickLinks = ["Contact", "FAQs", "Search"];
 const paymentMethodLogos = [
   "https://static.vecteezy.com/system/resources/previews/020/975/570/non_2x/visa-logo-visa-icon-transparent-free-png.png",
   "https://static-00.iconduck.com/assets.00/amex-icon-1024x666-5rlm5d50.png",
@@ -26,7 +26,7 @@ const Footer = () => {
         <Box className="flex-[2]"></Box>
         <Box className="text-center mb-7 xl:flex-1">
           <Typography variant="h5" className="mb-7">
-            Theme Info
+            Infomation
           </Typography>
           <Typography className="text-zinc-400 text-sm">
             Lorem Ipsum is simply dummy text of the printing and typesetting
