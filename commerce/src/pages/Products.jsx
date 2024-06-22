@@ -190,10 +190,7 @@ const Products = () => {
               or
               <strong
                 className="cursor-pointer ml-[4px] hover:underline-offset-2"
-                onClick={() => {
-                  setOpenModal(false);
-                  navigate(`/product`);
-                }}
+                onClick={handleCloseModal}
               >
                 Continue Shopping
               </strong>
@@ -216,6 +213,7 @@ const Products = () => {
   };
 
   const handleApplyFilter = () => {
+    setPageNumber(1);
     setMaxPrice(parseInt(maxPriceString));
     setMinPrice(parseInt(minPriceString));
   };
