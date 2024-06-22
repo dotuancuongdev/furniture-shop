@@ -151,6 +151,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
+    if (cart.length === 0) return;
     let ignore = false;
     const getCities = async () => {
       try {
