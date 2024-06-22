@@ -111,12 +111,14 @@ const Detail = () => {
       });
       setCart(updateProducts);
       setOpenModal(true);
+      setQuantity(1);
       return;
     }
 
     const newPrd = { ...detail, quantity: quantity };
     setCart([...cart, newPrd]);
     setOpenModal(true);
+    setQuantity(1);
   };
 
   let showcase = [];
@@ -198,7 +200,7 @@ const Detail = () => {
                     <Box
                       key={idx}
                       onClick={() => handleChangeImgIdx(idx)}
-                      className=" min-w-24 xl:min-w-10 "
+                      className=" min-w-24 xl:min-w-10 cursor-pointer"
                     >
                       <img src={img} alt="" className=" w-full " />
                     </Box>
@@ -290,13 +292,6 @@ const Detail = () => {
                   </Box>
                 </Box>
               </Box>
-            </Box>
-
-            <Box className="flex justify-center border border-solid p-4 rounded-sm mt-7">
-              <div
-                className="prdDescription"
-                dangerouslySetInnerHTML={{ __html: detail.description }}
-              />
             </Box>
           </Box>
         </Box>
