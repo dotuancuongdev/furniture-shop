@@ -23,6 +23,26 @@ const getDetailForCommerce = async (req, res) => {
   }
 }
 
+const getFeatured = async (req, res) => {
+  try {
+    const item = await productService.getFeatured()
+    if (!item) throw new Error()
+    res.status(200).json(item)
+  } catch (error) {
+    res.status(404).json({ code: 404, message: STATUS_CODE_MESSAGE[404] })
+  }
+}
+
+const getIconic = async (req, res) => {
+  try {
+    const item = await productService.getIconic()
+    if (!item) throw new Error()
+    res.status(200).json(item)
+  } catch (error) {
+    res.status(404).json({ code: 404, message: STATUS_CODE_MESSAGE[404] })
+  }
+}
+
 const get = async (req, res) => {
   const { query } = req
   try {
@@ -99,6 +119,8 @@ const remove = async (req, res) => {
 const productController = {
   getForCommerce,
   getDetailForCommerce,
+  getFeatured,
+  getIconic,
   get,
   getDetail,
   create,

@@ -7,6 +7,9 @@ import {
   ProductVersion,
 } from "../models/index.js"
 
+const FEATURED_COUNT = 3
+const ICONIC_COUNT = 1
+
 const getForCommerce = async (query) => {
   const { pageSize, pageNumber, categoryIds, minPrice, maxPrice, sortBy } =
     query
@@ -109,6 +112,54 @@ const getDetailForCommerce = async (id) => {
   item.productCategories = undefined
 
   return item
+}
+
+const getFeatured = async () => {
+  const productCount = await Product.countDocuments()
+  const skip = Math.floor(Math.random() * productCount)
+
+  const products = await Product.find({})
+    .select("_id")
+    .populate("productVersions")
+    .skip(skip)
+    .limit(FEATURED_COUNT)
+
+  const prds = products.map((p) => {
+    const activeVersion = p.productVersions.find((v) => v.isActive)
+    return {
+      _id: p._id,
+      name: activeVersion?.name,
+      price: activeVersion?.price,
+      thumbnail: activeVersion?.thumbnail,
+    }
+  })
+
+  return prds
+}
+
+const getIconic = async () => {
+  const productCount = await Product.countDocuments()
+  const skip = Math.floor(Math.random() * productCount)
+
+  const product = (
+    await Product.find({})
+      .select("_id summary")
+      .populate("productVersions")
+      .skip(skip)
+      .limit(ICONIC_COUNT)
+  )[0]
+
+  const activeVersion = product.productVersions.find((v) => v.isActive)
+
+  const prd = {
+    _id: product._id,
+    summary: product.summary,
+    name: activeVersion?.name,
+    price: activeVersion?.price,
+    thumbnail: activeVersion?.thumbnail,
+  }
+
+  return prd
 }
 
 const get = async (query) => {
@@ -245,6 +296,8 @@ const remove = async (id) => {
 const productService = {
   getForCommerce,
   getDetailForCommerce,
+  getFeatured,
+  getIconic,
   get,
   getDetail,
   create,

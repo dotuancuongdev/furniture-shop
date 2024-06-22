@@ -6,6 +6,8 @@ const productRouter = express.Router()
 
 productRouter.get("/commerce", productController.getForCommerce)
 productRouter.get("/commerce/:id", productController.getDetailForCommerce)
+productRouter.get("/featured", productController.getFeatured)
+productRouter.get("/iconic", productController.getIconic)
 productRouter.get("/", userAuth, adminAuth, productController.get)
 productRouter.get("/:id", userAuth, adminAuth, productController.getDetail)
 productRouter.post("/", userAuth, adminAuth, productController.create)
