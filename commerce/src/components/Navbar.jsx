@@ -39,21 +39,19 @@ const MenuItem = ({ name, subItems }) => {
 };
 
 const Navbar = () => {
-  const [collections, setCollections] = useState([]);
-  const [featured, setFeatured] = useState([]);
-  const [promotions, setPromotions] = useState([]);
-
+  const [menu, setMenu] = useState([]);
   const appContext = useContext(AppContext);
   const { setLoading, setSnackbar, cart } = appContext;
 
   const navigate = useNavigate();
   useEffect(() => {
     let ignore = false;
-    const getCollections = async () => {
+    const getMenu = async () => {
       try {
-        const res = await api.get(`/categories/collections`);
+        const res = await api.get(`/categories/menu`);
         if (!ignore) {
-          setCollections(res.data);
+          console.log(res.data);
+          setMenu(res.data);
         }
       } catch (error) {
         setSnackbar({
@@ -63,51 +61,7 @@ const Navbar = () => {
         });
       }
     };
-    getCollections();
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    let ignore = false;
-    const getFeatured = async () => {
-      try {
-        const res = await api.get(`/categories/featured`);
-        if (!ignore) {
-          setFeatured(res.data);
-        }
-      } catch (error) {
-        setSnackbar({
-          isOpen: true,
-          message: error.message,
-          severity: "error",
-        });
-      }
-    };
-    getFeatured();
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    let ignore = false;
-    const getPromotions = async () => {
-      try {
-        const res = await api.get(`/categories/promotions`);
-        if (!ignore) {
-          setPromotions(res.data);
-        }
-      } catch (error) {
-        setSnackbar({
-          isOpen: true,
-          message: error.message,
-          severity: "error",
-        });
-      }
-    };
-    getPromotions();
+    getMenu();
     return () => {
       ignore = true;
     };
@@ -139,8 +93,15 @@ const Navbar = () => {
             <Typography onClick={() => navigate(`/product`)}>
               Products
             </Typography>
-            <Typography>Featured</Typography>
-            <Typography>Promotion</Typography>
+            {menu.map((item) => (
+              <Typography
+                key={item._id}
+                className=""
+                onClick={() => navigate(`/product?categoryId=${item._id}`)}
+              >
+                {item.name}
+              </Typography>
+            ))}
             <Typography>Contact us</Typography>
             <Typography>FAQ</Typography>
           </AccordionDetails>
@@ -159,9 +120,15 @@ const Navbar = () => {
           >
             products
           </Typography>
-          <MenuItem name="COLLECTIONS" subItems={collections} />
-          <MenuItem name="FEATURED" subItems={featured} />
-          <MenuItem name="PROMOTIONS" subItems={promotions} />
+          {menu.map((item) => (
+            <Typography
+              key={item._id}
+              className="cursor-pointer uppercase hover:text-orange-500"
+              onClick={() => navigate(`/product?categoryId=${item._id}`)}
+            >
+              {item.name}
+            </Typography>
+          ))}
           <Typography className="uppercase cursor-pointer hover:text-orange-500">
             contact us
           </Typography>
