@@ -50,7 +50,6 @@ const Navbar = () => {
       try {
         const res = await api.get(`/categories/menu`);
         if (!ignore) {
-          console.log(res.data);
           setMenu(res.data);
         }
       } catch (error) {

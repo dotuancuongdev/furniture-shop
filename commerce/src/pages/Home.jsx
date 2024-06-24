@@ -16,6 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { formatPrice, shortenString } from "../helper";
 
 const carouselHomePage = [
   {
@@ -92,6 +93,34 @@ function Item(props) {
 }
 
 const Home = () => {
+  const [featured, setFeatured] = useState([]);
+
+  const appContext = useContext(AppContext);
+  const { setSnackbar } = appContext;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let ignore = false;
+    const getFeatured = async () => {
+      try {
+        const res = await api.get(`/products/featured`);
+        if (!ignore) {
+          setFeatured(res.data);
+        }
+      } catch (error) {
+        setSnackbar({
+          isOpen: true,
+          message: error.message,
+          severity: "error",
+        });
+      }
+    };
+    getFeatured();
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <>
       <Carousel className="mb-10" animation="slide" duration={550}>
@@ -113,6 +142,33 @@ const Home = () => {
         ))}
       </Box>
 
+      <Box className="px-5 xl:px-48  mb-5 mt-12">
+        <Divider className="bg-zinc-400" />
+        <Typography variant="h5" className="text-center text-[#003872] py-2">
+          Featured Fixtures
+        </Typography>
+        <Divider className="bg-zinc-400" />
+        <Box className="grid grid-cols-2 gap-5 mt-10 xl:flex">
+          {featured.map((item) => (
+            <Box
+              key={item._id}
+              className="xl:flex-1 mb-7 flex flex-col gap-4 cursor-pointer hover:text-zinc-400 duration-500"
+              onClick={() => navigate(`/product/${item._id}`)}
+            >
+              <img src={item.thumbnail} alt="" className="w-full" />
+              <Typography className="text-center xl:hidden">
+                {shortenString(item.name)}
+              </Typography>
+              <Typography className="text-center hidden xl:block">
+                {item.name}
+              </Typography>
+              <Typography className="text-center font-medium">
+                {formatPrice(item.price)}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
       <img
         src="https://responsive-theme-paris.myshopify.com/cdn/shop/files/home-image-6_010e9538-14c0-433b-8cba-b376066b7f8f_1200x.jpg?v=1613639513"
         alt=""
