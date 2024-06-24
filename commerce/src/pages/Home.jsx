@@ -187,7 +187,7 @@ const Home = () => {
     if (foundProduct) {
       const updateProducts = cart.map((prd) => {
         if (prd._id === foundProduct._id) {
-          return { ...prd, quantity: prd.quantity + 1 };
+          return { ...prd, quantity: prd.quantity + quantity };
         }
         return prd;
       });
@@ -197,7 +197,7 @@ const Home = () => {
       return;
     }
 
-    const newPrd = { ...iconic, quantity: 1 };
+    const newPrd = { ...iconic, quantity: quantity };
     setCart([...cart, newPrd]);
     setOpenModal(true);
   };
@@ -234,7 +234,7 @@ const Home = () => {
                     <Typography className="mb-2">{iconic.name}</Typography>
                   </Box>
                   <Typography>
-                    {1} * {formatPrice(iconic.price)}
+                    {quantity} * {formatPrice(iconic.price)}
                   </Typography>
                 </Box>
                 <Box className="xl:flex justify-center items-center gap-3">
