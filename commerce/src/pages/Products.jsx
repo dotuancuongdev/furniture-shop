@@ -43,6 +43,12 @@ const styleModal = {
   borderRadius: 1,
 };
 
+const Wrapper = () => {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("categoryId");
+  return <Products key={query} />;
+};
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
@@ -144,6 +150,7 @@ const Products = () => {
                 <button
                   className="border-none bg-[#ffebbb] w-full px-3 py-2 uppercase my-5 cursor-pointer"
                   onClick={handleAddToCart}
+                  disabled={detailPrd.stock === 0}
                 >
                   add to cart
                 </button>
@@ -520,4 +527,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Wrapper;
