@@ -213,10 +213,12 @@ const Home = () => {
           >
             <Box sx={style}>
               <Box>
-                <Box className=" text-end" onClick={handleCloseModal}>
-                  <CloseIcon className="cursor-pointer" />
+                <Box className=" text-end">
+                  <CloseIcon
+                    className="cursor-pointer"
+                    onClick={handleCloseModal}
+                  />
                 </Box>
-                <Typography className="text-zinc-400">View Cart</Typography>
                 <Box className="flex gap-2 text-[#003872]">
                   <DoneIcon className="text-xl xl:text-3xl" />
                   <Typography className="text-xl xl:text-3xl">
@@ -276,6 +278,7 @@ const Home = () => {
               <Box
                 key={idx}
                 className="mb-5 xl:w-[49%] xl:hover:cursor-pointer xl:hover:text-[#dba932]"
+                onClick={() => navigate(`/product`)}
               >
                 <img src={item.url} alt="" className="w-full" />
                 <Typography variant="h6" className="uppercase text-center py-2">
@@ -419,7 +422,7 @@ const Home = () => {
             <Typography variant="h5" className="mb-5 mt-10 pb-3 text-center">
               Latest from Beau Paris
             </Typography>
-            <Typography className=" my-5 pb-3 text-center">
+            <Typography className=" my-5 pb-3 px-5 text-center">
               Be the first to know about exciting new designs, special events
               and much more.
             </Typography>

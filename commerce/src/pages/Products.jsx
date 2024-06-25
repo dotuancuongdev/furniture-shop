@@ -156,10 +156,9 @@ const Products = () => {
     if (contentModal === NOTIFICATION_ADD_TO_CART_SUCCESSFULLY) {
       return (
         <Box>
-          <Box className=" text-end" onClick={handleCloseModal}>
-            <CloseIcon className="cursor-pointer" />
+          <Box className=" text-end">
+            <CloseIcon className="cursor-pointer" onClick={handleCloseModal} />
           </Box>
-          <Typography className="text-zinc-400">View Cart</Typography>
           <Box className="flex gap-2 text-[#003872]">
             <DoneIcon className="text-xl xl:text-3xl" />
             <Typography className="text-xl xl:text-3xl">Just Added</Typography>
@@ -346,7 +345,7 @@ const Products = () => {
                 className=" cursor-pointer relative group"
                 onClick={() => navigate(`/product/${item._id}`)}
               >
-                <Box className="absolute top-1/2 left-0  w-full  justify-center hidden group-hover:flex">
+                <Box className="absolute top-1/2 left-0  w-full  justify-center hidden xl:group-hover:flex">
                   <button
                     className="cursor-pointer border-none bg-[#ffebbb] px-3 py-2 text-base uppercase rounded-sm hover:bg-zinc-300 duration-500 z-50"
                     onClick={(e) => {

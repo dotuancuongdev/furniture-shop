@@ -1,5 +1,8 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Box, Typography } from "@mui/material";
+import XIcon from "@mui/icons-material/X";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const quickLinks = ["Contact", "FAQs", "Search"];
 const paymentMethodLogos = [
@@ -26,19 +29,22 @@ const Footer = () => {
         <Box className="flex-[2]"></Box>
         <Box className="text-center mb-7 xl:flex-1">
           <Typography variant="h5" className="mb-7">
-            Infomation
+            Contact us
           </Typography>
-          <Typography className="text-zinc-400 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-            <i>
-              <strong>Lorem Ipsum</strong>
-            </i>
-            has been the industry's standard dummy text ever since the 1500s.
-          </Typography>
-          <Typography className="text-zinc-400 text-sm">
-            Redfield@robertredfield
-          </Typography>
+          <Box className="flex flex-col items-center gap-3 text-zinc-400">
+            <Box className="flex items-center gap-1">
+              <XIcon className="text-sm" />
+              <Typography className="text-sm">Twitter</Typography>
+            </Box>
+            <Box className="flex items-center gap-1">
+              <FacebookIcon className="text-sm" />
+              <Typography className="text-sm">Facebook</Typography>
+            </Box>
+            <Box className="flex items-center gap-1">
+              <InstagramIcon className="text-sm" />
+              <Typography className="text-sm">Instagram</Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
       <Box className="h-[1px] bg-zinc-400 w-4/5 xl:w-full mx-auto mb-5"></Box>
