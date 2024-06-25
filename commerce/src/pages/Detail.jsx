@@ -81,6 +81,7 @@ const Detail = () => {
   }, []);
 
   const handleChangeQuantityInput = (e) => {
+    console.log(quantity);
     setQuantity(parseInt(e.target.value));
   };
   const handleIncreaseQuantity = () => {
@@ -111,14 +112,11 @@ const Detail = () => {
       });
       setCart(updateProducts);
       setOpenModal(true);
-      setQuantity(1);
       return;
     }
-
     const newPrd = { ...detail, quantity: quantity };
     setCart([...cart, newPrd]);
     setOpenModal(true);
-    setQuantity(1);
   };
 
   let showcase = [];
@@ -137,10 +135,16 @@ const Detail = () => {
           >
             <Box sx={style}>
               <Box>
-                <Box className=" text-end" onClick={handleCloseModal}>
-                  <CloseIcon className="cursor-pointer" />
+                <Box className=" text-end">
+                  <CloseIcon
+                    className="cursor-pointer"
+                    onClick={() => {
+                      handleCloseModal();
+                      setQuantity(1);
+                    }}
+                  />
                 </Box>
-                <Typography className="text-zinc-400">View Cart</Typography>
+
                 <Box className="flex gap-2 text-[#003872]">
                   <DoneIcon className="text-xl xl:text-3xl" />
                   <Typography className="text-xl xl:text-3xl">
@@ -165,7 +169,8 @@ const Detail = () => {
                   <button
                     className="border-none bg-[#ffebbb] rounded-sm px-4 py-3 text-sm uppercase cursor-pointer mb-4 xl:m-0"
                     onClick={() => {
-                      setOpenModal(false);
+                      handleCloseModal();
+                      setQuantity(1);
                       navigate(`/checkout`);
                     }}
                   >
@@ -175,10 +180,7 @@ const Detail = () => {
                     or
                     <strong
                       className="cursor-pointer ml-[4px] hover:underline-offset-2"
-                      onClick={() => {
-                        setOpenModal(false);
-                        navigate(`/product`);
-                      }}
+                      onClick={handleCloseModal}
                     >
                       Continue Shopping
                     </strong>
@@ -249,7 +251,7 @@ const Detail = () => {
                     </button>
                     <Box className="w-[1px] bg-zinc-200" />
                     <input
-                      value={quantity}
+                      value={quantity ? quantity : ""}
                       onChange={handleChangeQuantityInput}
                       className="w-full  text-lg text-center border-none"
                     />
@@ -266,7 +268,7 @@ const Detail = () => {
                   <button
                     className="cursor-pointer w-full border border-solid border-[#FFEBBB] rounded-sm bg-[#FFEBBB] uppercase h-12 xl:flex-[3]"
                     onClick={handleAddToCart}
-                    disabled={detail.stock === 0}
+                    disabled={detail.stock === 0 || !quantity}
                   >
                     add to cart
                   </button>
