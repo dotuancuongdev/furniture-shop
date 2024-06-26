@@ -230,7 +230,9 @@ const Products = () => {
 
   const handleDeleteChip = () => {
     setMinPrice(0);
+    setMinPriceString("");
     setMaxPrice(0);
+    setMaxPriceString("");
   };
 
   useEffect(() => {
