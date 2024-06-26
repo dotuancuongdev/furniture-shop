@@ -314,21 +314,17 @@ const Home = () => {
                 </Box>
                 <Divider className="my-4" />
                 <Box className="mb-5">
-                  {iconic && (
-                    <>
-                      <Box className="xl:flex items-center gap-5 xl:mb-3">
-                        <img
-                          src={iconic.thumbnail}
-                          alt=""
-                          className="w-20 hidden xl:block"
-                        />
-                        <Typography className="mb-2">{iconic.name}</Typography>
-                      </Box>
-                      <Typography>
-                        {quantity} * {formatPrice(iconic.price)}
-                      </Typography>
-                    </>
-                  )}
+                  <Box className="xl:flex items-center gap-5 xl:mb-3">
+                    <img
+                      src={iconic.thumbnail}
+                      alt=""
+                      className="w-20 hidden xl:block"
+                    />
+                    <Typography className="mb-2">{iconic.name}</Typography>
+                  </Box>
+                  <Typography>
+                    {quantity} * {formatPrice(iconic.price)}
+                  </Typography>
                 </Box>
                 <Box className="xl:flex justify-center items-center gap-3">
                   <button
