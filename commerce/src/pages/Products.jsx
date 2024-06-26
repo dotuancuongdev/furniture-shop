@@ -5,9 +5,11 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Divider,
   Modal,
   Pagination,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -51,6 +53,8 @@ const Wrapper = () => {
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [prdLoading, setPrdLoading] = useState(false);
+
   const [minPrice, setMinPrice] = useState(0);
   const [minPriceString, setMinPriceString] = useState("");
   const [maxPrice, setMaxPrice] = useState(0);
@@ -66,7 +70,7 @@ const Products = () => {
   const handleCloseModal = () => setOpenModal(false);
 
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar, cart, setCart } = appContext;
+  const { setSnackbar, cart, setCart } = appContext;
 
   const navigate = useNavigate();
 
@@ -224,12 +228,16 @@ const Products = () => {
     setMinPrice(parseInt(minPriceString));
   };
 
+  const handleDeleteChip = () => {
+    setMinPrice(0);
+    setMaxPrice(0);
+  };
+
   useEffect(() => {
     let ignore = false;
-
     const getPrds = async () => {
       try {
-        setLoading(true);
+        setPrdLoading(true);
         const res = await api.get(`/products/commerce`, {
           params: {
             pageSize: pageSize,
@@ -241,8 +249,8 @@ const Products = () => {
         });
         if (!ignore) {
           setProducts(res.data.items);
-          setLoading(false);
           totalPages = res.data.totalPages;
+          setPrdLoading(false);
         }
       } catch (error) {
         setSnackbar({
@@ -250,7 +258,6 @@ const Products = () => {
           message: error.message,
           severity: "error",
         });
-        setLoading(false);
       }
     };
 
@@ -344,62 +351,129 @@ const Products = () => {
               </Button>
             </Box>
           </Box>
-
-          <Box className="flex-[3] grid grid-cols-2 gap-4 mb-8 xl:grid-cols-3">
-            {products.map((item) => (
-              <Box
-                key={item._id}
-                className=" cursor-pointer relative group"
-                onClick={() => navigate(`/product/${item._id}`)}
-              >
-                <Box className="absolute top-1/2 left-0  w-full  justify-center hidden xl:group-hover:flex">
-                  <button
-                    className="cursor-pointer border-none bg-[#ffebbb] px-3 py-2 text-base uppercase rounded-sm hover:bg-zinc-300 duration-500 z-50"
-                    onClick={(e) => {
-                      setDetailPrd(item);
-                      e.stopPropagation();
-                      setContentModal(2);
-                      setOpenModal(true);
-                    }}
+          {!prdLoading ? (
+            <Box className="flex-[3] flex flex-col gap-3">
+              {minPrice !== 0 && maxPrice !== 0 ? (
+                <Chip
+                  label={`${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`}
+                  variant="outlined"
+                  className="w-min"
+                  onDelete={handleDeleteChip}
+                />
+              ) : (
+                <Box className="h-8"></Box>
+              )}
+              <Box className="grid grid-cols-2 gap-4 mb-8 xl:grid-cols-3">
+                {products.map((item) => (
+                  <Box
+                    key={item._id}
+                    className=" cursor-pointer relative group"
+                    onClick={() => navigate(`/product/${item._id}`)}
                   >
-                    quick shop
-                  </button>
-                </Box>
-                <img src={item.thumbnail} alt="" className="w-full mb-4" />
-                <Typography className="xl:hidden mb-3">
-                  {shortenString(item.name, 30)}
-                </Typography>
-                <Typography className="hidden xl:block text-center px-6 mb-3 group-hover:text-zinc-400 duration-500">
-                  {item.name}
-                </Typography>
+                    <Box className="absolute top-1/2 left-0  w-full  justify-center hidden xl:group-hover:flex">
+                      <button
+                        className="cursor-pointer border-none bg-[#ffebbb] px-3 py-2 text-base uppercase rounded-sm hover:bg-zinc-300 duration-500 z-50"
+                        onClick={(e) => {
+                          setDetailPrd(item);
+                          e.stopPropagation();
+                          setContentModal(2);
+                          setOpenModal(true);
+                        }}
+                      >
+                        quick shop
+                      </button>
+                    </Box>
+                    <img src={item.thumbnail} alt="" className="w-full mb-4" />
+                    <Typography className="xl:hidden mb-3">
+                      {shortenString(item.name, 30)}
+                    </Typography>
+                    <Typography className="hidden xl:block text-center px-6 mb-3 group-hover:text-zinc-400 duration-500">
+                      {item.name}
+                    </Typography>
 
-                {item.stock === 0 ? (
-                  <Typography className="group-hover:text-zinc-400">
-                    Sold out
-                  </Typography>
-                ) : (
-                  <Box>
-                    {item.price === item.originalPrice ? (
-                      <Box>
-                        <Typography className=" text-sm text-center font-semibold group-hover:text-zinc-400 duration-500">
-                          {formatPrice(item.originalPrice)}
-                        </Typography>
-                      </Box>
+                    {item.stock === 0 ? (
+                      <Typography className="group-hover:text-zinc-400">
+                        Sold out
+                      </Typography>
                     ) : (
-                      <Box className="text-center xl:flex justify-center gap-5">
-                        <Typography className=" text-sm group-hover:text-zinc-400 duration-500">
-                          {formatPrice(item.price)}
-                        </Typography>
-                        <Typography className="line-through text-zinc-400 text-sm group-hover:text-zinc-400 duration-500">
-                          {formatPrice(item.originalPrice)}
-                        </Typography>
+                      <Box>
+                        {item.price === item.originalPrice ? (
+                          <Box>
+                            <Typography className=" text-sm text-center font-semibold group-hover:text-zinc-400 duration-500">
+                              {formatPrice(item.originalPrice)}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Box className="text-center xl:flex justify-center gap-5">
+                            <Typography className=" text-sm group-hover:text-zinc-400 duration-500">
+                              {formatPrice(item.price)}
+                            </Typography>
+                            <Typography className="line-through text-zinc-400 text-sm group-hover:text-zinc-400 duration-500">
+                              {formatPrice(item.originalPrice)}
+                            </Typography>
+                          </Box>
+                        )}
                       </Box>
                     )}
                   </Box>
-                )}
+                ))}
               </Box>
-            ))}
-          </Box>
+            </Box>
+          ) : (
+            <Box className="flex-[3]">
+              <Box className="h-8 mb-3"></Box>
+              <Box className=" grid grid-cols-2 gap-4 mb-8 xl:grid-cols-3">
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+                <Box className="flex flex-col gap-2">
+                  <Skeleton
+                    variant="rectangular"
+                    className="w-full h-auto aspect-square mb-3"
+                  />
+                  <Skeleton variant="text" className="w-2/3 h-8 mx-auto mb-3" />
+                  <Skeleton variant="text" className="w-1/4 h-8 mx-auto " />
+                </Box>
+              </Box>
+            </Box>
+          )}
         </Box>
 
         <Box className="flex">
@@ -412,116 +486,6 @@ const Products = () => {
             />
           </Stack>
         </Box>
-      </Box>
-    </>
-  );
-
-  return (
-    <>
-      <Box className="flex ">
-        <Box className="flex-1 flex flex-col gap-3 w-full px-5">
-          <TextField
-            type="number"
-            label="Min Price"
-            variant="outlined"
-            size="small"
-            value={minPriceString}
-            onChange={handleChangeMinPrice}
-          />
-
-          <TextField
-            type="number"
-            label="Max Price"
-            variant="outlined"
-            size="small"
-            value={maxPriceString}
-            onChange={handleChangeMaxPrice}
-          />
-          <Button
-            variant="contained"
-            onClick={handleApplyFilter}
-            disabled={maxPriceString === "" || minPriceString === ""}
-          >
-            apply
-          </Button>
-        </Box>
-
-        <Box className=" grid grid-cols-4 gap-5 mb-10 flex-[4]">
-          {products.map((item) => (
-            <Card
-              title={item.name}
-              key={item._id}
-              className="max-w-[480px]"
-              onClick={() => navigate(`/product/${item._id}`)}
-            >
-              <CardActionArea>
-                {!!item.price &&
-                  !!item.originalPrice &&
-                  item.price !== item.originalPrice && (
-                    <Box
-                      className={`absolute top-3 left-3 bg-[#F41919] text-white px-1 py-[2px] rounded-md`}
-                    >
-                      <Typography>
-                        -
-                        {Math.floor(
-                          (1 - item.price / item.originalPrice) * 100
-                        )}
-                        %
-                      </Typography>
-                    </Box>
-                  )}
-
-                {item.stock === 0 && (
-                  <Box className="absolute top-3 right-3 bg-white text-orange-400 px-1 py-[2px]">
-                    Tạm hết hàng
-                  </Box>
-                )}
-                <CardMedia
-                  component="img"
-                  height="260"
-                  image={item.thumbnail}
-                  alt={item.name}
-                />
-
-                <CardContent>
-                  <Typography className="inline-block w-full whitespace-nowrap overflow-hidden text-ellipsis">
-                    {item.name}
-                  </Typography>
-
-                  <Box className="flex justify-center">
-                    {item.price === item.originalPrice ? (
-                      <Box>
-                        <Typography className="text-orange-500">
-                          {formatPrice(item.originalPrice)}
-                        </Typography>
-                      </Box>
-                    ) : (
-                      <Box className="flex gap-[5px] flex-wrap">
-                        <Typography className="text-orange-500">
-                          {formatPrice(item.price)}
-                        </Typography>
-                        <Typography className="line-through text-zinc-400">
-                          {formatPrice(item.originalPrice)}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
-        </Box>
-        <Box className="flex-1"></Box>
-      </Box>
-      <Box className="flex">
-        <Stack spacing={2} className="mx-auto">
-          <Pagination
-            count={totalPages}
-            shape="rounded"
-            onChange={handleChangePageNumber}
-            page={pageNumber}
-          />
-        </Stack>
       </Box>
     </>
   );
