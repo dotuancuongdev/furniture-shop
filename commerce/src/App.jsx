@@ -1,25 +1,24 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
-import {
-  Alert,
-  Box,
-  CircularProgress,
-  Snackbar,
-  Stack,
-  useMediaQuery,
-} from "@mui/material";
+import { Alert, Box, CircularProgress, Snackbar, Stack } from "@mui/material";
 import "./App.css";
 
-import Checkout from "./pages/Checkout";
-import Products from "./pages/Products";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import { AppContext } from "./context";
-import Home from "./pages/Home";
-import Detail from "./pages/Detail";
-import Order from "./pages/Order";
 import Navbar from "./components/Navbar";
+import { AppContext } from "./context";
+import Checkout from "./pages/Checkout";
+import Detail from "./pages/Detail";
+import Home from "./pages/Home";
+import Order from "./pages/Order";
+import Products from "./pages/Products";
 
 const AppSnackbar = () => {
   const appContext = useContext(AppContext);
@@ -97,6 +96,7 @@ const routers = [
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AppLoading />
       <AppSnackbar />
       <Header />
@@ -111,6 +111,16 @@ function App() {
       <Footer />
     </BrowserRouter>
   );
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 }
 
 export default App;
