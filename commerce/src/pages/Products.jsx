@@ -1,10 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Chip,
   Divider,
   Modal,
@@ -14,12 +10,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+
 import api from "../api";
 import { AppContext } from "../context";
 import { formatPrice, shortenString } from "../helper";
@@ -59,11 +54,11 @@ const Products = () => {
   const [minPriceString, setMinPriceString] = useState("");
   const [maxPrice, setMaxPrice] = useState(0);
   const [maxPriceString, setMaxPriceString] = useState("");
+
   const [pageNumber, setPageNumber] = useState(1);
 
   const [detailPrd, setDetailPrd] = useState(null);
-
-  const [contentModal, setContentModal] = useState(1);
+  const [contentModal, setContentModal] = useState(FILTER_PRICE);
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -87,16 +82,17 @@ const Products = () => {
         return prd;
       });
       setCart(updateProducts);
-      setContentModal(3);
+      setContentModal(NOTIFICATION_ADD_TO_CART_SUCCESSFULLY);
       setOpenModal(true);
       return;
     }
 
     const newPrd = { ...detailPrd, quantity: 1 };
     setCart([...cart, newPrd]);
-    setContentModal(3);
+    setContentModal(NOTIFICATION_ADD_TO_CART_SUCCESSFULLY);
     setOpenModal(true);
   };
+
   const renderModalContent = () => {
     if (contentModal === FILTER_PRICE) {
       return (
@@ -303,7 +299,9 @@ const Products = () => {
           </Typography>
           <Typography className="text-xs">{`>`}</Typography>
 
-          <Typography className="text-xs">{`Page ${pageNumber} of ${totalPages}`}</Typography>
+          {totalPages && (
+            <Typography className="text-xs">{`Page ${pageNumber} of ${totalPages}`}</Typography>
+          )}
         </Box>
         <Box
           className="uppercase border border-solid border-[#FFEABB] text-[#FFEABB] text-center rounded-sm py-3 mb-8 xl:hidden"
@@ -366,59 +364,71 @@ const Products = () => {
                 <Box className="h-8"></Box>
               )}
               <Box className="grid grid-cols-2 gap-4 mb-8 xl:grid-cols-3">
-                {products.map((item) => (
-                  <Box
-                    key={item._id}
-                    className=" cursor-pointer relative group"
-                    onClick={() => navigate(`/product/${item._id}`)}
-                  >
-                    <Box className="absolute top-1/2 left-0  w-full  justify-center hidden xl:group-hover:flex">
-                      <button
-                        className="cursor-pointer border-none bg-[#ffebbb] px-3 py-2 text-base uppercase rounded-sm hover:bg-zinc-300 duration-500 z-50"
-                        onClick={(e) => {
-                          setDetailPrd(item);
-                          e.stopPropagation();
-                          setContentModal(2);
-                          setOpenModal(true);
-                        }}
+                {products.length === 0 ? (
+                  <Box className=" text-center">
+                    <Typography>No data</Typography>
+                  </Box>
+                ) : (
+                  <>
+                    {products.map((item) => (
+                      <Box
+                        key={item._id}
+                        className=" cursor-pointer relative group"
+                        onClick={() => navigate(`/product/${item._id}`)}
                       >
-                        quick shop
-                      </button>
-                    </Box>
-                    <img src={item.thumbnail} alt="" className="w-full mb-4" />
-                    <Typography className="xl:hidden mb-3">
-                      {shortenString(item.name, 30)}
-                    </Typography>
-                    <Typography className="hidden xl:block text-center px-6 mb-3 group-hover:text-zinc-400 duration-500">
-                      {item.name}
-                    </Typography>
+                        <Box className="absolute top-1/2 left-0  w-full  justify-center hidden xl:group-hover:flex">
+                          <button
+                            className="cursor-pointer border-none bg-[#ffebbb] px-3 py-2 text-base uppercase rounded-sm hover:bg-zinc-300 duration-500 z-50"
+                            onClick={(e) => {
+                              setDetailPrd(item);
+                              e.stopPropagation();
+                              setContentModal(2);
+                              setOpenModal(true);
+                            }}
+                          >
+                            quick shop
+                          </button>
+                        </Box>
+                        <img
+                          src={item.thumbnail}
+                          alt=""
+                          className="w-full mb-4"
+                        />
+                        <Typography className="xl:hidden mb-3">
+                          {shortenString(item.name, 30)}
+                        </Typography>
+                        <Typography className="hidden xl:block text-center px-6 mb-3 group-hover:text-zinc-400 duration-500">
+                          {item.name}
+                        </Typography>
 
-                    {item.stock === 0 ? (
-                      <Typography className="group-hover:text-zinc-400">
-                        Sold out
-                      </Typography>
-                    ) : (
-                      <Box>
-                        {item.price === item.originalPrice ? (
-                          <Box>
-                            <Typography className=" text-sm text-center font-semibold group-hover:text-zinc-400 duration-500">
-                              {formatPrice(item.originalPrice)}
-                            </Typography>
-                          </Box>
+                        {item.stock === 0 ? (
+                          <Typography className="group-hover:text-zinc-400">
+                            Sold out
+                          </Typography>
                         ) : (
-                          <Box className="text-center xl:flex justify-center gap-5">
-                            <Typography className=" text-sm group-hover:text-zinc-400 duration-500">
-                              {formatPrice(item.price)}
-                            </Typography>
-                            <Typography className="line-through text-zinc-400 text-sm group-hover:text-zinc-400 duration-500">
-                              {formatPrice(item.originalPrice)}
-                            </Typography>
+                          <Box>
+                            {item.price === item.originalPrice ? (
+                              <Box>
+                                <Typography className=" text-sm text-center font-semibold group-hover:text-zinc-400 duration-500">
+                                  {formatPrice(item.originalPrice)}
+                                </Typography>
+                              </Box>
+                            ) : (
+                              <Box className="text-center xl:flex justify-center gap-5">
+                                <Typography className=" text-sm group-hover:text-zinc-400 duration-500">
+                                  {formatPrice(item.price)}
+                                </Typography>
+                                <Typography className="line-through text-zinc-400 text-sm group-hover:text-zinc-400 duration-500">
+                                  {formatPrice(item.originalPrice)}
+                                </Typography>
+                              </Box>
+                            )}
                           </Box>
                         )}
                       </Box>
-                    )}
-                  </Box>
-                ))}
+                    ))}
+                  </>
+                )}
               </Box>
             </Box>
           ) : (
@@ -478,16 +488,18 @@ const Products = () => {
           )}
         </Box>
 
-        <Box className="flex">
-          <Stack spacing={2} className="mx-auto">
-            <Pagination
-              count={totalPages}
-              shape="rounded"
-              onChange={handleChangePageNumber}
-              page={pageNumber}
-            />
-          </Stack>
-        </Box>
+        {products.length !== 0 && (
+          <Box className="flex">
+            <Stack spacing={2} className="mx-auto">
+              <Pagination
+                count={totalPages}
+                shape="rounded"
+                onChange={handleChangePageNumber}
+                page={pageNumber}
+              />
+            </Stack>
+          </Box>
+        )}
       </Box>
     </>
   );
