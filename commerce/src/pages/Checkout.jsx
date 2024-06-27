@@ -203,9 +203,6 @@ const Checkout = () => {
       </Dialog>
 
       <Box className="mx-5 xl:mx-48 ">
-        <Typography variant="h4" className="text-center text-[#003872]">
-          Checkout
-        </Typography>
         {cart.length === 0 ? (
           <Typography className="text-center mt-7">
             There are no items in your cart.{" "}
