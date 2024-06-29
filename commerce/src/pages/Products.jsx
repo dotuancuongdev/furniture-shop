@@ -299,7 +299,7 @@ const Products = () => {
           </Typography>
           <Typography className="text-xs">{`>`}</Typography>
 
-          {totalPages && (
+          {!prdLoading && (
             <Typography className="text-xs">{`Page ${pageNumber} of ${totalPages}`}</Typography>
           )}
         </Box>
