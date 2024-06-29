@@ -23,7 +23,7 @@ const Header = () => {
   const [promotions, setPromotions] = useState([]);
 
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar, cart } = appContext;
+  const { cart } = appContext;
 
   const navigate = useNavigate();
 

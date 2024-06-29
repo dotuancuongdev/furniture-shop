@@ -155,19 +155,16 @@ const Checkout = () => {
     let ignore = false;
     const getCities = async () => {
       try {
-        setLoading(true);
         const res = await api.get(`/cities`);
         if (!ignore) {
           setCities(res.data);
         }
-        setLoading(false);
       } catch (error) {
         setSnackbar({
           isOpen: true,
           message: error.message,
           severity: "error",
         });
-        setLoading(false);
       }
     };
 

@@ -10,7 +10,7 @@ const Order = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar } = appContext;
+  const { setSnackbar } = appContext;
 
   const params = useParams();
   const targetId = searchInput || params.id;
@@ -25,18 +25,15 @@ const Order = () => {
   }, []);
 
   const getOrderDetail = async () => {
-    setLoading(true);
     try {
       const res = await api.get(`/orders/${targetId}`);
       setOrderDetail(res.data);
-      setLoading(false);
     } catch (error) {
       setSnackbar({
         isOpen: true,
         message: error.message,
         severity: "error",
       });
-      setLoading(false);
     }
   };
 

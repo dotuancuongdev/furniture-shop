@@ -41,7 +41,7 @@ const MenuItem = ({ name, subItems }) => {
 const Navbar = () => {
   const [menu, setMenu] = useState([]);
   const appContext = useContext(AppContext);
-  const { setLoading, setSnackbar, cart } = appContext;
+  const { setSnackbar } = appContext;
 
   const navigate = useNavigate();
   useEffect(() => {
