@@ -363,11 +363,17 @@ const Products = () => {
               ) : (
                 <Box className="h-8"></Box>
               )}
-              <Box className="grid grid-cols-2 gap-4 mb-8 xl:grid-cols-3">
+              <Box
+                className={`${
+                  products.length === 0
+                    ? "flex justify-center"
+                    : "grid grid-cols-2 gap-4"
+                } xl:${
+                  products.length === 0 ? "flex justify-center" : "grid-cols-3"
+                } mb-8 `}
+              >
                 {products.length === 0 ? (
-                  <Box className=" text-center">
-                    <Typography>No data</Typography>
-                  </Box>
+                  <Typography className="text-center">No data</Typography>
                 ) : (
                   <>
                     {products.map((item) => (
