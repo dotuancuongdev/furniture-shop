@@ -36,14 +36,19 @@ const AppSnackbar = () => {
   return (
     <Snackbar
       open={isOpen}
-      autoHideDuration={6000}
+      autoHideDuration={3000}
       onClose={handleCloseSnackbar}
     >
       <Alert
         onClose={handleCloseSnackbar}
         severity={severity}
         variant="filled"
-        sx={{ width: "100%" }}
+        sx={{
+          width: "100%",
+          backgroundColor: "#ffebbb",
+          color: "black",
+          border: "1px solid black",
+        }}
       >
         {message}
       </Alert>
