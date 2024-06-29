@@ -35,10 +35,10 @@ import { useNavigate } from "react-router-dom";
 // const regexVietnamPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const schema = yup
   .object({
-    name: yup.string().required(),
+    name: yup.string().required("Name is required field"),
     phone: yup.number().typeError("Error Phone Number").required(),
     email: yup.string().email(),
-    address: yup.string().required(),
+    address: yup.string().required("Address is required field"),
     cityId: yup.string().required(),
   })
   .required();
